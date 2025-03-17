@@ -51,7 +51,7 @@ export default function Sidebar() {
                 </Link>
             </div>
 
-            <span className="toggle-sidebar-btn" onMouseOver={() => toggleIcon()} onMouseOut={() => setIcon("bi bi-list")} onClick={toggleSidebar} ><i className={icon}></i></span>
+            <span className={`toggle-sidebar-btn ${isSidebarOpen ? 'color' : ''}`} onMouseOver={() => toggleIcon()} onMouseOut={() => setIcon("bi bi-list")} onClick={toggleSidebar} ><i className={icon}></i></span>
             
             {(IsAgent || IsSuperAdmin || IsUser || IsAdmin) &&
             <>

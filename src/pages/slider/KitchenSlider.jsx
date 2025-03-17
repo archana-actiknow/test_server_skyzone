@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import GetLocations from '../../hooks/Locations';
 import { useRequest } from '../../utils/Requests';
 import { Skeleton } from '@mui/material';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Add from './Add';
 import SweetAlert from '../../components/SweetAlert';
 import Edit from './Edit';
@@ -97,6 +96,10 @@ export default function KitchenSlider() {
                     </div>
                 </div>
             </div>
+            {loading 
+                ? 
+                    <Skeleton variant="rectangular" width="100%" height={400} className="skeleton-custom" />
+                : 
             <div className="row align-items-center">
             {(data?.length > 0 && !load) ? (
                 data?.map((slider) => (
@@ -134,6 +137,7 @@ export default function KitchenSlider() {
                 </div>
             )}
             </div>
+            }
         </>
     </>
   )

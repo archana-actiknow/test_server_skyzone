@@ -42,7 +42,7 @@ export default function EditRule() {
 
   useEffect(() => {
     if (OfferData?.days_available) {
-      setVisibleOnState(OfferData.days_available .split(",").map(String)); // Convert to string array
+      setVisibleOnState(OfferData.days_available.split(",").map(String)); // Convert to string array
     }
   }, [OfferData?.days_available]);
 

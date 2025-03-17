@@ -213,11 +213,30 @@ export default function Products() {
                                         <img src={product.imageUrl} alt={product.name} className="rounded w-90" />
                                         <span className="fs-12">{product.name}</span>
                                     </td>
-                                    <td><span className="fs-12" style={{textAlign: 'justify'}} title={product.description}>{product.description.slice(0, 80)}...</span></td>
+                                    <td><span className="fs-12" style={{textAlign: 'justify'}} title={product.description}>{product.description.slice(0, 40)}...</span></td>
                                     <td>
                                         <FormDropdown options={cards} classnm="form-select fs-12" default_value={cardType} onChange={(e) => changeCategory(e.target.value, product.row_id)} />
                                     </td>
                                     <td className="days-container">
+                                        <div className="d-flex flex-wrap">
+                                            {weekdays.map((day) => (
+                                                <div key={day.id} className="day-item">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={
+                                                            product.days_available
+                                                                ? String(product.days_available).split(",").includes(String(day.id))
+                                                                : true 
+                                                        }
+                                                        onChange={() => toggleDaySelection(product.id, day.id)}
+                                                    />
+                                                    <label className="fs-12 lnk ms-1">{day.label}</label>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </td>
+
+                                    {/* <td className="days-container">
                                         <div className="d-flex flex-wrap">
                                             {weekdays.map((day) => (
                                             <div key={day.id} className="day-item">
@@ -230,7 +249,7 @@ export default function Products() {
                                             </div>
                                             ))}
                                         </div>
-                                    </td>
+                                    </td> */}
                                 </tr>
                             )
                         })}

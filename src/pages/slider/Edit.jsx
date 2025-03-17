@@ -1,13 +1,13 @@
 import { useState } from "react";
 import PopupModal from "../../components/PopupModal"
 import { useFormik } from "formik";
-import { encrypt, messagePop } from '../../utils/Common';
-import { UPDATE_KITCHEN_SLIDER_IMAGES, UPDATEMANAGER } from "../../utils/Endpoints";
+import { messagePop } from '../../utils/Common';
+import { UPDATE_KITCHEN_SLIDER_IMAGES } from "../../utils/Endpoints";
 import SweetAlert from "../../components/SweetAlert";
 import { useRequest } from "../../utils/Requests";
-import { imageValidation, managerValidation } from "../../utils/validationSchemas";
+import { imageValidation } from "../../utils/validationSchemas";
 
-export default function Edit({id, close, data, refreshData, alertMessage}) {  
+export default function Edit({id, close, data, refreshData}) {  
     const [open, setOpen] = useState(true);
     const apiRequest = useRequest();
 
