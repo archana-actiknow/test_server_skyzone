@@ -1,0 +1,158 @@
+@import '~bootstrap-icons/font/bootstrap-icons.css';
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+.verifyOtpButton {
+  padding: 10px !important;
+  width: 39% !important;
+}
+
+.v-align-center {
+  margin-top: 4px;
+}
+
+.search-container {
+  font-size: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  /* justify-content: flex-end; */
+  margin-right: 5px;
+  align-items: center; /* Centers items vertically */
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.skeleton-custom {
+  background: linear-gradient(90deg, #b5afaf 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* DATATABLE */
+.accordion{
+  --bs-accordion-btn-icon-width: 1rem!important;
+}
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th, .data-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left !important;
+}
+
+.expandable-row {
+    cursor: pointer;
+    background-color: #f5f5f5;
+}
+
+.expanded-row {
+    display: none;
+}
+
+.details-content {
+    padding: 10px;
+    background-color: #e0e0e0;
+}
+
+.ss_btn.small {
+  padding: 4px;
+  margin: 5px;
+  font-size: 12px;
+  font-weight: 500;
+}
+/* DATATABLE */
+
+.fs-color{
+  color: #FE5000;
+}
+.td-btn{
+  width: 35px;
+  margin-right: 10px;
+  text-align: center;
+  .ss_btn{
+    padding: 3px;
+    text-transform: capitalize;
+    font-size: 11px;
+  }
+  .spinner-border{
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  i{
+    color: #FE5000;
+    font-size: 25px;
+  }
+}
+.td-Updatebtn{
+  width: 60px;
+  margin-right: 10px;
+  text-align: center;
+  .ss_btn{
+    padding: 4px;
+    text-transform: capitalize;
+    font-size: 12px;
+  }
+  .spinner-border{
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+
+
+/* DATE PICKER CSS OVERRIDE */
+.react-datepicker__day--keyboard-selected:hover, .react-datepicker__month-text--keyboard-selected:hover, .react-datepicker__quarter-text--keyboard-selected:hover, .react-datepicker__year-text--keyboard-selected:hover{
+  background-color: #29999a !important;
+}
+.react-datepicker__day--keyboard-selected, .react-datepicker__month-text--keyboard-selected, .react-datepicker__quarter-text--keyboard-selected, .react-datepicker__year-text--keyboard-selected{
+  background-color: #FE5000 !important;
+}
+.react-datepicker__day--selected:hover, .react-datepicker__day--in-selecting-range:hover, .react-datepicker__day--in-range:hover, .react-datepicker__month-text--selected:hover, .react-datepicker__month-text--in-selecting-range:hover, .react-datepicker__month-text--in-range:hover, .react-datepicker__quarter-text--selected:hover, .react-datepicker__quarter-text--in-selecting-range:hover, .react-datepicker__quarter-text--in-range:hover, .react-datepicker__year-text--selected:hover, .react-datepicker__year-text--in-selecting-range:hover, .react-datepicker__year-text--in-range:hover {
+  background-color: #FFFF !important;
+}
+.react-datepicker__day--selected, .react-datepicker__day--in-selecting-range, .react-datepicker__day--in-range, .react-datepicker__month-text--selected, .react-datepicker__month-text--in-selecting-range, .react-datepicker__month-text--in-range, .react-datepicker__quarter-text--selected, .react-datepicker__quarter-text--in-selecting-range, .react-datepicker__quarter-text--in-range, .react-datepicker__year-text--selected, .react-datepicker__year-text--in-selecting-range, .react-datepicker__year-text--in-range {
+  background-color: #FE5000 !important;
+}
+.react-datepicker__header {
+  text-align: center;
+  background-color:   #FE5000 !important;
+  border-bottom: 1px solid #FFFF !important;
+  border-top-left-radius: 0.3rem;
+  padding: 8px 0;
+  position: relative;
+}
+.react-datepicker__current-month, .react-datepicker-time__header, .react-datepicker-year-header {
+  margin-top: 0;
+  color: #FFFF !important;
+  font-weight: bold;
+  font-size: 0.944rem;
+}
+.react-datepicker__day-name{
+  color: #FFFF !important;
+}
+
+/* ISSUBMITTING BUTTON LOADER */
+.issubmitting{
+  left: 46%; 
+  top: 50%; 
+  padding-top: 17px;
+  position: absolute;
+}
+
+
+/* WORDWRAP DATAGRID */
+.wrap-text{
+  text-wrap: auto!important;
+}
