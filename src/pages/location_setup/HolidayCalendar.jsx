@@ -10,7 +10,7 @@ import { holidayCalendarValidation } from '../../utils/validationSchemas';
 import SweetAlert from '../../components/SweetAlert';
 
 const TblBody = ({ data = {}, onDelete, index, title, onChange }) => {
-    const upRef = useRef(false);
+     const upRef = useRef(false);
     const { values, setFieldValue ,errors, touched, handleBlur } = useFormik({
         initialValues: {
             id: data.id || 0,
@@ -35,16 +35,21 @@ const TblBody = ({ data = {}, onDelete, index, title, onChange }) => {
         }
         return defaultTime;
     };
-
     const startTime = values.start_time ? setTime(values.start_time) : ''; 
-    const endTime = values.end_time ? setTime(values.end_time) : ''; 
-
+    const endTime = values.end_time ? setTime(values.end_time) : '';
+    
     const startDateChange = (date) => {
         setFieldValue("start_date", date );
         upRef.current = true;
     }
     const endDateChange = (date) => {
-        setFieldValue("end_date", date);
+        if (!values.start_date || (date && new Date(values.start_date) <= new Date(date))) {
+            setFieldValue("end_date", date);
+        } else {
+            SweetAlert.error("End date must be after start date.");
+            setTimeout(() => setFieldValue("end_date", ""), 0); 
+        }
+        // setFieldValue("end_date", date);
         upRef.current = true;
     }
     const startTimeChange = (time) => { 
@@ -52,7 +57,13 @@ const TblBody = ({ data = {}, onDelete, index, title, onChange }) => {
         upRef.current = true;
     }
     const endTimeChange = (time) => { 
-        setFieldValue("end_time", time); 
+        if (!values.start_time || (time && values.start_time <= time)) {
+            setFieldValue("end_time", time);
+        } else {
+            SweetAlert.error("End time must be after start time.");
+            setTimeout(() => setFieldValue("end_time", ""), 0);
+        }
+        // setFieldValue("end_time", time); 
         upRef.current = true;
     }
     const descriptionChange = (e) => { 
@@ -64,41 +75,12 @@ const TblBody = ({ data = {}, onDelete, index, title, onChange }) => {
         upRef.current = true;
     }
 
-    // const startDateChange = (date) => setFieldValue("start_date", date );
-    // const endDateChange = (date) => {
-    //     if (!values.start_date || (date && new Date(values.start_date) <= new Date(date))) {
-    //         setFieldValue("end_date", date);
-    //     } else {
-    //         SweetAlert.error("End date must be after start date.");
-    //         setTimeout(() => setFieldValue("end_date", ""), 0); 
-    //     }
-    // };
-    
-    // const endDateChange = (date) => setFieldValue("end_date", date);
-    // const startTimeChange = (time)  => { setFieldValue("start_time", time); }
-
-    // const endTimeChange = (time) => {
-    //     if (!values.start_time || (time && values.start_time <= time)) {
-    //         setFieldValue("end_time", time);
-    //     } else {
-    //         SweetAlert.error("End time must be after start time.");
-    //         setTimeout(() => setFieldValue("end_time", ""), 0);
-    //     }
-    // };
-    // const endTimeChange = (time) => { setFieldValue("end_time", time); }
-    // const descriptionChange = (e) => { setFieldValue("holiday_desc", e.target.value); };
-    // const holidayTypesChange = (e) => { setFieldValue("type", parseInt(e.target.value)) };
-
     useEffect(() => {
         if(upRef.current){
             onChange({ ...values });
             upRef.current = false;
         }
     }, [values, onChange]);
-    
-    // useEffect(() => {
-    //     onChange({ ...values });
-    // }, [values]);
 
     return (
         <tbody>
