@@ -96,40 +96,49 @@ export default function LocationSetup() {
     }
 
     // DELETE USER //
-    const handleDelete = async (id) => {
-        const title = "Are you sure?";
-        const text  = "Are you sure you want to change the status ?";
-        const confirm = await SweetAlert.confirm(title, text);
+    // const handleDelete = async (id) => {
+    //     const title = "Are you sure?";
+    //     const text  = "Are you sure you want to change the status ?";
+    //     const confirm = await SweetAlert.confirm(title, text);
 
-        if(confirm){
-            const data = await apiRequest({
-                url:UPDATESTATUSCHANGE,
-                 method:"POST",
-                data:{
-                    id:id,
-                    deleted:1
-                }});
-            setRefreshRecords(true);
-            messagePop(data)
-        }
-    }
+    //     if(confirm){
+    //         const data = await apiRequest({
+    //             url:UPDATESTATUSCHANGE,
+    //              method:"POST",
+    //             data:{
+    //                 id:id,
+    //                 deleted:1
+    //             }});
+    //         setRefreshRecords(true);
+    //         messagePop(data)
+    //     }
+    // }
+
+    // const handleCafeChange = async (id, cafe_module) => {
+    //     const title = "Are you sure?";
+    //     const text  = "Are you sure you want to change the fuel zone module visibility ?";
+    //     const confirm = await SweetAlert.confirm(title, text);
+
+    //     if(confirm){
+    //         const upCafeVisibility = { id: id, cafe_module:(cafe_module) ? 0 : 1};
+    //         const data = await apiRequest( {url: UPDATELOCATION, method: "POST", data: upCafeVisibility});
+    //         setRefreshRecords(true);
+    //         messagePop(data)
+    //     }
+    // }
 
     const handleCafeChange = async (id, cafe_module) => {
         const title = "Are you sure?";
-        const text  = "Are you sure you want to change the fuel zone module visibility ?";
+        const text  = "Are you sure you want to change the fuel zone module visibility?";
         const confirm = await SweetAlert.confirm(title, text);
-
-        if(confirm){
-            const upCafeVisibility = {
-                id: id,
-                cafe_module:(cafe_module) ? 0 : 1,
-            };
-
-            const data = await apiRequest( {url: UPDATELOCATION, method: "POST", data: upCafeVisibility});
+    
+        if (confirm) {
+            const upCafeVisibility = { id: id, cafe_module: !cafe_module }; // Toggle true/false
+            const data = await apiRequest({ url: UPDATELOCATION, method: "POST", data: upCafeVisibility });
             setRefreshRecords(true);
-            messagePop(data)
+            messagePop(data);
         }
-    }
+    };
 
   return (
     <>
@@ -246,8 +255,15 @@ export default function LocationSetup() {
 
                                         <div className="col-md-8 mt-40 mx-auto text-start">
                                             <div className="d-flex">
-                                                <Link className={`product-status me-2 ${data.cafe_module === true ? "product-active" : "product-inactive" }`} title={`Click to ${(data.cafe_module === true ? 'hide' : 'show')}`} onClick={() => handleCafeChange(data.client_id, data.cafe_module)}>
+                                                {/* <Link className={`product-status me-2 ${data.cafe_module === true ? "product-active" : "product-inactive" }`} title={`Click to ${(data.cafe_module === true ? 'hide' : 'show')}`} onClick={() => handleCafeChange(data.client_id, data.cafe_module)}>
                                                     {data.cafe_module === true ? "Fuel Zone : visible" : "Fuel Zone : hidden"}
+                                                </Link> */}
+                                                <Link 
+                                                    className={`product-status me-2 ${data.cafe_module ? "product-active" : "product-inactive"}`} 
+                                                    title={`Click to ${data.cafe_module ? 'hide' : 'show'}`} 
+                                                    onClick={() => handleCafeChange(data.client_id, data.cafe_module)}
+                                                >
+                                                    {data.cafe_module ? "Fuel Zone : visible" : "Fuel Zone : hidden"}
                                                 </Link>
                                                 <Link className={`product-status me-2 ${data.status === "1" ? "product-active" : "product-inactive" }`} title={`Click to ${(data.status === "1" ? 'deactivate' : 'activate')}`} onClick={() => handleStatusChange(data.client_id)}>
                                                     {data.status === "1" ? "Active" : "Inactive"}
@@ -255,9 +271,9 @@ export default function LocationSetup() {
                                                 <Link  onClick={() => handleEditClick(data.client_id)} className="me-2 icon edit" title="Edit" data-bs-title="Edit" >
                                                     <i className="bi bi-pencil-square"></i>
                                                 </Link>
-                                                <Link className="icon delete" title="Delete" data-bs-title="Delete" onClick={() => handleDelete(data.client_id)}>
+                                                {/* <Link className="icon delete" title="Delete" data-bs-title="Delete" onClick={() => handleDelete(data.client_id)}>
                                                     <i className="bi bi-trash-fill"></i>
-                                                </Link>
+                                                </Link> */}
                                             </div>
                                         </div>
                                         

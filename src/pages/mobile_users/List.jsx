@@ -29,6 +29,7 @@ export default function Lists () {
     const [refreshUsers, setRefreshUsers] = useState(true);
     const [isOpenId, setIsOpenId] = useState(false); 
     const [selectedUser, setSelectedUser] = useState(null);
+     const [loader, setLoader] = useState(false);
     const [customerQueryData, setCustomerQueryData] = useState(null);
     const apiRequest = useRequest();
 
@@ -70,6 +71,7 @@ export default function Lists () {
     }
 
     const handleEditClick = async(row) => {
+        setLoader(row);
         setSelectedUser({
             id: row.id,
             name: `${row.fname} ${row.lname}`,
@@ -88,6 +90,7 @@ export default function Lists () {
                 setCustomerQueryData(response.data); 
             }
         setIsOpenId(true); 
+        setLoader(false);
     };
 
     // USERS TABLE COLUMNS //
@@ -122,11 +125,19 @@ export default function Lists () {
             renderCell: (param) => {
                 return (
                     <>
-                        <div className="me-2 icon edit">
-                            <span onClick={() => handleEditClick(param.row)} className="fs-14 lnk" title="Reward Points">
-                                <i className="bi bi-award-fill"></i>
-                            </span>
-                        </div>
+                        {(loader && loader === param.row) ? 
+                            <div className='edit-btn'>
+                                <div className="spinner-border" role="status">
+                                    <span className="sr-only"></span>
+                                </div> 
+                            </div>
+                            :
+                            <div className="me-2 icon edit">
+                                <span onClick={() => handleEditClick(param.row)} className="fs-14 lnk" title="Reward Points">
+                                    <i className="bi bi-award-fill"></i>
+                                </span>
+                            </div>
+                        }
                     </>
                 )
             }

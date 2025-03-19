@@ -154,7 +154,7 @@ const RenderQueryRow = ({query, expandMessages, setExpandMessages}) => {
                                 <td colSpan={3}>
                                     <form>
                                         <TinyMCEEditor
-                                            height={400} name="reply" value={values.reply}
+                                            height={200} name="reply" value={values.reply}
                                             onEditorChange={(content) => setFieldValue("reply", content)} />
                                         {(errors.reply && touched.reply) && (<p className="fs-12 text-danger">{errors.reply}</p>)}
                                         <button

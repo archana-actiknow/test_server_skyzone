@@ -1203,7 +1203,7 @@ div:where(.swal2-icon).swal2-success .swal2-success-fix {
 }
 
 .day-item {
-    width: calc(25% - 10px);
+    width: calc(40% - 17px);
     display: flex;
     align-items: center;
 }

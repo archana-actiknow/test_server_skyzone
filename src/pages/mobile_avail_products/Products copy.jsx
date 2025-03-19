@@ -215,67 +215,55 @@ export default function Products() {
             <>
                 <div className="text-end mb-3"><span type="button" className="ss_btn" onClick={updateStatus}>Update</span></div>
 
-            <div className="row align-items-center">
-                {(data?.length > 0) ? (
-                    data?.map((product) => (
-                    <div className="col-md-3 mb-2" key={product.id}>
-                        <div className="card border-0">
-                        <div className="card-body hide-overflow">
-                            {product.imageUrl ? (
-                                <img src={product.imageUrl}  alt={product.name} className="product-img"/>
-                            ) : (
-                                <img src="./images/no-image.png" alt={product.name} className="product-img height-100"/>
-                            )}
-
-                            <div className="d-flex align-items-center justify-content-between mb-3">
-
-                              <label type="checkbox" className={`product-status ${product.status === 1 ? "product-active" : "product-inactive" }`}  checked={(product.status === 1) ? true : false} onChange={() => changeOption(product.id)}>
-                                    {product.status === 1 ? "Visible" : "Hidden"}
-                                </label>
-                                {/* <input type="checkbox" class="btn-check"  autocomplete="off" checked={(product.status === 1) ? true : false} onChange={() => changeOption(product.id)}/>
-                                <label class="btn btn-outline-primary">{product.status ===1 ?"Visible" : "Hidden"}</label> */}
-                                <div className="d-flex align-items-center">
-                                    <FormDropdown options={cards} classnm="form-select fs-12" default_value={cardType} onChange={(e) => changeCategory(e.target.value, product.row_id)} />                            
-                                </div>
-                            </div>
-
-                            <div className="product_detail mb-2" >
-                                <h1>{product.name}</h1>
-                                <span className="fs-12" style={{textAlign: 'justify'}} title={product.description}>{product.description.slice(0, 60)}...</span>
-                            </div>
-
-                            <div className="days-container">
-                                <div className="d-flex payments">
-                                    {weekdays.map((day) => (
-                                        <div key={day.id} className="day-item">
-                                            <input
-                                                type="checkbox"
-                                                checked={product.days_available
-                                                    ? product.days_available.split(",").includes(String(day.id))
-                                                    : false 
-                                                }
-                                                onChange={() => toggleDaySelection(product.id, day.id)}
-                                            />
-                                            <label className="fs-12 lnk ms-1">{day.label}</label>
+                <div className="table-responsive text-nowrap">
+                    <table className="table table-bordered RjTable mb-0 data-table">
+                        <thead>
+                            <tr>
+                                <th style={{width: 50}}>#</th>
+                                <th style={{width: 50}}></th>
+                                <th style={{width: 250}}>Description</th>
+                                <th style={{width: 150}}>Type</th>
+                                <th>Days</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {data?.map((product) => {
+                            return (
+                                <tr key={product.id}>
+                                    <td><input type='checkbox' checked={(product.status === 1) ? true : false} onChange={() => changeOption(product.id)} /></td>
+                                    <td className='flex-direction'>
+                                        <img src={product.imageUrl} alt={product.name} className="rounded w-90" />
+                                        <span className="fs-12">{product.name}</span>
+                                    </td>
+                                    <td><span className="fs-12" style={{textAlign: 'justify'}} title={product.description}>{product.description.slice(0, 40)}...</span></td>
+                                    <td>
+                                        <FormDropdown options={cards} classnm="form-select fs-12" default_value={cardType} onChange={(e) => changeCategory(e.target.value, product.row_id)} />
+                                    </td>
+                                    <td className="days-container">
+                                        <div className="d-flex flex-wrap">
+                                            {weekdays.map((day) => (
+                                                <div key={day.id} className="day-item">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={product.days_available
+                                                            ? product.days_available.split(",").includes(String(day.id))
+                                                            : false 
+                                                        }
+                                                        onChange={() => toggleDaySelection(product.id, day.id)}
+                                                    />
+                                                    <label className="fs-12 lnk ms-1">{day.label}</label>
+                                                </div>
+                                            ))}
                                         </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                        
-                        </div>
-                    </div>
-                    ))
-                ) : (
-                    <div className="row mb-3">
-                        <div className="col-md-12">
-                        {data?.length === 0 ? <>No Data Found!</> :
-                            <Skeleton variant="rectangular" width="100%" height={300} className="skeleton-custom" />
-                        }
-                        </div>
-                    </div>
-                )}
-            </div>
+                                    </td>
+                                </tr>
+                            )
+                        })}
+                        {/* REPEATING CARD */}
+                        </tbody>
+                    </table>
+                </div>
+                
             </>
             }
 

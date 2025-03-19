@@ -431,7 +431,7 @@ export default function Calendar() {
                                     <FormDropdown options={years} onChange={yearChange} value={Year} classnm="form-select fs-12" />
                                 </div>
                                 <div className="col-md-1">
-                                    <label className="form-label fs-12 fw-semibold">Refresh</label>
+                                    <label className="form-label fs-12 fw-semibold">Reset Year</label>
                                     <div  className="icon edit lnk f-ht-30" data-bs-title="Edit"  onClick={handleRefresh} >
                                         <i className="bi bi-arrow-clockwise"></i>
                                     </div>

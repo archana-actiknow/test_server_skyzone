@@ -191,7 +191,7 @@ export default function Sidebar() {
                 {IsSuperAdmin &&
                 <>
                     {/* <li className='fs-15 mt-30'><i className={`bi bi-cash-coin ${(iconSide === 'right') && 'fs_40'}`}></i> {iconSide === 'right' ? '' : 'Cost Optimization'}</li> */}
-                    <li className={`fs-15 mt-30 ${!isSidebarOpen ? 'd-flex justify-content-between align-items-center' : ''}`}
+                    <li className={`fs-15 mt-30 lnk ${!isSidebarOpen ? 'd-flex justify-content-between align-items-center' : ''}`}
                         onClick={() => handleSectionClick('Cost Optimization')}>
                         <div className= {`${!isSidebarOpen ? 'd-flex align-items-center' : ''}`}>
                             <i className={`bi bi-cash-coin ${(iconSide === 'right') && 'fs_40'}`}></i>{iconSide === 'right' ? '' : <span className="ms-2">Cost Optimization</span>}
