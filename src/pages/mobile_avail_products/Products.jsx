@@ -126,7 +126,6 @@ export default function Products() {
                 "id": row_id,
                 "type": category
             }
-
             const response = await apiRequest(
                 { url: CREATETYPE, method: "POST", data: formData }
             );
@@ -218,7 +217,7 @@ export default function Products() {
             <div className="row align-items-center">
                 {(data?.length > 0) ? (
                     data?.map((product) => (
-                    <div className="col-md-3 mb-2" key={product.id}>
+                    <div className="col-md-4 mb-2" key={product.id}>
                         <div className="card border-0">
                         <div className="card-body hide-overflow">
                             {product.imageUrl ? (
@@ -229,13 +228,19 @@ export default function Products() {
 
                             <div className="d-flex align-items-center justify-content-between mb-3">
 
-                              <label type="checkbox" className={`product-status ${product.status === 1 ? "product-active" : "product-inactive" }`}  checked={(product.status === 1) ? true : false} onChange={() => changeOption(product.id)}>
+                                {/* <label type="checkbox" className={`product-status ${product.status === 1 ? "product-active" : "product-inactive" }`}  checked={(product.status === 1) ? true : false} onChange={() => changeOption(product.id)}>
                                     {product.status === 1 ? "Visible" : "Hidden"}
-                                </label>
+                                </label> */}
+                                <div class="form-checkbox">
+                                    <input class="form-check-input margin-right" type="checkbox" value="" className={`product-status margin-right lnk ${product.status === 1 ? "product-active" : "product-inactive" }`}  checked={(product.status === 1) ? true : false} onChange={() => changeOption(product.id)}/>
+                                    <label class="form-check-label fs-14 " >
+                                        {product.status ===1 ?"Visible" : "Hidden"}
+                                    </label>
+                                </div>
                                 {/* <input type="checkbox" class="btn-check"  autocomplete="off" checked={(product.status === 1) ? true : false} onChange={() => changeOption(product.id)}/>
                                 <label class="btn btn-outline-primary">{product.status ===1 ?"Visible" : "Hidden"}</label> */}
                                 <div className="d-flex align-items-center">
-                                    <FormDropdown options={cards} classnm="form-select fs-12" default_value={cardType} onChange={(e) => changeCategory(e.target.value, product.row_id)} />                            
+                                    <FormDropdown options={cards} classnm="form-select fs-12"  value={cardType} onChange={(e) => changeCategory(e.target.value, product.row_id)} />                            
                                 </div>
                             </div>
 

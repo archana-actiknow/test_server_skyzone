@@ -106,10 +106,6 @@ export default function Datatable(props) {
                             </ThemeProvider> 
 
                         </div>
-
-                        
-
-
                         <div className="card border-0">
                             <div className="row paginationRj">
                                 <div className="col-md-12 fs_12">&nbsp;</div>
@@ -119,13 +115,13 @@ export default function Datatable(props) {
                                 <div className="col-md-6">
 
                                     {/* PAGINATION */}
-                                    {totalPages &&
+                                    {totalPages >0 && (
                                     <nav aria-label="Page navigation example">
                                         <ul className="pagination justify-content-end mb-0">
 
                                             {/* PREVIOUS */}
                                             <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-                                                <button className="page-link" onClick={() => paginate(currentPage - 1)}>
+                                                <button className="page-link" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>
                                                     Previous
                                                 </button>
                                             </li>
@@ -141,19 +137,17 @@ export default function Datatable(props) {
 
                                             {/* NEXT */}
                                             <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
-                                                <button className="page-link" onClick={() => paginate(currentPage + 1)}>
+                                                <button className="page-link" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>
                                                     Next
                                                 </button>
                                             </li>
 
                                         </ul>
                                     </nav>
-                                    }
-
+                                    )}
                                 </div>
                             </div>
                         </div>
-                        
                     </div>
                 </div>
             </div>

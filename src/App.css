@@ -1211,3 +1211,16 @@ div:where(.swal2-icon).swal2-success .swal2-success-fix {
 
 
 /* added 13 march*/
+
+/*added 19march */
+.form-checkbox {
+    display: block;
+    min-height: 1.5rem;
+    margin-bottom: .125rem;
+}
+
+.margin-right{
+    margin-right: 4px;
+}
+
+/*end 19march */

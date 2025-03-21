@@ -8,9 +8,10 @@ import { GETHOIDAYCAL, HOLIDAYCALENDAR,DELETEHOLIDAYCALENDAR } from '../../utils
 import { holidayTypes, messagePop } from '../../utils/Common';
 import { holidayCalendarValidation } from '../../utils/validationSchemas';
 import SweetAlert from '../../components/SweetAlert';
+import { Skeleton } from '@mui/material';
 
 const TblBody = ({ data = {}, onDelete, index, title, onChange }) => {
-     const upRef = useRef(false);
+    const upRef = useRef(false);
     const { values, setFieldValue ,errors, touched, handleBlur } = useFormik({
         initialValues: {
             id: data.id || 0,
@@ -42,6 +43,7 @@ const TblBody = ({ data = {}, onDelete, index, title, onChange }) => {
         setFieldValue("start_date", date );
         upRef.current = true;
     }
+
     const endDateChange = (date) => {
         if (!values.start_date || (date && new Date(values.start_date) <= new Date(date))) {
             setFieldValue("end_date", date);
@@ -52,10 +54,12 @@ const TblBody = ({ data = {}, onDelete, index, title, onChange }) => {
         // setFieldValue("end_date", date);
         upRef.current = true;
     }
+
     const startTimeChange = (time) => { 
         setFieldValue("start_time", time); 
         upRef.current = true;
     }
+
     const endTimeChange = (time) => { 
         if (!values.start_time || (time && values.start_time <= time)) {
             setFieldValue("end_time", time);
@@ -66,10 +70,12 @@ const TblBody = ({ data = {}, onDelete, index, title, onChange }) => {
         // setFieldValue("end_time", time); 
         upRef.current = true;
     }
+
     const descriptionChange = (e) => { 
         setFieldValue("holiday_desc", e.target.value); 
         upRef.current = true;
     }
+
     const holidayTypesChange = (e) => { 
         setFieldValue("type", parseInt(e.target.value)); 
         upRef.current = true;
@@ -125,47 +131,50 @@ const TblBody = ({ data = {}, onDelete, index, title, onChange }) => {
     );
 };
 
-const BreakSection = ({ title, imgPath, data, onAdd, onDelete, onChange }) => {
+const BreakSection = ({ title, imgPath, data, onAdd, onDelete, onChange  }) => {
     return (
-        <div className="row mb-3">
-            <div className="col-md-12">
-                <div className="card border-0">
-                    <div className="card-body">
-                        <div className="row align-items-center">
-                            <div className="col-md-12">
-                                <p className="fs-12 fw-semibold mb-0"> <img src={imgPath} alt={title} />&nbsp; {title}</p>
+        <>
+            <div className="row mb-3">
+                <div className="col-md-12">
+                    <div className="card border-0">
+                        <div className="card-body">
+                            <div className="row align-items-center">
+                                <div className="col-md-12">
+                                    <p className="fs-12 fw-semibold mb-0"> <img src={imgPath} alt={title} />&nbsp; {title}</p>
+                                </div>
                             </div>
-                        </div>
-                        <div className="row align-items-center mt-10">
-                            <div className="col-md-12">
-                                <div className="ss-table table-responsive">
-                                    <table className="table">
-                                        <thead>
-                                            <tr>
-                                                {title === "Holidays" && <th>Event</th>}
-                                                <th>{title === "Holidays" ? "Date" : "Start Date"}</th>
-                                                {title !== "Holidays" && <th>End Date</th>}
-                                                <th>Type</th>
-                                                <th>Opening Time</th>
-                                                <th>Closing Time</th>
-                                                <th>
-                                                    <span className="me-2 icon lnk edit" data-bs-title="Add New" onClick={onAdd}> <i className="bi bi-plus-lg"></i></span>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        {data.map((item, index) => (
-                                            <TblBody key={index} data={item} index={index} title={title} onDelete={onDelete} onChange={(updatedItem) => onChange(index, updatedItem)}/>
-                                        ))}
-                                    </table>
+                            <div className="row align-items-center mt-10">
+                                <div className="col-md-12">
+                                    <div className="ss-table table-responsive">
+                                        <table className="table">
+                                            <thead>
+                                                <tr>
+                                                    {title === "Holidays" && <th>Event</th>}
+                                                    <th>{title === "Holidays" ? "Date" : "Start Date"}</th>
+                                                    {title !== "Holidays" && <th>End Date</th>}
+                                                    <th>Type</th>
+                                                    <th>Opening Time</th>
+                                                    <th>Closing Time</th>
+                                                    <th>
+                                                        <span className="me-2 icon lnk edit" data-bs-title="Add New" onClick={onAdd}> <i className="bi bi-plus-lg"></i></span>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            {data.map((item, index) => (
+                                                    <TblBody key={index} data={item} index={index} title={title} onDelete={onDelete} onChange={(updatedItem) => onChange(index, updatedItem)}/>
+                                                ))}
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>                
     );
 };
+
 
 export default function Calendar() {
     const apiRequest = useRequest();
@@ -174,6 +183,7 @@ export default function Calendar() {
     const { data: locationdt, loading: locationloading } = GetLocations();
     const currentYear = new Date().getFullYear();
     const [Year, setYear] = useState(currentYear); 
+    const [loading, setLoading] = useState(true);
     const [breakSections, setBreakSections] = useState({
         springBreak: [{ id: 0, holiday_desc: "Spring Break", start_date: "", end_date: "", type: 1, start_time: "", end_time: "", }],
         summerBreak: [{ id: 0, holiday_desc: "Summer Break", start_date: "", end_date: "", type: 1, start_time: "", end_time: "", }],
@@ -199,22 +209,31 @@ export default function Calendar() {
         }
     }, [locationdt, locationloading]);
 
+
     useEffect(() => {
         const getData = async () => {
-            const data = { client_id: currentLocation, year: Year };
-            const response = await apiRequest({ url: GETHOIDAYCAL, method: "post", data });
-            if (Array.isArray(response.data)) {
-                setData(response.data);
-            } else {
-                setData([]);
+            setLoading(true);
+            try {
+                const data = { client_id: currentLocation, year: Year };
+                const response = await apiRequest({ url: GETHOIDAYCAL, method: "post", data });
+                if (Array.isArray(response.data)) {
+                    setData(response.data);
+                } else {
+                    setData([]);
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                setData([]); // Handle error case by setting an empty array
+            } finally {
+                setLoading(false); // Ensure loading state is turned off
             }
         };
+    
         if (refreshData) {
             setRefreshData(false);
             getData();
         }
     }, [refreshData, currentLocation, Year, apiRequest]);
-
 
     useEffect(() => {
         if (Array.isArray(data)) {
@@ -414,65 +433,80 @@ export default function Calendar() {
                 <div className="col-md-12 mb-3 text-md-end">
                     <button className="ss_btn" onClick={handleSave}>Save Setting</button>
                 </div>
-                <div className="col-md-12">
-                    <div className="card border-0">
-                        <div className="card-body">
-                            <div className="row align-items-center">
-                                <div className="col-md-3">
-                                    <p className="fs-15 fw-semibold mb-0">Holiday Settings</p>
-                                </div>
-                                <div className="col-md-4">&nbsp;</div>
-                                <div className="col-md-3">
-                                    <label className="form-label fs-12 fw-semibold">Location</label>
-                                        {((locationloading) || (!currentLocation)) ? 'Loading...' : locationdt && <FormDropdown onChange={dropDownChange} name="location" options={locationdt.data} default_value={currentLocation} classnm="form-select fs-12" />}
-                                </div>
-                                <div className="col-md-1">
-                                    <label className="form-label fs-12 fw-semibold">Year</label>
-                                    <FormDropdown options={years} onChange={yearChange} value={Year} classnm="form-select fs-12" />
-                                </div>
-                                <div className="col-md-1">
-                                    <label className="form-label fs-12 fw-semibold">Reset Year</label>
-                                    <div  className="icon edit lnk f-ht-30" data-bs-title="Edit"  onClick={handleRefresh} >
-                                        <i className="bi bi-arrow-clockwise"></i>
+                {locationloading ? (
+                    <>
+                        <div className="text-end mb-3">
+                        <Skeleton variant="rectangular" width="100%" height={80} className="skeleton-custom text-end"/>
+                        </div>
+                    </>
+                    ) : (
+                    locationdt && (
+                        <div className="col-md-12">
+                            <div className="card border-0">
+                                <div className="card-body">
+                                    <div className="row align-items-center">
+                                        <div className="col-md-3">
+                                            <p className="fs-15 fw-semibold mb-0">Holiday Settings</p>
+                                        </div>
+                                        <div className="col-md-4">&nbsp;</div>
+                                        <div className="col-md-3">
+                                            <label className="form-label fs-12 fw-semibold">Location</label>
+                                                {((locationloading) || (!currentLocation)) ? 'Loading...' : locationdt && <FormDropdown onChange={dropDownChange} name="location" options={locationdt.data} default_value={currentLocation} classnm="form-select fs-12" />}
+                                        </div>
+                                        <div className="col-md-1">
+                                            <label className="form-label fs-12 fw-semibold">Year</label>
+                                            <FormDropdown options={years} onChange={yearChange} value={Year} classnm="form-select fs-12" />
+                                        </div>
+                                        <div className="col-md-1">
+                                            <label className="form-label fs-12 fw-semibold">Reset Year</label>
+                                            <div  className="icon edit lnk f-ht-30" data-bs-title="Edit"  onClick={handleRefresh} >
+                                                <i className="bi bi-arrow-clockwise"></i>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    )
+                )}
+            </div>
+                {loading 
+                    ? 
+                        <Skeleton variant="rectangular" width="100%" height={400} className="skeleton-custom" />
+                    : 
+                <div>
+                    <BreakSection title="Holidays" imgPath="./images/happy.png" data={breakSections.holidays}
+                        onAdd={() => handleAddEntry("holidays","Holidays")}
+                        onDelete={(index,id) => handleDeleteEntry("holidays", index ,id)}
+                        onChange={(index, updatedItem) => handleUpdateEntry("holidays", index, updatedItem)}
+                    />
+                    <BreakSection title="Spring Break" imgPath="./images/break.png" data={breakSections.springBreak}
+                        onAdd={() => handleAddEntry("springBreak","Spring Break")}
+                        onDelete={(index,id) => handleDeleteEntry("springBreak", index,id)}
+                        onChange={(index, updatedItem) => handleUpdateEntry("springBreak", index, updatedItem)}
+                    />
+                    <BreakSection title="Summer Break" imgPath="./images/sun-umbrella.png" data={breakSections.summerBreak}
+                        onAdd={() => handleAddEntry("summerBreak","Summer Break")}
+                        onDelete={(index,id) => handleDeleteEntry("summerBreak", index, id)}
+                        onChange={(index, updatedItem) => handleUpdateEntry("summerBreak", index, updatedItem)}
+                        />
+                    <BreakSection title="Thanks Giving Break" imgPath="./images/leaves.png" data={breakSections.thanksGivingBreak}
+                        onAdd={() => handleAddEntry("thanksGivingBreak","Thanks Giving Break")}
+                        onDelete={(index,id) => handleDeleteEntry("thanksGivingBreak", index ,id)}
+                        onChange={(index, updatedItem) => handleUpdateEntry("thanksGivingBreak", index, updatedItem)}
+                        />
+                    <BreakSection title="Winter Break" imgPath="./images/snowman.png" data={breakSections.winterBreak}
+                        onAdd={() => handleAddEntry("winterBreak","Winter Break")}
+                        onDelete={(index,id) => handleDeleteEntry("winterBreak", index, id)}
+                        onChange={(index, updatedItem) => handleUpdateEntry("winterBreak", index, updatedItem)}
+                        />
+                    <BreakSection title="Christmas Break" imgPath="./images/snowman.png" data={breakSections.christmasBreak}
+                        onAdd={() => handleAddEntry("christmasBreak","Christmas Break")}
+                        onDelete={(index,id) => handleDeleteEntry("christmasBreak", index, id)}
+                        onChange={(index, updatedItem) => handleUpdateEntry("christmasBreak", index, updatedItem)}
+                        />
                 </div>
-            </div>
-            <div>
-                <BreakSection title="Holidays" imgPath="./images/happy.png" data={breakSections.holidays}
-                    onAdd={() => handleAddEntry("holidays","Holidays")}
-                    onDelete={(index,id) => handleDeleteEntry("holidays", index ,id)}
-                    onChange={(index, updatedItem) => handleUpdateEntry("holidays", index, updatedItem)}
-                />
-                <BreakSection title="Spring Break" imgPath="./images/break.png" data={breakSections.springBreak}
-                    onAdd={() => handleAddEntry("springBreak","Spring Break")}
-                    onDelete={(index,id) => handleDeleteEntry("springBreak", index,id)}
-                    onChange={(index, updatedItem) => handleUpdateEntry("springBreak", index, updatedItem)}
-                />
-                <BreakSection title="Summer Break" imgPath="./images/sun-umbrella.png" data={breakSections.summerBreak}
-                    onAdd={() => handleAddEntry("summerBreak","Summer Break")}
-                    onDelete={(index,id) => handleDeleteEntry("summerBreak", index, id)}
-                    onChange={(index, updatedItem) => handleUpdateEntry("summerBreak", index, updatedItem)}
-                    />
-                <BreakSection title="Thanks Giving Break" imgPath="./images/leaves.png" data={breakSections.thanksGivingBreak}
-                    onAdd={() => handleAddEntry("thanksGivingBreak","Thanks Giving Break")}
-                    onDelete={(index,id) => handleDeleteEntry("thanksGivingBreak", index ,id)}
-                    onChange={(index, updatedItem) => handleUpdateEntry("thanksGivingBreak", index, updatedItem)}
-                    />
-                <BreakSection title="Winter Break" imgPath="./images/snowman.png" data={breakSections.winterBreak}
-                    onAdd={() => handleAddEntry("winterBreak","Winter Break")}
-                    onDelete={(index,id) => handleDeleteEntry("winterBreak", index, id)}
-                    onChange={(index, updatedItem) => handleUpdateEntry("winterBreak", index, updatedItem)}
-                    />
-                <BreakSection title="Christmas Break" imgPath="./images/snowman.png" data={breakSections.christmasBreak}
-                    onAdd={() => handleAddEntry("christmasBreak","Christmas Break")}
-                    onDelete={(index,id) => handleDeleteEntry("christmasBreak", index, id)}
-                    onChange={(index, updatedItem) => handleUpdateEntry("christmasBreak", index, updatedItem)}
-                    />
-            </div>
+             }
         </div>
     );
 }

@@ -13,6 +13,7 @@ export default function LocationSetup() {
     const [data, setData] = useState([]);
     const [refreshRecords, setRefreshRecords] = useState(true);
     const [currentLocation, setCurrentLocation] = useState(false);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const apiRequest = useRequest();
     const { data: locationdt, loading: locationloading } = GetLocations();
@@ -39,6 +40,7 @@ export default function LocationSetup() {
     // COMPONENT MOUNTING / UPDATING
     useEffect(() => {
         const getRecords = async () => {
+            setLoading(true);
             try {
                 const response = await apiRequest({ 
                     url: `${FETCHLOCATIONS}?id=${currentLocation}`, 
@@ -53,6 +55,7 @@ export default function LocationSetup() {
             } catch (error) {
                 console.error("Error fetching records:", error);
             } finally {
+                setLoading(false);
                 setRefreshRecords(false);
             }
         };
@@ -188,28 +191,15 @@ export default function LocationSetup() {
             )
         )}
 
+        {loading ? (
+            <Skeleton variant="rectangular" width="100%" height={400} className="skeleton-custom" />
+        ):(
+
+
         <div className="row align-items-center">
             <div className="col-md-12 mb-2">
                 <div className="card border-0">
                     <div className="card-body hide-overflow">
-                        {/* <div className="d-flex align-items-center justify-content-between mb-3">
-                            <h2></h2>
-                            <div className="d-flex align-items-center">
-                                <Link className={`product-status me-2 ${data.cafe_module === true ? "product-active" : "product-inactive" }`} title={`Click to ${(data.cafe_module === true ? 'deactivate' : 'activate')}`} onClick={() => handleCafeChange(data.client_id, data.cafe_module)}>
-                                    {data.cafe_module === true ? "Fuel Zone : visible" : "Fuel Zone : hidden"}
-                                </Link>
-                                <Link className={`product-status me-2 ${data.status === "1" ? "product-active" : "product-inactive" }`} title={`Click to ${(data.status === "1" ? 'deactivate' : 'activate')}`} onClick={() => handleStatusChange(data.client_id)}>
-                                    {data.status === "1" ? "Active" : "Inactive"}
-                                </Link>
-                                <Link  onClick={() => handleEditClick(data.client_id)} className="me-2 icon edit" title="Edit" data-bs-title="Edit" >
-                                    <i className="bi bi-pencil-square"></i>
-                                </Link>
-                                <Link className="icon delete" title="Delete" data-bs-title="Delete" onClick={() => handleDelete(data.client_id)}>
-                                    <i className="bi bi-trash-fill"></i>
-                                </Link>
-                            </div>
-                        </div> */}
-
                         <div className="col-sm-6 padding-right mx-auto mt-40">
                             <div className="card boxShadow mb-2 position-relative">
                                 <div className="initials-circle fs-50">
@@ -219,17 +209,6 @@ export default function LocationSetup() {
                                     <div className="col-md-8 mt-40 mx-auto text-start">
                                         <label className="fs-20 fw-semibold d-block text-center margin">{data.location}</label>
                                         <p className="fs-14 mt-20 d-flex align-items"> <b>{data.address}</b> </p>
-
-
-                                        {/* <div className="col-md-8 mt-40 mx-auto text-start">
-                                            <span className="fs-13 d-flex gap-2"><i className="bi bi-envelope"></i> {data.client_email} </span>
-                                            <span className="fs-13 d-flex gap-2"><i className="bi bi-telephone"></i> {data.phone_number}</span>
-                                            
-                                            <span className="fs-13 d-flex gap-2"><i className="bi bi-globe"></i> 
-                                                <a href={data.website} target="_blank" rel="noopener noreferrer">{data.website}</a>
-                                            </span>
-                                            <span className="fs-13 d-flex gap-2"><i className="bi bi-clock"></i> {data.client_timezone} </span>
-                                        </div> */}
                                         <div className="col-md-8 mt-40 mx-auto text-start">
                                             <div className="d-flex flex-column gap-2">
                                                 <div className="d-flex align-items-center">
@@ -255,9 +234,6 @@ export default function LocationSetup() {
 
                                         <div className="col-md-8 mt-40 mx-auto text-start">
                                             <div className="d-flex">
-                                                {/* <Link className={`product-status me-2 ${data.cafe_module === true ? "product-active" : "product-inactive" }`} title={`Click to ${(data.cafe_module === true ? 'hide' : 'show')}`} onClick={() => handleCafeChange(data.client_id, data.cafe_module)}>
-                                                    {data.cafe_module === true ? "Fuel Zone : visible" : "Fuel Zone : hidden"}
-                                                </Link> */}
                                                 <Link 
                                                     className={`product-status me-2 ${data.cafe_module ? "product-active" : "product-inactive"}`} 
                                                     title={`Click to ${data.cafe_module ? 'hide' : 'show'}`} 
@@ -271,9 +247,6 @@ export default function LocationSetup() {
                                                 <Link  onClick={() => handleEditClick(data.client_id)} className="me-2 icon edit" title="Edit" data-bs-title="Edit" >
                                                     <i className="bi bi-pencil-square"></i>
                                                 </Link>
-                                                {/* <Link className="icon delete" title="Delete" data-bs-title="Delete" onClick={() => handleDelete(data.client_id)}>
-                                                    <i className="bi bi-trash-fill"></i>
-                                                </Link> */}
                                             </div>
                                         </div>
                                         
@@ -281,33 +254,11 @@ export default function LocationSetup() {
                                 </div>
                             </div>
                         </div>
-
-                        {/* <div className="col-sm-6 padding-right mx-auto">
-                            <div className="card boxShadow mb-2 position-relative">
-                                <div className="initials-circle">
-                                    {data.client_name 
-                                        ? data.client_name.split(" ").map(word => word.charAt(0).toUpperCase()).join("") 
-                                        : "N"}
-                                </div>
-                                <div className="card-body text-center">
-                                    <div className="col-md-6 mt-40 mx-auto text-start">
-                                        <label className="fs-20 fw-semibold d-block text-center margin">{data.client_name}</label>
-                                        
-                                        <p className="fs-14 d-flex align-items-center gap-2"><i className="bi bi-envelope-fill"></i> {data.client_email} </p>
-                                        <p className="fs-14 d-flex align-items-center gap-2"><i className="bi bi-phone-fill"></i> {data.phone_number}</p>
-                                        <p className="fs-14 d-flex align-items-center gap-2"> <i className="bi bi-geo-alt-fill"></i> {data.address} </p>
-                                        <p className="fs-14 d-flex align-items-center gap-2"><i className="bi bi-globe"></i> 
-                                            <a href={data.website} target="_blank" rel="noopener noreferrer">{data.website}</a>
-                                        </p>
-                                        <p className="fs-14 d-flex align-items-center gap-2"><i className="bi bi-clock-fill"></i> {data.client_timezone} </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> */}
                     </div>
                 </div>
             </div>
         </div>
+        )}
     </>
   )
 }

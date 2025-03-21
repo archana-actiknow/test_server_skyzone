@@ -99,6 +99,35 @@ export default function Sidebar() {
                         </Link>
                     </li>
                 }
+
+
+                {!IsAgent &&
+                    <>
+                        <li className={`fs-15 mt-30 lnk ${!isSidebarOpen ? 'd-flex justify-content-between align-items-center' : ''}`}
+                            onClick={() => handleSectionClick('Fuel Zone Settings')}>
+                            <div className= {`${!isSidebarOpen ? 'd-flex align-items-center' : ''}`}><i className={`bi bi-gear-fill ${(iconSide === 'right') && 'fs_40'}`}></i> 
+                                {iconSide === 'right' ? '' : <span className="ms-2">Fuel Zone Settings</span>}
+                            </div>
+                            {!isSidebarOpen && (<i className={`bi fs-13 ${openSection === 'Fuel Zone Settings' ? 'bi-chevron-down' : 'bi-chevron-right'}`}></i>)}
+                        </li>
+
+                        <li><hr className='horizontal' /></li>
+                        {openSection === 'Fuel Zone Settings' &&
+                            <>
+                                <li className="mb-2 nav-item">  
+                                    <Link to="/menu-items" className={`w-100 nav-link ${(currentPath === '/menu-items' || currentPath === '/add-menu-items') ? `active` : ''}`}>
+                                        <i className="bi bi-ui-checks"></i> <span className="ms-2">Menu Items</span>
+                                    </Link>
+                                </li>
+                                <li className="mb-2 nav-item">
+                                    <Link to="/menu-slider" className={`w-100 nav-link ${(currentPath === '/menu-slider') ? `active` : ''}`}>
+                                        <i className="bi bi-images"></i><span className="ms-2"> Menu Slider</span>
+                                    </Link>
+                                </li>
+                            </>
+                        }
+                    </>
+                }
                 
                 {!IsAgent &&
                     <>
@@ -113,16 +142,6 @@ export default function Sidebar() {
                         <li><hr className='horizontal' /></li>
                         {openSection === 'App Settings' &&
                             <>
-                                <li className="mb-2 nav-item">  
-                                    <Link to="/menu-items" className={`w-100 nav-link ${(currentPath === '/menu-items' || currentPath === '/add-menu-items') ? `active` : ''}`}>
-                                        <i className="bi bi-ui-checks"></i> <span className="ms-2">Fuel Zone Items</span>
-                                    </Link>
-                                </li>
-                                <li className="mb-2 nav-item">
-                                    <Link to="/menu-slider" className={`w-100 nav-link ${(currentPath === '/menu-slider') ? `active` : ''}`}>
-                                        <i className="bi bi-person-badge-fill"></i><span className="ms-2">Kitchen Menu Slider</span>
-                                    </Link>
-                                </li>
                                 <li className="mb-2 nav-item">
                                     <Link to="/mobile-available-products" className={`w-100 nav-link ${(currentPath === '/mobile-available-products') ? `active` : ''}`}>
                                         <i className="bi bi-cart-check-fill"></i><span className="ms-2">App Visible Products</span>
