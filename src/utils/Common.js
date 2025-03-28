@@ -92,6 +92,15 @@ export const cards = [
   { id: 3, label: "Jump Tickets", value: "3" },
 ];
 
+// export const cardsMembership = [
+//   { id: 1, label: "Memberships", value: "1" },
+//   { id: 2, label: "Birthday Parties", value: "2" },
+//   { id: 3, label: "Jump Tickets", value: "3" },
+//   { id: 4, label: "Fuel Zone", value: "4" },
+// ];
+
+export const cardsMembership = [...cards, { id: 4, label: "Fuel Zone", value: "4" }];
+
 export const available_prd_category = [
   "addon",
   "membership",

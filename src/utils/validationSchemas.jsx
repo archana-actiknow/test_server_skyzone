@@ -270,3 +270,8 @@ export const holidayCalendarValidation = yup.object().shape({
   start_time: yup.string().required('start time is required'),
   end_time: yup.string().required("end time is required."),
 });
+
+export const addMembershipDiscount = yup.object().shape({
+  discountCode:yup.string().required("discount code is required"),
+  selectedProduct:yup.string().required("select products"),
+})

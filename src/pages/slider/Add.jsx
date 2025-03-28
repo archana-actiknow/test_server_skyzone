@@ -9,9 +9,11 @@ import { ADD_KITCHEN_SLIDER_IMAGES } from "../../utils/Endpoints";
 
 function Add({refreshData, close}) {    
     const apiRequest = useRequest();
+    const [loading, setLoading] = useState(false);
 
     // FORM SUBMIT //
     const onSubmit = async (values, { resetForm }) => {
+        setLoading(true); 
         const formData = {
             image: values.image,
         }
@@ -27,6 +29,7 @@ function Add({refreshData, close}) {
       }else{
             SweetAlert.error("Error", "There is some issue while adding user.")
       }
+      setLoading(false);
     }
 
     const {values, touched, errors, handleBlur, setFieldValue, handleSubmit} = useFormik({
@@ -49,14 +52,14 @@ function Add({refreshData, close}) {
       };
 
   return (
-    <PopupModal title="Add Slider Image" open={open} setOpen={handleClose} handleSubmit={handleSubmit} size="md">
+    <PopupModal title="Add Slider Image" open={open} setOpen={handleClose} handleSubmit={handleSubmit} size="md" loading={loading}>
         <div className="col-sm-12" id="dis_list"> 
             <div className="form-group row">
                 <div className="col-sm-12">
                         <label className="fs-12 fw-semibold">Image<span className='mandatory'>*</span></label>
-                        <input className="form-control fs-12" type="file" name="image" onBlur={handleBlur} onChange={(e) => handleFileChange(e.target.files[0]) }/>
+                        <input className="form-control fs-12" type="file" name="image" onChange={(e) => handleFileChange(e.target.files[0]) }/>
                         <span style={{ fontSize: "9px" }}>*(preferred image size 650×350)</span>
-                        {errors.image && touched.image && <p className='text-danger fs-12'>{errors.image}</p>}
+                        {errors.image && <p className='text-danger fs-12'>{errors.image}</p>}
                     <div className="col-md-4">
                         <img src={values.image !== '' ? URL.createObjectURL(values.image) : ""} alt="" className="w-90" />
                     </div>

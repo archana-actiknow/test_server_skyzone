@@ -36,6 +36,7 @@ import AddLocations from "./pages/location_setup/AddLocations";
 import EditLocation from "./pages/location_setup/EditLocations";
 
 import KitchenSlider from "./pages/slider/KitchenSlider";
+import MembershipDiscount from "./pages/membership_discount/MembershipDiscount";
 
 function App() {
   const humanityRoute = [
@@ -261,6 +262,14 @@ function App() {
       element: (
         <Auth title="Products">
           <Products />
+        </Auth>
+      ),
+    },
+    {
+      path: "/membership-discount",
+      element: (
+        <Auth title="Membership Discount">
+          <MembershipDiscount />
         </Auth>
       ),
     },

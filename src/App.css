@@ -1224,3 +1224,15 @@ div:where(.swal2-icon).swal2-success .swal2-success-fix {
 }
 
 /*end 19march */
+
+.custom-spinner {
+    width: 1.5rem !important; /* Smaller spinner */
+    height: 1.5rem !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.justify-content-end{
+    justify-content: end;
+}

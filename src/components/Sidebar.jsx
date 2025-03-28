@@ -70,7 +70,7 @@ export default function Sidebar() {
                                 <span className="ms-2">Payments</span>
                             </Link>
                         </li>
-                        <li className="mb-2 nav-item">
+                        {/* <li className="mb-2 nav-item">
                             <Link to="/rewards" className={`w-100 nav-link ${(currentPath === '/rewards' || currentPath === '/add-reward-rule') ? `active` : ''}`}>
                                 <i className="bi bi-trophy-fill"></i>
                                 <span className="ms-2">Rewards</span>
@@ -87,10 +87,10 @@ export default function Sidebar() {
                                 <i className="bi bi-bag-plus-fill"></i>
                                 <span className="ms-2">Addons</span>
                             </Link>
-                        </li>
+                        </li> */}
                     </>
                 }
-                
+{/*                 
                 {(!IsUser && !IsAgent) &&
                     <li className="mb-2 nav-item">
                         <Link to="/push-notifications" className={`w-100 nav-link ${(currentPath === '/edit-notification' || currentPath === '/push-notifications' || currentPath === '/add-notification') ? `active` : ''}`}>
@@ -98,8 +98,72 @@ export default function Sidebar() {
                             <span className="ms-2">Push Notifications</span>
                         </Link>
                     </li>
-                }
+                } */}
+                
+                {!IsAgent &&
+                    <>
+                        <li className={`fs-15 mt-30 lnk ${!isSidebarOpen ? 'd-flex justify-content-between align-items-center' : ''}`}
+                            onClick={() => handleSectionClick('App Settings')}>
+                            <div className= {`${!isSidebarOpen ? 'd-flex align-items-center' : ''}`}><i className={`bi bi-sliders ${(iconSide === 'right') && 'fs_40'}`}></i> 
+                                {iconSide === 'right' ? '' : <span className="ms-2">App Settings</span>}
+                            </div>
+                            {!isSidebarOpen && (<i className={`bi fs-13 ${openSection === 'App Settings' ? 'bi-chevron-down' : 'bi-chevron-right'}`}></i>)}
+                        </li>
 
+                        <li><hr className='horizontal' /></li>
+                        {openSection === 'App Settings' &&
+                            <>
+                                <li className="mb-2 nav-item">
+                                    <Link to="/rewards" className={`w-100 nav-link ${(currentPath === '/rewards' || currentPath === '/add-reward-rule') ? `active` : ''}`}>
+                                        <i className="bi bi-trophy-fill"></i>
+                                        <span className="ms-2">Rewards</span>
+                                    </Link>
+                                </li>
+                                <li className="mb-2 nav-item">
+                                    <Link to="/latest-offerings" className={`w-100 nav-link ${(currentPath === '/add-offer' || currentPath === '/latest-offerings' || currentPath === '/update-offer') ? `active` : ''}`}>
+                                        <i className="bi bi-gift-fill"></i>
+                                        <span className="ms-2">Latest Offerings</span>
+                                    </Link>
+                                </li>
+                                
+                                {(!IsUser && !IsAgent) &&
+                                    <li className="mb-2 nav-item">
+                                        <Link to="/push-notifications" className={`w-100 nav-link ${(currentPath === '/edit-notification' || currentPath === '/push-notifications' || currentPath === '/add-notification') ? `active` : ''}`}>
+                                            <i className="bi bi-bell-fill"></i>
+                                            <span className="ms-2">Push Notifications</span>
+                                        </Link>
+                                    </li>
+                                }
+                                <li className="mb-2 nav-item">
+                                    <Link to="/addons" className={`w-100 nav-link ${(currentPath === '/addons' || currentPath === '/create-addons') ? `active` : ''}`}>
+                                        <i className="bi bi-bag-plus-fill"></i>
+                                        <span className="ms-2">Addons</span>
+                                    </Link>
+                                </li>
+                                <li className="mb-2 nav-item">
+                                    <Link to="/mobile-available-products" className={`w-100 nav-link ${(currentPath === '/mobile-available-products') ? `active` : ''}`}>
+                                        <i className="bi bi-cart-check-fill"></i><span className="ms-2">App Visible Products</span>
+                                    </Link>
+                                </li>
+                                <li className="mb-2 nav-item">
+                                    <Link to="/location-manager-setup" className={`w-100 nav-link ${(currentPath === '/location-manager-setup') ? `active` : ''}`}>
+                                        <i className="bi bi-person-badge-fill"></i><span className="ms-2">Location Manager</span>
+                                    </Link>
+                                </li>
+                                <li className="mb-2 nav-item">
+                                    <Link to="/mobile-users" className={`w-100 nav-link ${(currentPath === '/mobile-users') ? `active` : ''}`}>
+                                        <i className="bi bi-people-fill"></i><span className="ms-2">Mobile Users</span>
+                                    </Link>
+                                </li>
+                                <li className="mb-2 nav-item">
+                                    <Link to="/membership-discount" className={`w-100 nav-link ${(currentPath === '/membership-discount') ? `active` : ''}`}>
+                                        <i className="bi bi-person-bounding-box"></i><span className="ms-2">Membership Discount</span>
+                                    </Link>
+                                </li>
+                            </>
+                        }
+                    </>
+                }
 
                 {!IsAgent &&
                     <>
@@ -122,39 +186,6 @@ export default function Sidebar() {
                                 <li className="mb-2 nav-item">
                                     <Link to="/menu-slider" className={`w-100 nav-link ${(currentPath === '/menu-slider') ? `active` : ''}`}>
                                         <i className="bi bi-images"></i><span className="ms-2"> Menu Slider</span>
-                                    </Link>
-                                </li>
-                            </>
-                        }
-                    </>
-                }
-                
-                {!IsAgent &&
-                    <>
-                        <li className={`fs-15 mt-30 lnk ${!isSidebarOpen ? 'd-flex justify-content-between align-items-center' : ''}`}
-                            onClick={() => handleSectionClick('App Settings')}>
-                            <div className= {`${!isSidebarOpen ? 'd-flex align-items-center' : ''}`}><i className={`bi bi-sliders ${(iconSide === 'right') && 'fs_40'}`}></i> 
-                                {iconSide === 'right' ? '' : <span className="ms-2">App Settings</span>}
-                            </div>
-                            {!isSidebarOpen && (<i className={`bi fs-13 ${openSection === 'App Settings' ? 'bi-chevron-down' : 'bi-chevron-right'}`}></i>)}
-                        </li>
-
-                        <li><hr className='horizontal' /></li>
-                        {openSection === 'App Settings' &&
-                            <>
-                                <li className="mb-2 nav-item">
-                                    <Link to="/mobile-available-products" className={`w-100 nav-link ${(currentPath === '/mobile-available-products') ? `active` : ''}`}>
-                                        <i className="bi bi-cart-check-fill"></i><span className="ms-2">App Visible Products</span>
-                                    </Link>
-                                </li>
-                                <li className="mb-2 nav-item">
-                                    <Link to="/location-manager-setup" className={`w-100 nav-link ${(currentPath === '/location-manager-setup') ? `active` : ''}`}>
-                                        <i className="bi bi-person-badge-fill"></i><span className="ms-2">Location Manager</span>
-                                    </Link>
-                                </li>
-                                <li className="mb-2 nav-item">
-                                    <Link to="/mobile-users" className={`w-100 nav-link ${(currentPath === '/mobile-users') ? `active` : ''}`}>
-                                        <i className="bi bi-people-fill"></i><span className="ms-2">Mobile Users</span>
                                     </Link>
                                 </li>
                             </>

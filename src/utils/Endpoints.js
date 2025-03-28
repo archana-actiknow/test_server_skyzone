@@ -116,3 +116,11 @@ export const ADD_KITCHEN_SLIDER_IMAGES = MENU +  "/upload_carousal_images";
 export const GET_KITCHEN_SLIDER_IMAGES = MENU + "/fetch_carousal_images";
 export const UPDATE_KITCHEN_SLIDER_IMAGES = MENU + "/update_carousal_images";
 export const DELETE_KITCHEN_SLIDER_IMAGES = MENU + "/delete_carousal_images/";
+
+//memebership discount
+const MEMBERSHIPDISCOUNT = "/discount_code";
+export const ADDMEMBERSHIPDISCOUNT = MEMBERSHIPDISCOUNT + "/create";
+export const FETCHMEMBERSHIPDISCOUNT = MEMBERSHIPDISCOUNT + "/fetch";
+export const SINGLEMEMBERSHIPDISCOUNT = MEMBERSHIPDISCOUNT + "/details";
+export const UPDATEMEMBERSHIPDISCOUNT = MEMBERSHIPDISCOUNT + "/update";
+export const DELETEMEMBERSHIPDISCOUNT = MEMBERSHIPDISCOUNT + "/status_update";

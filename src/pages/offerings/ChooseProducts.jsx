@@ -7,9 +7,7 @@ import Accordion from '../../components/Accordion';
 
 
 const ChooseProducts = ({ open, setOpen, offerType, clientID, setSelectedProducts, loadProducts, setLoadProducts}) => {
-
     const apiRequest = useRequest();
-
     const [load, setLoad] = useState(false);
 	const [selected, setSelected] = useState([]);
     const [data,setData] = useState([]);

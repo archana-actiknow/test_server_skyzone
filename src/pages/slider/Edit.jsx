@@ -9,6 +9,7 @@ import { imageValidation } from "../../utils/validationSchemas";
 
 export default function Edit({id, close, data, refreshData}) {  
     const [open, setOpen] = useState(true);
+    const [loading, setLoading] = useState(false);
     const apiRequest = useRequest();
 
     const handleClose = () => {
@@ -19,6 +20,7 @@ export default function Edit({id, close, data, refreshData}) {
     // // FORM SUBMIT //
 
     const onSubmit = async (values, {resetForm}) => {
+        setLoading(true); 
         const uUser = {
             id: id,
             image: values.image,
@@ -36,6 +38,7 @@ export default function Edit({id, close, data, refreshData}) {
         }else{
             SweetAlert.error("Error", "There is some issue while adding user.")
         }
+        setLoading(false);
     }
 
     const {values, touched, errors, handleBlur, setFieldValue, handleSubmit} = useFormik({
@@ -52,7 +55,7 @@ export default function Edit({id, close, data, refreshData}) {
       };
 
   return (
-    <PopupModal title="Edit Slider Image" open={open} setOpen={handleClose} handleSubmit={handleSubmit} size="md">
+    <PopupModal title="Edit Slider Image" open={open} setOpen={handleClose} handleSubmit={handleSubmit} size="md"  loading={loading}>
         <div className="col-sm-12" id="dis_list"> 
             <div className="form-group row">
                 <div className="col-sm-12">
@@ -60,9 +63,9 @@ export default function Edit({id, close, data, refreshData}) {
                     <input className="form-control fs-12" type="file" name="image" onBlur={handleBlur} onChange={(e) => handleFileChange(e.target.files[0]) }/>
                     <span style={{ fontSize: "9px" }}>*(preferred image size 650×350)</span>
                     {errors.image && touched.image && <p className='text-danger fs-12'>{errors.image}</p>}
-                <div className="col-md-4">
-                    <img src={values.image !== '' ? values.image : ""} alt="" className="w-90" />
-                </div>
+                    <div className="col-md-4">
+                        <img src={values.image !== '' ? values.image : ""} alt="" className="w-90" />
+                    </div>
                 </div>
             </div>
         </div>

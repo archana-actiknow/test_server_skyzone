@@ -187,7 +187,6 @@ export default function Offers() {
     };
 
   return (
-
     <>
 
         <div className="row align-items-center mb-3">
