@@ -70,7 +70,7 @@ export default function Add({close,user,data }) {
                     <div className="col-sm-8">
                         <div className="card boxShadow mb-2">
                             <div className="card-body">
-                                <div style={{ height:"205px", overflowY: "auto" }}>
+                                <div className="overflow-y" style={{ height:"205px"}}>
                                     
                                     <table className="table table-bordered" style={{ borderCollapse: "collapse", borderStyle: "none", width: "100%" }}>
                                         <thead className="border-style">

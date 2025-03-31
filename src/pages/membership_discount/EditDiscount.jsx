@@ -115,7 +115,7 @@ const EditDiscount = ({id, close, editData,clientID, loadProducts, setLoadProduc
                         {errors.discountCode && (<p className="text-danger">{errors.discountCode}</p>)}
                     </div>
                 </div>
-                <div className="form-group row mb-3">
+                <div className="form-group row mb-3 height-300 overflow-y">
                     <label className="col-md-3 fs-12 fw-semibold">Products</label>
                     <div className="col-md-9">
                         {data.map((product) => (

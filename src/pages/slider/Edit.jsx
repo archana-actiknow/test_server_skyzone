@@ -21,14 +21,8 @@ export default function Edit({id, close, data, refreshData}) {
 
     const onSubmit = async (values, {resetForm}) => {
         setLoading(true); 
-        const uUser = {
-            id: id,
-            image: values.image,
-        }
-
-        const response = await apiRequest({
-            url:UPDATE_KITCHEN_SLIDER_IMAGES, method:"POST", data: uUser},true);
-
+        const uUser = {id: id,image: values.image}
+        const response = await apiRequest({ url:UPDATE_KITCHEN_SLIDER_IMAGES, method:"POST", data: uUser},true);
         if(response){
             setOpen(false)
             close(false)
@@ -42,17 +36,13 @@ export default function Edit({id, close, data, refreshData}) {
     }
 
     const {values, touched, errors, handleBlur, setFieldValue, handleSubmit} = useFormik({
-        initialValues: {
-            image:data?.image,
-        },
+        initialValues: {image:data?.image},
         enableReinitialize: true,
         validationSchema: imageValidation,
         onSubmit
     })
 
-    const handleFileChange = (file) => {
-        setFieldValue("image", file);
-      };
+    const handleFileChange = (file) => {setFieldValue("image", file)};
 
   return (
     <PopupModal title="Edit Slider Image" open={open} setOpen={handleClose} handleSubmit={handleSubmit} size="md"  loading={loading}>
@@ -64,7 +54,7 @@ export default function Edit({id, close, data, refreshData}) {
                     <span style={{ fontSize: "9px" }}>*(preferred image size 650×350)</span>
                     {errors.image && touched.image && <p className='text-danger fs-12'>{errors.image}</p>}
                     <div className="col-md-4">
-                        <img src={values.image !== '' ? values.image : ""} alt="" className="w-90" />
+                        <img src={values.image !== '' ? values.image : ""} alt="" className="w-90"/>
                     </div>
                 </div>
             </div>
