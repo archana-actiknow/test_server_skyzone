@@ -8,6 +8,7 @@ import PopupModal from '../../components/PopupModal';
 import { addMembershipDiscount } from '../../utils/validationSchemas';
 import SweetAlert from '../../components/SweetAlert';
 import { messagePop } from '../../utils/Common';
+import { Skeleton } from '@mui/material';
 
 const AddDiscount = ({close, clientID, loadProducts, setLoadProducts,refreshData}) => {
 
@@ -15,12 +16,10 @@ const AddDiscount = ({close, clientID, loadProducts, setLoadProducts,refreshData
     const [load, setLoad] = useState(false);
     const [data,setData] = useState([]);
     const [open, setOpen] = useState(true);
-    const handleClose = () => {
-        setOpen(false)
-        close(false)
-    }
+    const [loading, setLoading] = useState(true);
     const fetchProducts = useCallback(async () => {
         setLoad(true);
+        setLoading(true)
         try {
             const response = await apiRequest({
                 url:OFFERSPRODUCTS, 
@@ -32,6 +31,7 @@ const AddDiscount = ({close, clientID, loadProducts, setLoadProducts,refreshData
                 const products = response.data;
                 setData(products);
                 setLoad(false);
+                setLoading(false)
             } else {
                 console.error('Failed to fetch products:', response.data.message);
             }
@@ -64,13 +64,19 @@ const AddDiscount = ({close, clientID, loadProducts, setLoadProducts,refreshData
             method: "POST", data: formData});
         if(response){
             messagePop(response);
-            resetForm();
-            setOpen(false)
             refreshData(true);
+            resetForm();
+            close();
+            setOpen(false)
         }else{
             SweetAlert.error("Error", "There is some issue while adding user.")
         }
     setLoad(false);
+    }
+
+    const handleClose = () => {
+        setOpen(false)
+        close(false)
     }
 
     const {values, errors, handleSubmit,handleChange} = useFormik({
@@ -97,12 +103,16 @@ const AddDiscount = ({close, clientID, loadProducts, setLoadProducts,refreshData
                             value={values.discountCode}
                             onChange={handleChange}
                         />
-                        {errors.discountCode && (<p className="text-danger">{errors.discountCode}</p>)}
+                        {errors.discountCode && (<p className="text-danger fs-11">{errors.discountCode}</p>)}
                     </div>
                 </div>
-                <div className="form-group row mb-3 height-300 overflow-y">
+                 {loading 
+                    ? 
+                        <Skeleton variant="rectangular" width="100%" height={400} className="skeleton-custom" />
+                    : 
+                <div className="form-group row mb-3">
                     <label className="col-md-3 fs-12 fw-semibold">Products</label>
-                    <div className="col-md-9">
+                    <div className="col-md-9 height-300 overflow-y">
                         {data.map((product) => (
                             <Accordion className='fs-12 fw-semibold' key={product.Pid} id={product.Pid} title={product.parent_name} open={false}>
                                 {!load && (
@@ -141,10 +151,11 @@ const AddDiscount = ({close, clientID, loadProducts, setLoadProducts,refreshData
                             </Accordion>
                         ))}
                         {errors.selectedProduct && (
-                            <p className="text-danger">{errors.selectedProduct}</p>
+                            <p className="text-danger fs-11">{errors.selectedProduct}</p>
                         )}
                     </div>
                 </div>
+                }
             </div>
         </PopupModal>
     </>

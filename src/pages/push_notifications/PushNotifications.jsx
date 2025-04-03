@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useRequest } from '../../utils/Requests';
-import { messagePop, timezones} from '../../utils/Common';
+import { can_access, messagePop, status, timezones} from '../../utils/Common';
 import Moment from 'moment';
 import DOMPurify from 'dompurify';
 import { Tooltip } from '@mui/material';
@@ -9,6 +9,7 @@ import Datatable from '../../components/Datatable';
 import { Link, useNavigate } from 'react-router-dom';
 import SweetAlert from '../../components/SweetAlert';
 import GetLocations from '../../hooks/Locations';
+import FormDropdown from '../../components/FormDropdown';
 
 export default function PushNotifications() {
     const [data, setData] = useState([]);
@@ -16,11 +17,24 @@ export default function PushNotifications() {
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState(null);
     const [editLoader, setEditLoader] = useState(false);
+    const [currentStatus, setCurrentStatus] = useState(1);
+    const [notified, setNotified] = useState(1);
     const { data: locationdt } = GetLocations();
    
 
     const navigate = useNavigate();
     const apiRequest = useRequest();
+
+    const dropDownChangeStatus = (e) => {
+        setCurrentStatus(e.target.value);
+        setRefreshRecords(true);
+    };
+
+    const dropDownChangeNotified = (e) => {
+        setNotified(e.target.value);
+        setRefreshRecords(true);
+    };
+  
 
     // PAGE AND ITEMS SETTINGS //
     const [totalPages, setTotalPages] = useState(0);
@@ -122,7 +136,12 @@ export default function PushNotifications() {
     useEffect(()=>{
 
         const getRecords = async () => {
-            const data = await apiRequest({url:NOTIFICATIONS, method:"get", params: {page: currentPage, items_per_page: itemsPerPage, search: search}});
+            const data = await apiRequest({url:NOTIFICATIONS, method:"get", params: {page: currentPage,
+                 items_per_page: itemsPerPage,
+                  search: search, 
+                  status: currentStatus,
+                  notified: notified
+                }});
             setData(data);
             setCurrentPage(data?.data?.page);
             setTotalPages(data?.data?.total_pages);
@@ -134,7 +153,7 @@ export default function PushNotifications() {
             setRefreshRecords(false)
             getRecords();
         }
-    }, [refreshRecords, apiRequest, currentPage, itemsPerPage, search]);
+    }, [refreshRecords, apiRequest, currentPage, itemsPerPage, search,currentStatus,notified]);
 
     useEffect(()=>{
         setRefreshRecords(true);
@@ -172,22 +191,79 @@ export default function PushNotifications() {
             <Link to="/add-notification" className="ss_btn">Add Notification</Link>
         </div>
 
-        <Datatable 
-            rows={data?.data?.listing} 
-            title="Notifications" 
-            columns={columns} 
-            loading={loading} 
-            manageListing={{
-                currentPage,
-                setCurrentPage,
-                totalPages,
-                itemsPerPage,
-                setItemsPerPage,
-                setRefreshRecords,
-                setSearch,
-                searhPlaceholder: "Title / Message"
-            }}
-        />
+        <div className="card border-0 boxShadow">
+            <div className="card-body">
+                <div className="row">
+                    <div className="col-md-12 mb-3">
+                        {/* DATE FILTER */}
+                        <div className="fs-12 payments-filters">
+                            <div className='col-md-8'>
+                                    
+                            </div>
+                            <div className="col-md-2 margin-right-20">
+                                <label className="form-label fs-12 fw-semibold">Status</label>
+                                <FormDropdown
+                                    name="status"
+                                    options={status}
+                                    onChange={dropDownChangeStatus}
+                                    default_value={currentStatus || "active"}
+                                    classnm="form-select fs-12"
+                                />
+                            </div>
+                            <div className="col-md-2">
+                                <label className="form-label fs-12 fw-semibold">Notified</label>
+                                <FormDropdown
+                                    name="status"
+                                    options={can_access}
+                                    onChange={dropDownChangeNotified}
+                                    default_value={notified || "no"}
+                                    classnm="form-select fs-12"
+                                />
+                            </div>
+                                
+                            {/* <div className="me-3">
+                                <label htmlFor="fromDate" className="form-label">From Date</label>
+                                <DatePicker value={fromDate} onChange={(date) => setFromDate(date)} minDate={false} name="startDate"/>
+                            </div>
+                            <div className="me-3">
+                                <label htmlFor="toDate" className="form-label"> To Date </label>
+                                <DatePicker value={toDate} onChange={(date) => setToDate(date)} minDate={false} name="startDate"/>
+                            </div>
+                            <div className="me-3">
+                                <label htmlFor="searchName" className="form-label">Search Name</label>
+                                <input type="text" className="form-control fs-12" id="searchName" placeholder="" onChange={handleSearch} />
+                            </div>
+                            <div className="me-3 mt-3 pt-md-1">
+                                <button className="ss_btn" onClick={handleApplyFilter}> Apply Filter</button>
+                            </div>
+                            <div className="me-3 mt-3 pt-md-1">
+                                <button className="refreshbtn" onClick={handleClearFilter}>Clear Filter </button>
+                            </div> */}
+                        </div>
+
+                        {/* USERS LISTING */}
+
+                        <Datatable 
+                            rows={data?.data?.listing} 
+                            title="Notifications" 
+                            columns={columns} 
+                            loading={loading} 
+                            manageListing={{
+                                currentPage,
+                                setCurrentPage,
+                                totalPages,
+                                itemsPerPage,
+                                setItemsPerPage,
+                                setRefreshRecords,
+                                setSearch,
+                                searhPlaceholder: "Title / Message"
+                            }}
+                        />
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
     </>
   )
 }

@@ -274,13 +274,30 @@ export default function CustomerQueries() {
                                     <div className="col-md-6">
                                         <p className="fs-15 fw-semibold mb-0">Filter Queries</p>
                                     </div>
-                                    <div className="col-md-3">
+                                    {/* <div className="col-md-3">
                                         <label className="form-label fs-12 fw-semibold">Location</label>
                                         {((locationloading)) ? 'Loading...' :
                                             locationdt &&
                                             <FormDropdown onChange={dropDownChange} name="location" options={locationdt.data} default_value={currentLocation} classnm="form-select fs-12"/>
                                         }
+                                    </div> */}
+                                    <div className="col-md-3">
+                                        <label className="form-label fs-12 fw-semibold">Location</label>
+                                        {locationloading ? (
+                                            "Loading..."
+                                        ) : (
+                                            locationdt && (
+                                                <FormDropdown
+                                                    onChange={dropDownChange}
+                                                    name="location"
+                                                    options={[{ id: "", label: "All Locations", value:"" }, ...locationdt.data]} // Adding "All" as default
+                                                    default_value={"All Locations"} // Default selection to "All"
+                                                    classnm="form-select fs-12"
+                                                />
+                                            )
+                                        )}
                                     </div>
+
                                     <div className="col-md-3">
                                         <label htmlFor="searchProduct" className="form-label fs-12 fw-semibold">Search</label>
                                         <input type="text" className="form-control fs-12" id="searchProduct" placeholder="Search Queries" onChange={handleSearch} />

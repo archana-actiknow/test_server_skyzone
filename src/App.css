@@ -1325,3 +1325,11 @@ height: 300px;
 .overflow-y{
     overflow-y:auto ;
 }
+
+.justify-content-center{
+    justify-content: center;
+}
+
+.margin-right-20{
+    margin-right: 20px;
+}

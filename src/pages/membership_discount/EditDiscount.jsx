@@ -7,12 +7,14 @@ import Accordion from '../../components/Accordion';
 import PopupModal from '../../components/PopupModal';
 import SweetAlert from '../../components/SweetAlert';
 import { messagePop } from '../../utils/Common';
+import { Skeleton } from '@mui/material';
 
 const EditDiscount = ({id, close, editData,clientID, loadProducts, setLoadProducts, refreshData}) => {
     const apiRequest = useRequest();
     const [load, setLoad] = useState(false);
     const [data,setData] = useState([]);
     const [open, setOpen] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [openAccordion, setOpenAccordion] = useState(null);
      const handleClose = () => {
         setOpen(false)
@@ -20,6 +22,7 @@ const EditDiscount = ({id, close, editData,clientID, loadProducts, setLoadProduc
     }
     const fetchProducts = useCallback(async () => {
         setLoad(true);
+        setLoading(true)
         try {
             const response = await apiRequest({
                 url:OFFERSPRODUCTS, 
@@ -31,6 +34,7 @@ const EditDiscount = ({id, close, editData,clientID, loadProducts, setLoadProduc
                 const products = response.data;
                 setData(products);
                 setLoad(false);
+                setLoading(false)
             } else {
                 console.error('Failed to fetch products:', response.data.message);
             }
@@ -63,24 +67,23 @@ const EditDiscount = ({id, close, editData,clientID, loadProducts, setLoadProduc
                 url: UPDATEMEMBERSHIPDISCOUNT, 
                 method: "POST", data: formData});
           if(response){
-                messagePop(response);
-                resetForm();
-                setOpen(false)
-                close(false)
-                refreshData(true);
+             setOpen(false)
+            close(false)
+            refreshData(true);
+            resetForm();
+            messagePop(response);
           }else{
                 SweetAlert.error("Error", "There is some issue while adding user.")
           }
         setLoad(false);
         }
     
-        const {values, errors, handleSubmit,handleChange} = useFormik({
+        const {values, handleSubmit,handleChange} = useFormik({
             initialValues: {
                discountCode: editData.discount_code,
                 selectedProduct: editData.productId,
             },
             enableReinitialize: true,
-            // validationSchema:addMembershipDiscount,
             onSubmit
         })
 
@@ -112,12 +115,15 @@ const EditDiscount = ({id, close, editData,clientID, loadProducts, setLoadProduc
                             value={values.discountCode}
                             onChange={handleChange}
                         />
-                        {errors.discountCode && (<p className="text-danger">{errors.discountCode}</p>)}
                     </div>
                 </div>
-                <div className="form-group row mb-3 height-300 overflow-y">
+                {loading 
+                    ? 
+                        <Skeleton variant="rectangular" width="100%" height={400} className="skeleton-custom" />
+                    : 
+                <div className="form-group row mb-3">
                     <label className="col-md-3 fs-12 fw-semibold">Products</label>
-                    <div className="col-md-9">
+                    <div className="col-md-9 height-300 overflow-y">
                         {data.map((product) => (
                             <Accordion className='fs-12 fw-semibold'key={product.parent_id}
                                 id={product.parent_id}
@@ -162,11 +168,9 @@ const EditDiscount = ({id, close, editData,clientID, loadProducts, setLoadProduc
                             </Accordion>
                             
                         ))}
-                        {errors.selectedProduct && (
-                            <p className="text-danger">{errors.selectedProduct}</p>
-                        )}
                     </div>
                 </div>
+                }
             </div>
         </PopupModal>
     </>

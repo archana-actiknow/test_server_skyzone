@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useRequest } from '../../utils/Requests';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import GetLocations from "../../hooks/Locations";
 import FormDropdown from "../../components/FormDropdown";
 import { Skeleton } from "@mui/material";
@@ -18,7 +18,6 @@ export default function MembershipDiscount() {
     const [refreshRecords, setRefreshRecords] = useState(true);
     const [currentLocation, setCurrentLocation] = useState(false);
     const [loadProducts, setLoadProducts] = useState(true);
-    const [openDialogbox, setOpendialogbox] = useState(false);// Add Manager Popup
     const [currentStatus, setCurrentStatus] = useState(1);
     const [search, setSearch] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
@@ -26,8 +25,8 @@ export default function MembershipDiscount() {
     const [totalPages, setTotalPages] = useState(0);
     const [editLoader, setEditLoader] = useState(false);
     const [editData, setEditData] = useState(0);
+    const [openDialogbox, setOpendialogbox] = useState(false);// Add Manager Popup
     const [isOpenId, setIsOpenId] = useState(false); // Edit User Popup
-    const navigate = useNavigate();
     const apiRequest = useRequest();
     const { data: locationdt, loading: locationloading } = GetLocations();
 
@@ -40,6 +39,7 @@ export default function MembershipDiscount() {
     const refreshListing = (response) => {
         if(response){
             setRefreshRecords(true);
+            setLoadProducts(true);
         }
         else{
             SweetAlert.error('Oops!', 'Something went wrong.')
@@ -60,8 +60,10 @@ export default function MembershipDiscount() {
     }, [locationdt, locationloading, location.state]);
 
     const openDialog = () => {
+        // setLoadProducts(true);
+        setOpendialogbox(prev => !prev);
         setLoadProducts(true);
-        setOpendialogbox(true);
+        // setOpendialogbox(true);
     };
 
     const dropDownChangeStatus = (e) => {
@@ -122,7 +124,6 @@ export default function MembershipDiscount() {
     };
 
     const handleStatusChange = async (id) => {
-        console.log("id",id)
         const title = "Are you sure?";
         const text  = "Are you sure you want to change the status ?";
         const confirm = await SweetAlert.confirm(title, text);
@@ -142,14 +143,13 @@ export default function MembershipDiscount() {
 
             <div className="row align-items-center mb-3">
                 <div className="col-md-8 mb-2">
-                    <div className="col col-12">
-                    </div>
+                    <div className="col col-12"> </div>
                 </div>
                 <div className="col-md-4 mb-2">
                     <div className="col col-12 text-md-end" onClick={openDialog}>
                         <button className="ss_btn">Add Discount</button>
                     </div>
-                    {openDialogbox && <AddDiscount close={setOpendialogbox} setOpendialogbox={setOpendialogbox} loadProducts={loadProducts} setLoadProducts={setLoadProducts}  clientID={currentLocation} refreshData={refreshListing}/>}
+                    {openDialogbox && <AddDiscount close={setOpendialogbox} loadProducts={loadProducts} setLoadProducts={setLoadProducts}  clientID={currentLocation} refreshData={refreshListing}/>}
                     {isOpenId && <EditDiscount id={isOpenId} close={setIsOpenId} editData={editData} loadProducts={loadProducts} setLoadProducts={setLoadProducts}  clientID={currentLocation} refreshData={refreshListing}/>}
                 </div>
             </div>
@@ -163,48 +163,42 @@ export default function MembershipDiscount() {
                 locationdt && (
                     <div className="row mb-2" >
                         <div className="col-md-12">
-                        <div className="card border-0">
-                            <div className="card-body">
-                            <div className="row align-items-center">
-        
-                                <div className="col-md-3">
-                                <p className="fs-15 fw-semibold mb-0">Membership Discount</p>
+                            <div className="card border-0">
+                                <div className="card-body">
+                                    <div className="row align-items-center">
+                                        <div className="col-md-3">
+                                            <p className="fs-15 fw-semibold mb-0">Membership Discount</p>
+                                        </div>
+                                        <div className="col-md-3">
+                                            <label className="form-label fs-12 fw-semibold">Status</label>
+                                            {locationloading || !currentLocation ? (
+                                                "Loading..."
+                                            ) : (
+                    
+                                                <FormDropdown
+                                                onChange={dropDownChangeStatus}
+                                                name="status"
+                                                options={status}
+                                                default_value={currentStatus || "active"}
+                                                classnm="form-select fs-12"
+                                                />
+                    
+                                            )}
+                                        </div>
+                                        <div className="col-md-3">
+                                            <label className="form-label fs-12 fw-semibold">Location</label>
+                                            {locationloading || !currentLocation
+                                            ? "Loading..."
+                                            : locationdt && (<FormDropdown onChange={dropDownChange} name="location" options={locationdt.data} default_value={currentLocation} classnm="form-select fs-12"/> )}
+                                        </div>
+                                        <div className="col-md-3">
+                                            <label htmlFor="searchProduct" className="form-label fs-12 fw-semibold">Search
+                                                Product</label>
+                                            <input type="text" className="form-control fs-12" id="searchProduct" placeholder="Search Membership Code" onChange={handleSearch} />
+                                        </div>
+                                    </div>
                                 </div>
-        
-                                <div className="col-md-3">
-                                    <label className="form-label fs-12 fw-semibold">Status</label>
-                                    {locationloading || !currentLocation ? (
-                                        "Loading..."
-                                    ) : (
-            
-                                        <FormDropdown
-                                        onChange={dropDownChangeStatus}
-                                        name="status"
-                                        options={status}
-                                        default_value={currentStatus || "active"}
-                                        classnm="form-select fs-12"
-                                        />
-            
-                                    )}
-                                </div>
-                                <div className="col-md-3">
-                                    <label className="form-label fs-12 fw-semibold">Location</label>
-                                    {locationloading || !currentLocation
-                                    ? "Loading..."
-                                    : locationdt && (
-                                    <FormDropdown onChange={dropDownChange} name="location" options={locationdt.data} default_value={currentLocation} classnm="form-select fs-12"/>
-                                    )}
-                                </div>
-
-                                <div className="col-md-3">
-                                    <label htmlFor="searchProduct" className="form-label fs-12 fw-semibold">Search
-                                        Product</label>
-                                    <input type="text" className="form-control fs-12" id="searchProduct" placeholder="Search Product" onChange={handleSearch} />
-                                </div>
-        
                             </div>
-                            </div>
-                        </div>
                         </div>
                     </div>
                 )
@@ -215,20 +209,23 @@ export default function MembershipDiscount() {
                     data?.data?.listing?.map((list) => (
                     <div className="col-md-3 mb-2" key={list.id}>
                         <div className="card border-0">
-                        <div className="card-body hide-overflow">
-                            {list.Membersproduct && list.Membersproduct.imageUrl ? (
-                                <img src={list.Membersproduct.imageUrl} alt={list.title || "No Title"} className="product-img"/>
-                            ) : (
-                                <img src="./images/no-image.png" alt={list.title || "No Title"} className="product-img height-100"/>
-                            )}
-                            <div className="d-flex align-items-center justify-content-between mb-3">
-        
-                                <Link className={`product-status ${list.status === 1 ? "product-active" : "product-inactive" }`} title={`Click to ${(list.status === 1 ? 'deactivate' : 'activate')}`} onClick={() => handleStatusChange(list.id)}>
+                            <div className="card-body hide-overflow">
+                                {list.Membersproduct && list.Membersproduct.imageUrl ? (
+                                    <img src={list.Membersproduct.imageUrl} alt={list.title || "No Title"} className="product-img"/>
+                                ) : (
+                                    <img src="./images/no-image.png" alt={list.title || "No Title"} className="product-img height-100"/>
+                                )}
+                                <div className="product_detail">
+                                    <h1>{list.title}</h1>
+                                    <p dangerouslySetInnerHTML={{ __html: list.description }}/>
+                                    <p className='fs-14 semibold'><strong>Discount Code :</strong> {list.discount_code}</p>
+                                </div>
+                            </div>
+                            <div className="d-flex align-items-center justify-content-center mb-3">
+                                <Link className={`product-status me-2 ${list.status === 1 ? "product-active" : "product-inactive" }`} title={`Click to ${(list.status === 1 ? 'deactivate' : 'activate')}`} onClick={() => handleStatusChange(list.id)}>
                                     {list.status === 1 ? "Active" : "Inactive"}
                                 </Link>
-        
                                 <div className="d-flex align-items-center">
-        
                                     {(editLoader && editLoader === list.id) ? 
                                         <div className='td-btn'>
                                             <div className="spinner-border" role="status">
@@ -240,22 +237,8 @@ export default function MembershipDiscount() {
                                             <i className="bi bi-pencil-square"></i>
                                         </Link>
                                     }
-        
-                                    {/* <Link className="icon delete" data-bs-title="Delete" onClick={() => handleDelete(currentLocation, list.id)}>
-                                        <i className="bi bi-trash-fill"></i>
-                                    </Link> */}
-                                    
                                 </div>
-        
                             </div>
-        
-                            <div className="product_detail">
-                                <h1>{list.title}</h1>
-                                <p>{list.discount_code}</p>
-                            </div>
-        
-                        </div>
-                        
                         </div>
                     </div>
                     ))
