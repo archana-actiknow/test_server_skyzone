@@ -5,6 +5,16 @@ import { getToken } from "../utils/Common";
 // import { useEffect, useRef, useState } from "react";
 
 const baseURL = process.env.REACT_APP_API_URL;
+
+// ALLOWED DOMAINS //
+const allowedDomains = process.env.REACT_APP_DOMAINS_ALLOWED.split(",");
+
+function isValidUrl(url) {
+  const urlObj = new URL(url);
+  const domain = urlObj.origin;
+  return allowedDomains.includes(domain);
+}
+
 const getHeader = async (token = false, up_file = false) => {
   const auth = token ? { Authorization: `Bearer ${token}` } : {};
   const file_header = up_file
@@ -19,14 +29,19 @@ const getHeader = async (token = false, up_file = false) => {
 
 // POST WITHOUT TOKEN
 export const PostRequest = async (endpoint, data) => {
-  let url = baseURL + endpoint;
+  if (isValidUrl(baseURL)) {
+    let url = baseURL + endpoint;
 
-  try {
-    const headers = await getHeader();
-    const res = await axios.post(url, data, { headers });
-    return { status: true, data: res };
-  } catch (error) {
-    return { status: false, data: error };
+    try {
+      const headers = await getHeader();
+      const res = await axios.post(url, data, { headers });
+      return { status: true, data: res };
+    } catch (error) {
+      return { status: false, data: error };
+    }
+  } else {
+    console.error("Blocked URL: Invalid domain");
+    return { status: false, data: "Blocked URL: Invalid domain" };
   }
 };
 
@@ -34,6 +49,12 @@ export const PostRequest = async (endpoint, data) => {
 export const useRequest = () => {
   const navigate = useNavigate();
   const { dispatch, user } = useAuthContext();
+
+  if (!isValidUrl(baseURL)) {
+    console.error("Blocked URL: Invalid domain");
+    dispatch({ type: "LOGOUT" });
+    navigate("/");
+  }
 
   const api = axios.create({ baseURL: baseURL });
 
