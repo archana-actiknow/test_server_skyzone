@@ -281,9 +281,3 @@ export const decodeUTF8String = (bytes) => {
   const decoder = new TextDecoder();
   return decoder.decode(bytes);
 };
-
-export const decodeHtml = (html) => {
-  const txt = document.createElement("div");
-  txt.innerHTML = html;
-  return txt.textContent || txt.innerText;
-};
