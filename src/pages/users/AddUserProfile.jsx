@@ -10,9 +10,6 @@ import SweetAlert from '../../components/SweetAlert';
 import PopupModal from '../../components/PopupModal';
 
 export default function AddUserProfile({refreshData, close}) {
-
-    console.log("user_roles", user_roles)
-
     const apiRequest = useRequest();
     const [open, setOpen] = useState(true);
     const [ExUserError, setExUserError] = useState(false);
