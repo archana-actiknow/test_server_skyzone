@@ -154,6 +154,8 @@ export const getToken = () => {
 //   { id: 3, value: 3, label: "User" },
 // ];
 
+
+
 export const weekdays = [
   { id: 0, value: "Sunday", label: "Sunday", shortLabel: "SUN" },
   { id: 1, value: "Monday", label: "Monday", shortLabel: "MON" },
@@ -229,6 +231,19 @@ const user_role = () => {
 };
 
 export const user_roles = user_role();
+
+export const sa_user_roles = [
+  { id: 1, value: 1, label: "Superadmin" },
+  { id: 2, value: 2, label: "Admin" },
+  { id: 3, value: 3, label: "User" },
+  { id: 4, value: 4, label: "Call-Center Agent" },
+];
+
+export const a_user_roles = [
+  { id: 2, value: 2, label: "Admin" },
+  { id: 3, value: 3, label: "User" },
+  { id: 4, value: 4, label: "Call-Center Agent" },
+];
 
 // Export the function
 export { decrypt, getRole, IsAdmin, IsSuperAdmin, IsUser, IsAgent };

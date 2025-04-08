@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { encrypt, IsRoleUser, messagePop, timezones, user_roles } from '../../utils/Common';
+import { a_user_roles, encrypt, IsRoleUser, messagePop, sa_user_roles, timezones } from '../../utils/Common';
 import FormDropdown from '../../components/FormDropdown';
 import {useFormik} from 'formik';
 import { check_user_validation, userValidationSchema } from '../../utils/validationSchemas';
@@ -15,6 +15,7 @@ export default function AddUserProfile({refreshData, close}) {
     const [ExUserError, setExUserError] = useState(false);
     const [ExUserErrorMsg, setExUserErrorMsg] = useState("");
     const [multiSelect, setMultiSelect] = useState(true);
+    const user_roles = IsAdmin ? a_user_roles : sa_user_roles;
 
     const handleClose = () => {
         setOpen(false)

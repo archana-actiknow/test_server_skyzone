@@ -10,7 +10,7 @@ export default function Sidebar() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [iconSide, setIconSide] = useState('right');
     const [icon, setIcon] = useState("bi bi-list");
-    const [openSection, setOpenSection] = useState('App Settings');
+    const [openSection, setOpenSection] = useState(IsAgent?'Queries':'App Settings');
 
     const toggleSidebar = () => {
         setIsSidebarOpen(prevState => !prevState);

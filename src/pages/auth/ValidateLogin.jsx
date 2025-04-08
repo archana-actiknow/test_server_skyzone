@@ -19,7 +19,10 @@ export default function ValidateLogin({setUserInfo, setTfaInfo}) {
         }else{
             setErr(true);
             const error = res.data;
-            setErrMsg(error.response.data.message);
+            if(error?.response?.data?.message)
+                setErrMsg(error.response.data.message);
+            else
+                setErrMsg(error);
         }
     }
 
