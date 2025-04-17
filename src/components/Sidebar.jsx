@@ -47,7 +47,7 @@ export default function Sidebar() {
             
             <div className="d-flex align-items-center mb-3">
                 <Link className="navbar-brand  mx-auto">
-                  <img style={{height: "50px"}} src={process.env.REACT_APP_LOGO} className="img-fluid" alt="logo" />
+                  <img style={{height: "50px"}} src={process.env.REACT_APP_ICON} className="img-fluid" alt="logo" />
                 </Link>
             </div>
 
@@ -56,7 +56,44 @@ export default function Sidebar() {
             {(IsAgent || IsSuperAdmin || IsUser || IsAdmin) &&
             <>
 
-                {!IsAgent &&
+            {!IsAgent && (
+                <>
+                    <li
+                        className={`fs-15 mt-70 lnk ${!isSidebarOpen ? 'd-flex justify-content-between align-items-center' : ''}`}
+                        onClick={() => handleSectionClick('Stripe Payments')}
+                    >
+                        <div className={`${!isSidebarOpen ? 'd-flex align-items-center' : ''}`}>
+                            <i className={`bi bi-wallet2 ${iconSide === 'right' ? 'fs_40' : ''}`}></i>
+                            {iconSide === 'right' ? '' : <span className="ms-2">Stripe Payments</span>}
+                        </div>
+                        {!isSidebarOpen && (
+                            <i className={`bi fs-13 ${openSection === 'Stripe Payments' ? 'bi-chevron-down' : 'bi-chevron-right'}`}></i>
+                        )}
+                    </li>
+
+                    <li><hr className='horizontal' /></li>
+
+                    {openSection === 'Stripe Payments' && (
+                        <>
+                            <li className="mb-2 nav-item">
+                                <Link to="/stripe" className={`w-100 nav-link ${currentPath === '/stripe' ? 'active' : ''}`}>
+                                    <i className="bi bi-plugin"></i>
+                                    <span className="ms-2">Stripe Integration</span>
+                                </Link>
+                            </li>
+                            <li className="mb-2 nav-item">
+                                <Link to="/payments" className={`w-100 nav-link ${currentPath === '/payments' ? 'active' : ''}`}>
+                                    <i className="bi bi-credit-card-fill"></i>
+                                    <span className="ms-2">Payments</span>
+                                </Link>
+                            </li>
+                        </>
+                    )}
+                </>
+            )}
+
+
+                {/* {!IsAgent &&
                     <>
                         <li className="mb-2 nav-item">
                             <Link to="/stripe" className={`w-100 nav-link ${(currentPath === '/stripe') ? `active` : ''}`}>
@@ -70,36 +107,8 @@ export default function Sidebar() {
                                 <span className="ms-2">Payments</span>
                             </Link>
                         </li>
-                        {/* <li className="mb-2 nav-item">
-                            <Link to="/rewards" className={`w-100 nav-link ${(currentPath === '/rewards' || currentPath === '/add-reward-rule') ? `active` : ''}`}>
-                                <i className="bi bi-trophy-fill"></i>
-                                <span className="ms-2">Rewards</span>
-                            </Link>
-                        </li>
-                        <li className="mb-2 nav-item">
-                            <Link to="/latest-offerings" className={`w-100 nav-link ${(currentPath === '/add-offer' || currentPath === '/latest-offerings' || currentPath === '/update-offer') ? `active` : ''}`}>
-                                <i className="bi bi-gift-fill"></i>
-                                <span className="ms-2">Latest Offerings</span>
-                            </Link>
-                        </li>
-                        <li className="mb-2 nav-item">
-                            <Link to="/addons" className={`w-100 nav-link ${(currentPath === '/addons' || currentPath === '/create-addons') ? `active` : ''}`}>
-                                <i className="bi bi-bag-plus-fill"></i>
-                                <span className="ms-2">Addons</span>
-                            </Link>
-                        </li> */}
                     </>
-                }
-{/*                 
-                {(!IsUser && !IsAgent) &&
-                    <li className="mb-2 nav-item">
-                        <Link to="/push-notifications" className={`w-100 nav-link ${(currentPath === '/edit-notification' || currentPath === '/push-notifications' || currentPath === '/add-notification') ? `active` : ''}`}>
-                            <i className="bi bi-bell-fill"></i>
-                            <span className="ms-2">Push Notifications</span>
-                        </Link>
-                    </li>
                 } */}
-                
                 {!IsAgent &&
                     <>
                         <li className={`fs-15 mt-30 lnk ${!isSidebarOpen ? 'd-flex justify-content-between align-items-center' : ''}`}
