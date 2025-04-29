@@ -10,6 +10,7 @@ import ViewUserProfile from './ViewUserProfile';
 import AddUserProfile from './AddUserProfile';
 // import Table from '../../components/Table';
 import Datatable from '../../components/Datatable';
+import Table from '../../components/Table';
 
 export default function Users() {
     const [refreshUsers, setRefreshUsers] = useState(true);
@@ -225,7 +226,7 @@ export default function Users() {
         
 
         {/* TABLE */}
-        {/* <Table
+        <Table
             title="List Users" 
             loading={loading} 
             currentPage={currentPage}
@@ -243,7 +244,7 @@ export default function Users() {
                 <th className="fs-12 fw-semibold sorting">Name</th>
                 <th className="fs-12 fw-semibold sorting">Email</th>
                 <th className="fs-12 fw-semibold sorting">Status</th>
-                <th className="fs-12 fw-semibold sorting">Location</th>
+                {/* <th className="fs-12 fw-semibold sorting">Location</th> */}
                 <th className="fs-12 fw-semibold sorting" tabindex>Created On</th>
                 <th className="fs-12 fw-semibold sorting">Action</th></tr>
             </thead>
@@ -265,12 +266,23 @@ export default function Users() {
                         <span className="p-1 bg-success rounded-circle"></span><span className="ms-1 text-success">Active</span>
                     </div>
                     }
-                    </td>								
-                    <td>{item.clientmaster.location}</td>
+                    </td>		
+                    {/* <td></td>						 */}
                     <td>{Moment(item.created).format('D MMM, YYYY') }</td>
                     <td>
 
                         <div className="d-flex align-items-center v-align-center">
+                            {(loader && loader === `${item.id}-view`) ? 
+                                <div className='edit-btn'>
+                                    <div className="spinner-border" role="status">
+                                        <span className="sr-only"></span>
+                                    </div> 
+                                </div>
+                                :
+                                <Link className="me-2 icon edit" data-bs-title="View" onClick={() => toggleView(item.id)}>
+                                    <i className="bi bi-eye"></i>
+                                </Link>
+                            }
                             {(loader && loader === item.id) ? 
                                 <div className='edit-btn'>
                                     <div className="spinner-border" role="status">
@@ -281,6 +293,7 @@ export default function Users() {
                                 <Link className="me-2 icon edit" data-bs-title="Edit" onClick={() => toggleEdit(item.id)}>
                                     <i className="bi bi-pencil-square"></i>
                                 </Link>
+
                             }
                             
                             <Link className=" icon delete" data-bs-title="Delete" onClick={() => deleteUser(item.id)}>
@@ -292,11 +305,11 @@ export default function Users() {
                 )))}
             
             </tbody>
-        </Table> */}
+        </Table>
 
 
         {/* USERS LISTING */}
-        <Datatable 
+        {/* <Datatable 
             rows={data?.data?.listing} 
             title="List Users" 
             columns={columns} 
@@ -311,7 +324,7 @@ export default function Users() {
                 setSearch,
                 searhPlaceholder: "Name / Username"
             }}
-        />
+        /> */}
     </>
   )
 }

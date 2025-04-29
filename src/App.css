@@ -1333,3 +1333,11 @@ height: 300px;
 .margin-right-20{
     margin-right: 20px;
 }
+
+
+/* for confirm alert */
+.react-confirm-alert-button-group {
+    display: flex;
+    justify-content: center !important;
+    margin-top: 20px;
+}

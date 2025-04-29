@@ -1,6 +1,6 @@
 import { Skeleton } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import GetLocations from "../../hooks/Locations";
 import FormDropdown from "../../components/FormDropdown";
 import DatePicker from "../../components/DatePicker";
@@ -10,6 +10,7 @@ import Moment from 'moment';
 import { useRequest } from "../../utils/Requests";
 import { GETCUSTOMERQUERIESPOINTS, MOBCUSTOMERLIST } from "../../utils/Endpoints";
 import Add from "./Add";
+import Table from '../../components/Table';
 
 
 export default function Lists () {
@@ -94,56 +95,56 @@ export default function Lists () {
     };
 
     // USERS TABLE COLUMNS //
-    const columns = [
-        {
-            field: "profile_picture",
-            headerClassName: "fs-12 fw-semibold",
-            headerName: "Profile",
-            renderCell: (params) => {
-                const profilePic = params?.row?.profile_picture ? decrypt(params.row.profile_picture): "./images/user-image.jpg";
-                return (
-                    <img  className="profile-pic img-fluid rounded-circle" src={profilePic} alt={`${params.row.fname}`} onError={(e) => e.target.src = "./images/user-image.jpg"} />
-                );
-            }
-        },        
-        {
-            field: "fname", headerClassName: "fs-12 fw-semibold",
-            headerName: "Name",
-            flex: 1,
-            renderCell: (params) => `${params.row.fname} ${params.row.lname}`,
-        },
-        { field: "email", headerClassName: "fs-12 fw-semibold", flex: 2, headerName: "Email", renderCell: (params) => decrypt(params.row.email)},
-        { field: "phone", flex: 1, headerClassName: "fs-12 fw-semibold", headerName: "Contact", renderCell: (params) => decrypt(params.row.phone)},
-        { 
-            field: "created", 
-            headerClassName: "fs-12 fw-semibold", 
-            flex: 1, 
-            headerName: "Created On",  
-            renderCell: (params) =>  Moment(params.row.created).format('D MMM, YYYY') 
-        },
-        { field: "action", headerClassName: "header-theme", headerName: "Action", 
-            renderCell: (param) => {
-                return (
-                    <>
-                        {(loader && loader === param.row) ? 
-                            <div className='edit-btn'>
-                                <div className="spinner-border" role="status">
-                                    <span className="sr-only"></span>
-                                </div> 
-                            </div>
-                            :
-                            <div className="me-2 icon edit">
-                                <span onClick={() => handleEditClick(param.row)} className="fs-14 lnk" title="Reward Points">
-                                    <i className="bi bi-award-fill"></i>
-                                </span>
-                            </div>
-                        }
-                    </>
-                )
-            }
-        },
+    // const columns = [
+    //     {
+    //         field: "profile_picture",
+    //         headerClassName: "fs-12 fw-semibold",
+    //         headerName: "Profile",
+    //         renderCell: (params) => {
+    //             const profilePic = params?.row?.profile_picture ? decrypt(params.row.profile_picture): "./images/user-image.jpg";
+    //             return (
+    //                 <img  className="profile-pic img-fluid rounded-circle" src={profilePic} alt={`${params.row.fname}`} onError={(e) => e.target.src = "./images/user-image.jpg"} />
+    //             );
+    //         }
+    //     },        
+    //     {
+    //         field: "fname", headerClassName: "fs-12 fw-semibold",
+    //         headerName: "Name",
+    //         flex: 1,
+    //         renderCell: (params) => `${params.row.fname} ${params.row.lname}`,
+    //     },
+    //     { field: "email", headerClassName: "fs-12 fw-semibold", flex: 2, headerName: "Email", renderCell: (params) => decrypt(params.row.email)},
+    //     { field: "phone", flex: 1, headerClassName: "fs-12 fw-semibold", headerName: "Contact", renderCell: (params) => decrypt(params.row.phone)},
+    //     { 
+    //         field: "created", 
+    //         headerClassName: "fs-12 fw-semibold", 
+    //         flex: 1, 
+    //         headerName: "Created On",  
+    //         renderCell: (params) =>  Moment(params.row.created).format('D MMM, YYYY') 
+    //     },
+    //     { field: "action", headerClassName: "header-theme", headerName: "Action", 
+    //         renderCell: (param) => {
+    //             return (
+    //                 <>
+    //                     {(loader && loader === param.row) ? 
+    //                         <div className='edit-btn'>
+    //                             <div className="spinner-border" role="status">
+    //                                 <span className="sr-only"></span>
+    //                             </div> 
+    //                         </div>
+    //                         :
+    //                         <div className="me-2 icon edit">
+    //                             <span onClick={() => handleEditClick(param.row)} className="fs-14 lnk" title="Reward Points">
+    //                                 <i className="bi bi-award-fill"></i>
+    //                             </span>
+    //                         </div>
+    //                     }
+    //                 </>
+    //             )
+    //         }
+    //     },
         
-    ];
+    // ];
 
 
     useEffect(() => {
@@ -252,9 +253,82 @@ export default function Lists () {
                                 </div>
                             </div>
 
+                             <Table
+                                title="List Users" 
+                                loading={loading} 
+                                currentPage={currentPage}
+                                setCurrentPage={setCurrentPage}
+                                totalPages={totalPages}
+                                itemsPerPage={itemsPerPage}
+                                setItemsPerPage={setItemsPerPage}
+                                setRefreshRecords={setRefreshUsers}
+                                setSearch={setSearch}
+                                searhPlaceholder= "Username"
+                            >   
+                                <thead>
+                                    <tr className="bg-color">
+                                    <th className="fs-12 fw-semibold sorting sorting_asc">Profile</th>
+                                    <th className="fs-12 fw-semibold sorting">Name</th>
+                                    <th className="fs-12 fw-semibold sorting">Email</th>
+                                    <th className="fs-12 fw-semibold sorting">Contact</th>
+                                    {/* <th className="fs-12 fw-semibold sorting">Location</th> */}
+                                    <th className="fs-12 fw-semibold sorting" tabindex>Created On</th>
+                                    <th className="fs-12 fw-semibold sorting">Action</th></tr>
+                                </thead>
+                                <tbody className="fs-12">
+                                    {data?.data?.data.map((item, idx) => (
+                                    <tr key={idx} className="odd">
+                                        {/* Profile Picture */}
+                                        <td className="sorting_1">
+                                        <img
+                                            className="profile-pic img-fluid rounded-circle"
+                                            src={item.profile_picture ? decrypt(item.profile_picture) : "./images/user-image.jpg"}
+                                            alt={item.fname}
+                                            onError={(e) => (e.target.src = "./images/user-image.jpg")}
+                                            style={{ width: "28px", height: "28px", objectFit: "cover" }}
+                                            // style={{ width: "40px", height: "40px", objectFit: "cover" }}
+                                        />
+                                        </td>
+
+                                        {/* Full Name */}
+                                        <td>{`${item.fname} ${item.lname}`}</td>
+
+                                        {/* Email */}
+                                        <td>{decrypt(item.email)}</td>
+
+                                        {/* Phone */}
+                                        <td>{decrypt(item.phone)}</td>
+
+                                        {/* Created On */}
+                                        <td>{Moment(item.created).format('D MMM, YYYY')}</td>
+
+                                        {/* Action Buttons */}
+                                        <td>
+                                        <div className="d-flex align-items-center v-align-center">
+                                            {(loader && loader === item.id) ? 
+                                                <div className='edit-btn'>
+                                                <div className="spinner-border" role="status">
+                                                    <span className="sr-only"></span>
+                                                </div> 
+                                                </div>
+                                                :
+                                                <div className="me-2 icon edit">
+                                                <span onClick={() => handleEditClick(item)} className="fs-14 lnk" title="Reward Points">
+                                                    <i className="bi bi-award-fill"></i>
+                                                </span>
+                                                </div>
+                                            }
+                                        </div>
+
+                                        </td>
+                                    </tr>
+                                    ))}
+                                </tbody>
+                            </Table>
+
                             {/* USERS LISTING */}
 
-                                <Datatable 
+                                {/* <Datatable 
                                     rows={data?.data?.data} 
                                     title="" 
                                     columns={columns} 
@@ -269,7 +343,7 @@ export default function Lists () {
                                         setSearch,
                                         searhPlaceholder: "Username"
                                     }}
-                                />
+                                /> */}
                             
                         </div>
                     </div>

@@ -10,6 +10,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import SweetAlert from '../../components/SweetAlert';
 import GetLocations from '../../hooks/Locations';
 import FormDropdown from '../../components/FormDropdown';
+import Table from '../../components/Table';
 
 export default function PushNotifications() {
     const [data, setData] = useState([]);
@@ -241,9 +242,133 @@ export default function PushNotifications() {
                             </div> */}
                         </div>
 
+                         {/* TABLE */}
+                        <Table
+                            style={{ tableLayout: "fixed", width: "100%" }}
+                            title="List Users" 
+                            loading={loading} 
+                            currentPage={currentPage}
+                            setCurrentPage={setCurrentPage}
+                            totalPages={totalPages}
+                            itemsPerPage={itemsPerPage}
+                            setItemsPerPage={setItemsPerPage}
+                            setRefreshRecords={setRefreshRecords}
+                            setSearch={setSearch}
+                            searhPlaceholder= "Title / Message"
+                        >   
+                            {/* <thead>
+                                <tr className="bg-color">
+                                <th className="fs-12 fw-semibold sorting sorting_asc">Title</th>
+                                <th className="fs-12 fw-semibold sorting">Message</th>
+                                <th className="fs-12 fw-semibold sorting">Timezone</th>
+                                <th className="fs-12 fw-semibold sorting">Locations</th>
+                                <th className="fs-12 fw-semibold sorting">Date</th>
+                                <th className="fs-12 fw-semibold sorting" >Time</th>
+                                <th className="fs-12 fw-semibold sorting" >Status</th>
+                                <th className="fs-12 fw-semibold sorting" >Notified</th>
+                                <th className="fs-12 fw-semibold sorting">Action</th></tr>
+                            </thead> */}
+                            <thead>
+                            <tr className="bg-color">
+                                <th className="fs-12 fw-semibold sorting sorting_asc" style={{ width: "50px" }}>Title</th>
+                                <th className="fs-12 fw-semibold sorting" style={{ width: "100px" }}>Message</th>
+                                <th className="fs-12 fw-semibold sorting" style={{ width: "150px" }}>Timezone</th>
+                                <th className="fs-12 fw-semibold sorting" style={{ width: "200px" }}>Locations</th>
+                                <th className="fs-12 fw-semibold sorting" style={{ width: "200px" }}>Date</th>
+                                <th className="fs-12 fw-semibold sorting" style={{ width: "120px" }}>Time</th>
+                                <th className="fs-12 fw-semibold sorting" style={{ width: "100px" }}>Status</th>
+                                <th className="fs-12 fw-semibold sorting" style={{ width: "100px" }}>Notified</th>
+                                <th className="fs-12 fw-semibold sorting" style={{ width: "150px" }}>Action</th>
+                            </tr>
+                            </thead>
+
+                
+                            <tbody className="fs-12">
+                                {data?.data?.listing.map((item) => {
+                                    const location_ids_ary = item.client_ids?.split(",").map(Number) || [];
+                                    const location_names = locationdt?.data
+                                    ?.filter(location => location_ids_ary.includes(location.id))
+                                    .map(location => location.label)
+                                    .join(", ") || "";
+
+                                    const timezoneObj = timezones.find((timezone) => item.cust_timezone === timezone.value);
+                                    const timezoneLabel = timezoneObj ? timezoneObj.label : "";
+
+                                    return (
+                                    <tr key={item.id} className="odd">
+                                        <td style={{ width: "50px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                                            <span title={item.title}>
+                                                {item.title.length > 30 ? item.title.slice(0,10) + "..." : item.title}
+                                            </span>
+                                        </td>
+
+                                        {/* <td className="sorting_1">{item.title}</td> */}
+
+                                        <td style={{ maxWidth: "100px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                                        <span title={item.message?.replace(/<[^>]+>/g, '')}>
+                                            {item.message ? (
+                                            DOMPurify.sanitize(item.message.replace(/<[^>]+>/g, '')).slice(0, 10) + (item.message.length > 30 ? "..." : "")
+                                            ) : ""}
+                                        </span>
+                                        </td>
+
+                                        <td>{timezoneLabel}</td>
+
+                                        <td style={{ maxWidth: "200px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                                        <span title={location_names}>
+                                            {location_names.length > 30 ? location_names.slice(0, 30) + "..." : location_names}
+                                        </span>
+                                        </td>
+
+                                        <td style={{ maxWidth: "200px"}} >{Moment(item.date_to_notify).format('D MMM, YYYY')}</td>
+                                        <td>{item.time_to_notify}</td>
+
+                                        <td>
+                                        <div className="fw-semibold d-flex align-items-center">
+                                            <span className={`p-1 bg-${item.status === '1' ? 'success' : 'secondary'} rounded-circle`}></span>
+                                            <span className={`ms-1 text-${item.status === '1' ? 'success' : 'secondary'}`}>
+                                            {item.status === '1' ? 'Active' : 'Inactive'}
+                                            </span>
+                                        </div>
+                                        </td>
+
+                                        <td>{item.notified === '1' ? 'YES' : 'NO'}</td>
+
+                                        <td>
+                                        {item.notified !== '1' ? (
+                                            <div className="d-flex align-items-center v-align-center">
+                                            {(editLoader && editLoader === item.id) ? (
+                                                <div className='td-btn'>
+                                                <div className="spinner-border" role="status">
+                                                    <span className="sr-only"></span>
+                                                </div>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                <Link onClick={() => handleEditClick(item.id)} className="me-2 icon edit" data-bs-title="Edit">
+                                                    <i className="bi bi-pencil-square"></i>
+                                                </Link>
+                                                <Link onClick={() => handleDelete(item.id)} className="icon delete" data-bs-title="Delete">
+                                                    <i className="bi bi-trash-fill"></i>
+                                                </Link>
+                                                </>
+                                            )}
+                                            </div>
+                                        ) : (
+                                            "NA"
+                                        )}
+                                        </td>
+                                    </tr>
+                                    );
+                                })}
+                            </tbody>
+
+
+                        </Table>
+
                         {/* USERS LISTING */}
 
-                        <Datatable 
+                        {/* <Datatable 
                             rows={data?.data?.listing} 
                             title="Notifications" 
                             columns={columns} 
@@ -258,7 +383,7 @@ export default function PushNotifications() {
                                 setSearch,
                                 searhPlaceholder: "Title / Message"
                             }}
-                        />
+                        /> */}
                         
                     </div>
                 </div>

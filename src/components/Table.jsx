@@ -38,8 +38,7 @@ export default function Table({title, loading, manageListing, currentPage, setCu
                             </div>
                         </div>
 
-                        <div className="table-responsive">
-
+                        <div className="table-responsive" style={{ height: 400, width: '100%' }}>
                             <table className="table dataTable no-footer" id="customer_table" aria-describedby="customer_table_info">
                                 {children}
                             </table>
