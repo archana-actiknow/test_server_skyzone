@@ -241,9 +241,9 @@ function List() {
                           <span onClick={() => toggleEdit(list.id)} className="me-2 icon edit lnk" data-bs-title="Edit">
                               <i className="bi bi-pencil-square"></i>
                           </span>
-                        <span className="icon delete lnk" data-bs-title="Delete" href="/latest-offerings">
-                          <i className="bi bi-trash-fill"></i>
-                        </span>
+                          {/* <span className="icon delete lnk" data-bs-title="Delete" href="/latest-offerings">
+                            <i className="bi bi-trash-fill"></i>
+                          </span> */}
                       </div>
                     </div>
                     <div className="product_detail">

@@ -12,7 +12,7 @@ import { Skeleton } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import SweetAlert from "../../components/SweetAlert";
-import { items_per_page, messagePop, status } from "../../utils/Common";
+import { items_per_page, messagePop, sanitizeImage, sanitizeText, status } from "../../utils/Common";
 import Pagination from "../../components/Pagination";
 
 export default function Offers() {
@@ -265,11 +265,8 @@ export default function Offers() {
             <div className="col-md-3 mb-2" key={offering.id}>
                 <div className="card border-0">
                 <div className="card-body hide-overflow">
-                    {offering.image ? (
-                        <img src={offering.image} alt={offering.title} className="product-img"/>
-                    ) : (
-                        <img src="./images/no-image.png" alt={offering.title} className="product-img height-100"/>
-                    )}
+                    <img src={sanitizeImage(offering.image)} alt={offering.title} className="product-img"/>
+
 
                     <div className="d-flex align-items-center justify-content-between mb-3">
 
@@ -301,7 +298,7 @@ export default function Offers() {
 
                     <div className="product_detail">
                         <h1>{offering.title}</h1>
-                        <p dangerouslySetInnerHTML={{ __html: offering.description }}/>
+                        <p dangerouslySetInnerHTML={{ __html:sanitizeText(offering.description)}}/>
                     </div>
 
                 </div>

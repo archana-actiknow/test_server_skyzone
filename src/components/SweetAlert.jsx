@@ -67,17 +67,18 @@ const SweetAlert = {
       confirmAlert({
         // title: <span><i className="bi bi-check-circle-fill text-success me-2"></i> {options.title}</span>,
         title: options.title || '',
-        message: options.text || '',
+        message: <p className='react-confirm-p fs-14'>{options.text}</p>, 
+        // message: options.text || '',
         buttons: [
           {
             label: options.confirmButtonText || 'OK',
             onClick: () => resolve(true),
-            className:'swal2-confirm'
+            className:'swal2-confirm fs-11 fw-600'
           },
           {
             label: options.cancelButtonText || 'Cancel',
             onClick: () => resolve(false),
-            className:'swal2-cancel'
+            className:'swal2-cancel fs-11 fw-600'
           }
         ]
       });
@@ -89,17 +90,18 @@ const SweetAlert = {
       confirmAlert({
         // title: <span><i className="bi bi-check-circle-fill text-success me-2"></i> {title}</span>,
         title,
-        message: text,
+        message: <p className='react-confirm-p fs-14'>{text}</p>, 
+        // message: text,
         buttons: [
           {
             label: 'OK',
             onClick: () => resolve(true),
-            className:'swal2-confirm'
+            className:'swal2-confirm fs-11 fw-600'
           },
           {
             label: 'Cancel',
             onClick: () => resolve(false),
-            className:'swal2-cancel'
+            className:'swal2-cancel fs-11 fw-600'
           }
         ]
       });
@@ -110,12 +112,13 @@ const SweetAlert = {
     confirmAlert({
       // title: <span><i className="bi bi-check-circle-fill text-success me-2"></i> {title}</span>,
       title: title,
-      message: text,
+      message: <p className='react-confirm-p fs-14'>{text}</p>, 
+      // message: text,
       buttons: [
         {
           label: 'OK',
           onClick: () => {},
-          className:'swal2-confirm'
+          className:'swal2-confirm fs-11 fw-600'
         }
       ]
     });
@@ -125,12 +128,13 @@ const SweetAlert = {
     confirmAlert({
       // title: <span><i className="bi bi-check-circle-fill text-success me-2"></i> {title}</span>,
       title: title,
-      message: text,
+      message: <p className='react-confirm-p fs-14'>{text}</p>, 
+      // message: text,
       buttons: [
         {
           label: 'OK',
           onClick: () => {},
-          className:'swal2-confirm'
+          className:'swal2-confirm fs-11 fw-600'
         }
       ]
     });
@@ -140,12 +144,13 @@ const SweetAlert = {
     confirmAlert({
       // title: <span><i className="bi bi-check-circle-fill text-success me-2"></i> {title}</span>,
       title: title,
-      message: text,
+      message: <p className='react-confirm-p fs-14'>{text}</p>, 
+      // message: text,
       buttons: [
         {
           label: 'OK',
           onClick: () => {},
-          className:'swal2-confirm'
+          className:'swal2-confirm fs-11 fw-600'
         }
       ]
     });
@@ -155,12 +160,13 @@ const SweetAlert = {
     confirmAlert({
       // title: <span><i className="bi bi-check-circle-fill text-success me-2"></i> {title}</span>,
       title: title,
-      message: text,
+      message: <p className='react-confirm-p fs-14'>{text}</p>, 
+      // message: text,
       buttons: [
         {
           label: 'OK',
           onClick: () => {},
-          className:'swal2-confirm'
+          className:'swal2-confirm fs-11 fw-600'
         }
       ]
     });
@@ -170,12 +176,13 @@ const SweetAlert = {
     return new Promise((resolve) => {
       confirmAlert({
         title: options.title || '',
-        message: options.text || '',
+        message: <p className='react-confirm-p fs-14'>{options.text}</p>, 
+        // message: options.text || '',
         buttons: options.buttons || [
           {
             label: 'OK',
             onClick: () => resolve(true),
-            className:'swal2-confirm'
+            className:'swal2-confirm fs-11 fw-600'
           }
         ]
       });

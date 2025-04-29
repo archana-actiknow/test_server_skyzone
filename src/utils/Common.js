@@ -1,5 +1,6 @@
 import CryptoJS from "crypto-js";
 import SweetAlert from "../components/SweetAlert";
+import DOMPurify from 'dompurify';
 
 const key = CryptoJS.enc.Utf8.parse(process.env.REACT_APP_RIVETTE_KEY);
 const iv = CryptoJS.enc.Utf8.parse(process.env.REACT_APP_SECRET_IV);
@@ -295,4 +296,31 @@ export const encodeStringToUTF8 = (str) => {
 export const decodeUTF8String = (bytes) => {
   const decoder = new TextDecoder();
   return decoder.decode(bytes);
+};
+
+export const sanitizeImage = (imgUrl) => {
+  // Check if the URL is not empty and sanitize it
+  const sanitizedImg = imgUrl
+    ? DOMPurify.sanitize(imgUrl, { ALLOWED_URI_REGEXP: /^(https?|ftp):/ })
+    : "";
+
+  // Validate the sanitized image URL
+  const isValidImageUrl = (url) => {
+    const imageExtensions = ["jpg", "jpeg", "png", "gif", "webp", "svg"];
+    const regex = new RegExp(
+      `https?://.+\\.(?:${imageExtensions.join("|")})$`,
+      "i"
+    );
+    return regex.test(url);
+  };
+
+  // Return either the sanitized valid image URL or a fallback image
+  return sanitizedImg && isValidImageUrl(sanitizedImg)
+    ? sanitizedImg
+    : "./images/no-image.png";
+};
+
+export const sanitizeText = (text) => {
+  const sanitizedDescription = DOMPurify.sanitize(text);
+  return sanitizedDescription;
 };

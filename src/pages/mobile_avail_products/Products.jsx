@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { useRequest } from '../../utils/Requests';
 import { CREATETYPE, GET_PRODUCTS, UPDATE_STATUS } from '../../utils/Endpoints';
 import { Skeleton } from '@mui/material';
-import { messagePop, cards, available_prd_category, weekdays } from '../../utils/Common';
+import { messagePop, cards, available_prd_category, weekdays, sanitizeImage } from '../../utils/Common';
 import SweetAlert from '../../components/SweetAlert';
 
 export default function Products() {
@@ -221,7 +221,7 @@ export default function Products() {
                         <div className="card border-0">
                         <div className="card-body hide-overflow">
                             {product.imageUrl ? (
-                                <img src={product.imageUrl}  alt={product.name} className="product-img"/>
+                                <img src={ sanitizeImage( product.imageUrl)}  alt={product.name} className="product-img"/>
                             ) : (
                                 <img src="./images/no-image.png" alt={product.name} className="product-img height-100"/>
                             )}

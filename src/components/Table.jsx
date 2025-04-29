@@ -38,16 +38,12 @@ export default function Table({title, loading, manageListing, currentPage, setCu
                             </div>
                         </div>
 
-                        <div className="table-responsive" style={{ height: 400, width: '100%' }}>
-                            <table className="table dataTable no-footer" id="customer_table" aria-describedby="customer_table_info">
+                        <div className="table-responsive table-wrapper" >
+                            <table className="table dataTable no-footer scrollable-table" id="customer_table" aria-describedby="customer_table_info">
                                 {children}
                             </table>
                         
                         </div>
-
-                        
-
-
                         <div className="card border-0">
                             <div className="row paginationRj">
                                 <div className="col-md-12 fs_12">&nbsp;</div>

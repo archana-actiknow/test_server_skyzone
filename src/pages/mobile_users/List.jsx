@@ -5,7 +5,7 @@ import GetLocations from "../../hooks/Locations";
 import FormDropdown from "../../components/FormDropdown";
 import DatePicker from "../../components/DatePicker";
 import Datatable from '../../components/Datatable';
-import { decrypt } from "../../utils/Common";
+import { decrypt, sanitizeImage } from "../../utils/Common";
 import Moment from 'moment';
 import { useRequest } from "../../utils/Requests";
 import { GETCUSTOMERQUERIESPOINTS, MOBCUSTOMERLIST } from "../../utils/Endpoints";
@@ -254,7 +254,7 @@ export default function Lists () {
                             </div>
 
                              <Table
-                                title="List Users" 
+                                title="" 
                                 loading={loading} 
                                 currentPage={currentPage}
                                 setCurrentPage={setCurrentPage}
@@ -275,54 +275,60 @@ export default function Lists () {
                                     <th className="fs-12 fw-semibold sorting" tabindex>Created On</th>
                                     <th className="fs-12 fw-semibold sorting">Action</th></tr>
                                 </thead>
-                                <tbody className="fs-12">
-                                    {data?.data?.data.map((item, idx) => (
-                                    <tr key={idx} className="odd">
-                                        {/* Profile Picture */}
-                                        <td className="sorting_1">
-                                        <img
-                                            className="profile-pic img-fluid rounded-circle"
-                                            src={item.profile_picture ? decrypt(item.profile_picture) : "./images/user-image.jpg"}
-                                            alt={item.fname}
-                                            onError={(e) => (e.target.src = "./images/user-image.jpg")}
-                                            style={{ width: "28px", height: "28px", objectFit: "cover" }}
-                                            // style={{ width: "40px", height: "40px", objectFit: "cover" }}
-                                        />
-                                        </td>
+                                <tbody className="fs-12 scrollable-tbody">
+                                
+                                    {data?.data?.data.map((item, idx) => {
+                                        const profilePic = item.profile_picture ? decrypt(item.profile_picture): "./images/user-image.jpg";
+                                        return(
+                                            <tr key={idx} className="odd">
+                                            
+                                            {/* Profile Picture */}
+                                            <td className="sorting_1">
+                                            
+                                            <img
+                                                className="profile-pic img-fluid rounded-circle"
+                                                src={sanitizeImage(profilePic)}
+                                                alt={item.fname}
+                                                onError={(e) => (e.target.src = "./images/user-image.jpg")}
+                                                style={{ width: "28px", height: "28px", objectFit: "cover" }}
+                                                // style={{ width: "40px", height: "40px", objectFit: "cover" }}
+                                            />
+                                            </td>
 
-                                        {/* Full Name */}
-                                        <td>{`${item.fname} ${item.lname}`}</td>
+                                            {/* Full Name */}
+                                            <td>{`${item.fname} ${item.lname}`}</td>
 
-                                        {/* Email */}
-                                        <td>{decrypt(item.email)}</td>
+                                            {/* Email */}
+                                            <td>{decrypt(item.email)}</td>
 
-                                        {/* Phone */}
-                                        <td>{decrypt(item.phone)}</td>
+                                            {/* Phone */}
+                                            <td>{decrypt(item.phone)}</td>
 
-                                        {/* Created On */}
-                                        <td>{Moment(item.created).format('D MMM, YYYY')}</td>
+                                            {/* Created On */}
+                                            <td>{Moment(item.created).format('D MMM, YYYY')}</td>
 
-                                        {/* Action Buttons */}
-                                        <td>
-                                        <div className="d-flex align-items-center v-align-center">
-                                            {(loader && loader === item.id) ? 
-                                                <div className='edit-btn'>
-                                                <div className="spinner-border" role="status">
-                                                    <span className="sr-only"></span>
-                                                </div> 
-                                                </div>
-                                                :
-                                                <div className="me-2 icon edit">
-                                                <span onClick={() => handleEditClick(item)} className="fs-14 lnk" title="Reward Points">
-                                                    <i className="bi bi-award-fill"></i>
-                                                </span>
-                                                </div>
-                                            }
-                                        </div>
+                                            {/* Action Buttons */}
+                                            <td>
+                                            <div className="d-flex align-items-center v-align-center">
+                                                {(loader && loader === item.id) ? 
+                                                    <div className='edit-btn'>
+                                                    <div className="spinner-border" role="status">
+                                                        <span className="sr-only"></span>
+                                                    </div> 
+                                                    </div>
+                                                    :
+                                                    <div className="me-2 icon edit">
+                                                    <span onClick={() => handleEditClick(item)} className="fs-14 lnk" title="Reward Points">
+                                                        <i className="bi bi-award-fill"></i>
+                                                    </span>
+                                                    </div>
+                                                }
+                                            </div>
 
-                                        </td>
-                                    </tr>
-                                    ))}
+                                            </td>
+                                            </tr>
+                                        )
+                                    })}
                                 </tbody>
                             </Table>
 
