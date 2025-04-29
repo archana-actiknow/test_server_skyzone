@@ -209,6 +209,7 @@ export default function MembershipDiscount() {
                     data?.data?.listing?.map((list) => (
                     <div className="col-md-3 mb-2" key={list.id}>
                         <div className="card border-0">
+                        
                             <div className="card-body hide-overflow">
                              <img src={ sanitizeImage(list.Membersproduct.imageUrl)}  alt={list.title} className="product-img"/>
                                 <div className="product_detail">
