@@ -267,13 +267,13 @@ export default function Lists () {
                             >   
                                 <thead>
                                     <tr className="bg-color">
-                                    <th className="fs-12 fw-semibold sorting sorting_asc">Profile</th>
-                                    <th className="fs-12 fw-semibold sorting">Name</th>
-                                    <th className="fs-12 fw-semibold sorting">Email</th>
-                                    <th className="fs-12 fw-semibold sorting">Contact</th>
+                                    <th className="fs-12 fw-semibold sorting sorting_asc" style={{ width: "10%" }}>Profile</th>
+                                    <th className="fs-12 fw-semibold sorting" style={{ width: "15%" }}>Name</th>
+                                    <th className="fs-12 fw-semibold sorting" style={{ width: "25%" }}>Email</th>
+                                    <th className="fs-12 fw-semibold sorting" style={{ width: "15%" }}>Contact</th>
                                     {/* <th className="fs-12 fw-semibold sorting">Location</th> */}
-                                    <th className="fs-12 fw-semibold sorting" tabindex>Created On</th>
-                                    <th className="fs-12 fw-semibold sorting">Action</th></tr>
+                                    <th className="fs-12 fw-semibold sorting"  style={{ width: "20%" }} tabindex>Created On</th>
+                                    <th className="fs-12 fw-semibold sorting" style={{ width: "15%" }}>Action</th></tr>
                                 </thead>
                                 <tbody className="fs-12 scrollable-tbody">
                                 
@@ -283,7 +283,7 @@ export default function Lists () {
                                             <tr key={idx} className="odd">
                                             
                                             {/* Profile Picture */}
-                                            <td className="sorting_1">
+                                            <td className="sorting_1" style={{ width: "10%" }} >
                                             
                                             <img
                                                 className="profile-pic img-fluid rounded-circle"
@@ -296,19 +296,19 @@ export default function Lists () {
                                             </td>
 
                                             {/* Full Name */}
-                                            <td>{`${item.fname} ${item.lname}`}</td>
+                                            <td style={{ width: "15%" }} >{`${item.fname} ${item.lname}`}</td>
 
                                             {/* Email */}
-                                            <td>{decrypt(item.email)}</td>
+                                            <td style={{ width: "25%" }} >{decrypt(item.email)}</td>
 
                                             {/* Phone */}
-                                            <td>{decrypt(item.phone)}</td>
+                                            <td style={{ width: "15%" }} >{decrypt(item.phone)}</td>
 
                                             {/* Created On */}
-                                            <td>{Moment(item.created).format('D MMM, YYYY')}</td>
+                                            <td style={{ width: "20%" }} >{Moment(item.created).format('D MMM, YYYY')}</td>
 
                                             {/* Action Buttons */}
-                                            <td>
+                                            <td style={{ width: "15%" }} >
                                             <div className="d-flex align-items-center v-align-center">
                                                 {(loader && loader === item.id) ? 
                                                     <div className='edit-btn'>

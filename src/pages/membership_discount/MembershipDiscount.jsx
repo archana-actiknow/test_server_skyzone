@@ -4,7 +4,7 @@ import { useLocation, Link } from 'react-router-dom';
 import GetLocations from "../../hooks/Locations";
 import FormDropdown from "../../components/FormDropdown";
 import { Skeleton } from "@mui/material";
-import { items_per_page, messagePop, status } from "../../utils/Common";
+import { items_per_page, messagePop, sanitizeImage, sanitizeText, status } from "../../utils/Common";
 import AddDiscount from './AddDiscount';
 import Pagination from "../../components/Pagination";
 import { DELETEMEMBERSHIPDISCOUNT, FETCHMEMBERSHIPDISCOUNT, SINGLEMEMBERSHIPDISCOUNT } from '../../utils/Endpoints';
@@ -210,14 +210,10 @@ export default function MembershipDiscount() {
                     <div className="col-md-3 mb-2" key={list.id}>
                         <div className="card border-0">
                             <div className="card-body hide-overflow">
-                                {list.Membersproduct && list.Membersproduct.imageUrl ? (
-                                    <img src={list.Membersproduct.imageUrl} alt={list.title || "No Title"} className="product-img"/>
-                                ) : (
-                                    <img src="./images/no-image.png" alt={list.title || "No Title"} className="product-img height-100"/>
-                                )}
+                             <img src={ sanitizeImage(list.Membersproduct.imageUrl)}  alt={list.title} className="product-img"/>
                                 <div className="product_detail">
                                     <h1>{list.title}</h1>
-                                    <p dangerouslySetInnerHTML={{ __html: list.description }}/>
+                                    <p dangerouslySetInnerHTML={{ __html:  sanitizeText(list.description)}}/>
                                     <p className='fs-14 semibold'><strong>Discount Code :</strong> {list.discount_code}</p>
                                 </div>
                             </div>

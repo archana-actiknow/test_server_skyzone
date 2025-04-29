@@ -249,7 +249,7 @@ export default function Users() {
                 <th className="fs-12 fw-semibold sorting">Action</th></tr>
             </thead>
 
-            <tbody className="fs-12">
+            <tbody className="fs-12 scrollable-tbody">
                 {data?.data?.listing.map((item => (
                     <tr className="odd">
                     <td className="sorting_1">{item.username}</td>

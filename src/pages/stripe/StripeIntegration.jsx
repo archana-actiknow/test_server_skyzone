@@ -66,7 +66,7 @@ export default function StripeIntegration() {
                 <th style={{ width: '20%' }} className="fs-12 fw-semibold sorting">Action</th>
             </tr>
         </thead>
-        <tbody className="fs-12">
+        <tbody className="fs-12  scrollable-tbody">
         {data?.data?.map((item, idx) => (
             <tr key={idx} className="odd">
                 <td style={{ width: '20%' }} className="sorting_1">{item.client_name}</td>

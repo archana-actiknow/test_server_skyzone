@@ -367,9 +367,9 @@ a{
 .table-striped>tbody>tr:nth-of-type(odd)>*{
     --bs-table-bg-type: rgb(0 158 226 / 11%);
 }
-table.dataTable thead th, table.dataTable thead td {
+/* table.dataTable thead th, table.dataTable thead td {
     border-bottom: 1px solid #fb5656;
-}
+} */
 .dataTables_wrapper{
     font-size: 12px;
 }

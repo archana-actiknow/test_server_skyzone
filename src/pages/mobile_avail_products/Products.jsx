@@ -220,11 +220,7 @@ export default function Products() {
                     <div className="col-md-4 mb-2" key={product.id}>
                         <div className="card border-0">
                         <div className="card-body hide-overflow">
-                            {product.imageUrl ? (
-                                <img src={ sanitizeImage( product.imageUrl)}  alt={product.name} className="product-img"/>
-                            ) : (
-                                <img src="./images/no-image.png" alt={product.name} className="product-img height-100"/>
-                            )}
+                            <img src={ sanitizeImage( product.imageUrl)}  alt={product.name} className="product-img"/>
 
                             <div className="d-flex align-items-center justify-content-between mb-3">
 

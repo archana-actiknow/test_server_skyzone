@@ -324,3 +324,25 @@ export const sanitizeText = (text) => {
   const sanitizedDescription = DOMPurify.sanitize(text);
   return sanitizedDescription;
 };
+export const sanitizeAndValidateUrl = (url) => {
+  // Validate the URL
+  const isValidUrl = (url) => {
+    try {
+      const parsedUrl = new URL(url);
+      return parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:";
+    } catch (e) {
+      return false;
+    }
+  };
+
+  // If the URL is invalid, return an empty string or a fallback URL
+  if (!isValidUrl(url)) {
+    console.warn("Invalid URL:", url);
+    return ""; // Or you could return a default/fallback URL here
+  }
+
+  // Sanitize the URL (optional but recommended if from untrusted sources)
+  const sanitizedUrl = DOMPurify.sanitize(url);
+
+  return sanitizedUrl;
+};

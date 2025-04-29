@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useRequest } from '../../utils/Requests';
-import { messagePop} from '../../utils/Common';
+import { messagePop, sanitizeAndValidateUrl} from '../../utils/Common';
 import { Link, useNavigate ,useLocation} from 'react-router-dom';
 import SweetAlert from '../../components/SweetAlert';
 import { FETCHLOCATIONS, UPDATELOCATION, UPDATESTATUSCHANGE } from '../../utils/Endpoints';
@@ -221,7 +221,7 @@ export default function LocationSetup() {
                                                 </div>
                                                 <div className="d-flex align-items-center">
                                                     <i className="bi bi-globe"></i> 
-                                                    <a href={data.website} target="_blank" rel="noopener noreferrer" className="fs-13 ms-2 text-break">{data.website}</a>
+                                                    <Link href={ sanitizeAndValidateUrl(data.website)} target="_blank" rel="noopener noreferrer" className="fs-13 ms-2 text-break">{data.website}</Link>
                                                 </div>
                                                 <div className="d-flex align-items-center ">
                                                     <i className="bi bi-clock"></i> 
