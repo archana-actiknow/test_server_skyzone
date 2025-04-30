@@ -32,7 +32,7 @@ function Add({refreshData, close}) {
       setLoading(false);
     }
 
-    const {values, touched, errors, handleBlur, setFieldValue, handleSubmit} = useFormik({
+    const {values, errors, setFieldValue, handleSubmit} = useFormik({
         initialValues: {
             image:"",
         },

@@ -8,9 +8,8 @@ import SweetAlert from '../../components/SweetAlert';
 import EditUserProfile from './EditUserProfile';
 import ViewUserProfile from './ViewUserProfile';
 import AddUserProfile from './AddUserProfile';
-// import Table from '../../components/Table';
-import Datatable from '../../components/Datatable';
 import Table from '../../components/Table';
+import SkeletonLoader from '../../components/SkeletonLoader';
 
 export default function Users() {
     const [refreshUsers, setRefreshUsers] = useState(true);
@@ -33,82 +32,82 @@ export default function Users() {
     const [search, setSearch] = useState(null);
 
     // USERS TABLE COLUMNS //
-    const columns = [
-        { field: "username", headerClassName: "fs-12 fw-semibold", flex: 1, headerName: "UserName" },
-        { field: "first_name", headerClassName: "fs-12 fw-semibold", flex: 1, headerName: "Name", },
-        { field: "email", headerClassName: "fs-12 fw-semibold", flex: 2, headerName: "Email", renderCell: (params) => decrypt(params.row.email)},
-        // { field: "contact_number", flex: 1, headerClassName: "fs-12 fw-semibold", flex: 1, headerName: "Contact"},
-        {
-            field: "status", headerClassName: "fs-12 fw-semibold",
-            headerName: "Status",
-            flex: 1,
-            renderCell: (params) => {
+    // const columns = [
+    //     { field: "username", headerClassName: "fs-12 fw-semibold", flex: 1, headerName: "UserName" },
+    //     { field: "first_name", headerClassName: "fs-12 fw-semibold", flex: 1, headerName: "Name", },
+    //     { field: "email", headerClassName: "fs-12 fw-semibold", flex: 2, headerName: "Email", renderCell: (params) => decrypt(params.row.email)},
+    //     // { field: "contact_number", flex: 1, headerClassName: "fs-12 fw-semibold", flex: 1, headerName: "Contact"},
+    //     {
+    //         field: "status", headerClassName: "fs-12 fw-semibold",
+    //         headerName: "Status",
+    //         flex: 1,
+    //         renderCell: (params) => {
 
-                if(params.row.status === 1) 
-                return (
-                    <div className="fw-semibold d-flex align-items-center">
-                        <span className="p-1 bg-success rounded-circle"></span>
-                        <span className="ms-1 text-success">Active</span>
-                    </div>
-                );
-                else
-                return (
-                    <div className="fw-semibold d-flex align-items-center">
-                        <span className="p-1 bg-danger rounded-circle"></span>
-                        <span className="ms-1 text-success">Inactive</span>
-                    </div>
-                );
-            },
-        },
-        // { field: "location", flex: 1, headerClassName: "fs-12 fw-semibold", headerName: "Location", renderCell: (params) => params.row.clientmaster.location},
-        { 
-            field: "created", 
-            headerClassName: "fs-12 fw-semibold", 
-            flex: 1, 
-            headerName: "Created On",  
-            renderCell: (params) =>  Moment(params.row.created).format('D MMM, YYYY') 
-        },
-        { field: "action", flex: 1, headerClassName: "fs-12 fw-semibold", headerName: "Action",
-            renderCell: (param) => {
-                return (
-                    <>
+    //             if(params.row.status === 1) 
+    //             return (
+    //                 <div className="fw-semibold d-flex align-items-center">
+    //                     <span className="p-1 bg-success rounded-circle"></span>
+    //                     <span className="ms-1 text-success">Active</span>
+    //                 </div>
+    //             );
+    //             else
+    //             return (
+    //                 <div className="fw-semibold d-flex align-items-center">
+    //                     <span className="p-1 bg-danger rounded-circle"></span>
+    //                     <span className="ms-1 text-success">Inactive</span>
+    //                 </div>
+    //             );
+    //         },
+    //     },
+    //     // { field: "location", flex: 1, headerClassName: "fs-12 fw-semibold", headerName: "Location", renderCell: (params) => params.row.clientmaster.location},
+    //     { 
+    //         field: "created", 
+    //         headerClassName: "fs-12 fw-semibold", 
+    //         flex: 1, 
+    //         headerName: "Created On",  
+    //         renderCell: (params) =>  Moment(params.row.created).format('D MMM, YYYY') 
+    //     },
+    //     { field: "action", flex: 1, headerClassName: "fs-12 fw-semibold", headerName: "Action",
+    //         renderCell: (param) => {
+    //             return (
+    //                 <>
                     
-                    <div className="d-flex align-items-center v-align-center">
-                    {(loader && loader === `${param.row.id}-view`) ? 
-                            <div className='edit-btn'>
-                                <div className="spinner-border" role="status">
-                                    <span className="sr-only"></span>
-                                </div> 
-                            </div>
-                            :
-                            <Link className="me-2 icon edit" data-bs-title="View" onClick={() => toggleView(param.row.id)}>
-                                <i className="bi bi-eye"></i>
-                            </Link>
-                        }
+    //                 <div className="d-flex align-items-center v-align-center">
+    //                 {(loader && loader === `${param.row.id}-view`) ? 
+    //                         <div className='edit-btn'>
+    //                             <div className="spinner-border" role="status">
+    //                                 <span className="sr-only"></span>
+    //                             </div> 
+    //                         </div>
+    //                         :
+    //                         <Link className="me-2 icon edit" data-bs-title="View" onClick={() => toggleView(param.row.id)}>
+    //                             <i className="bi bi-eye"></i>
+    //                         </Link>
+    //                     }
                             
                             
-                        {(loader && loader === param.row.id) ? 
-                            <div className='edit-btn'>
-                                <div className="spinner-border" role="status">
-                                    <span className="sr-only"></span>
-                                </div> 
-                            </div>
-                            :
-                            <Link className="me-2 icon edit" data-bs-title="Edit" onClick={() => toggleEdit(param.row.id)}>
-                                <i className="bi bi-pencil-square"></i>
-                            </Link>
-                        }
+    //                     {(loader && loader === param.row.id) ? 
+    //                         <div className='edit-btn'>
+    //                             <div className="spinner-border" role="status">
+    //                                 <span className="sr-only"></span>
+    //                             </div> 
+    //                         </div>
+    //                         :
+    //                         <Link className="me-2 icon edit" data-bs-title="Edit" onClick={() => toggleEdit(param.row.id)}>
+    //                             <i className="bi bi-pencil-square"></i>
+    //                         </Link>
+    //                     }
 
-                        <Link className=" icon delete" data-bs-title="Delete" onClick={() => deleteUser(param.row.id)}>
-                            <i className="bi bi-trash-fill"></i>
-                        </Link>
-                    </div>
+    //                     <Link className=" icon delete" data-bs-title="Delete" onClick={() => deleteUser(param.row.id)}>
+    //                         <i className="bi bi-trash-fill"></i>
+    //                     </Link>
+    //                 </div>
 
-                    </>
-                )
-            }
-        },
-    ];
+    //                 </>
+    //             )
+    //         }
+    //     },
+    // ];
     
     // REFRESH USERS LISTING ON USERS RECORD ADD / UPDATED
     const refreshListing = (response) => {
@@ -240,22 +239,21 @@ export default function Users() {
         >   
             <thead>
                 <tr className="bg-color">
-                <th className="fs-12 fw-semibold sorting sorting_asc">UserName</th>
-                <th className="fs-12 fw-semibold sorting">Name</th>
-                <th className="fs-12 fw-semibold sorting">Email</th>
-                <th className="fs-12 fw-semibold sorting">Status</th>
+                <th className="fs-12 fw-semibold sorting sorting_asc" style={{ width: "15%" }}>UserName</th>
+                <th className="fs-12 fw-semibold sorting" style={{ width: "15%" }}>Name</th>
+                <th className="fs-12 fw-semibold sorting" style={{ width: "25%" }}>Email</th>
+                <th className="fs-12 fw-semibold sorting" style={{ width: "10%" }}>Status</th>
                 {/* <th className="fs-12 fw-semibold sorting">Location</th> */}
-                <th className="fs-12 fw-semibold sorting" tabindex>Created On</th>
-                <th className="fs-12 fw-semibold sorting">Action</th></tr>
+                <th className="fs-12 fw-semibold sorting" tabindex style={{ width: "15%" }} >Created On</th>
+                <th className="fs-12 fw-semibold sorting" style={{ width: "20%" }}>Action</th></tr>
             </thead>
-
             <tbody className="fs-12 scrollable-tbody">
                 {data?.data?.listing.map((item => (
                     <tr className="odd">
-                    <td className="sorting_1">{item.username}</td>
-                    <td>{item.first_name}</td>
-                    <td>{decrypt(item.email)}</td>
-                    <td>
+                    <td className="sorting_1" style={{ width: "15%" }}>{item.username}</td>
+                    <td style={{ width: "15%" }}>{item.first_name}</td>
+                    <td style={{ width: "25%" }}>{decrypt(item.email)}</td>
+                    <td style={{ width: "10%" }}>
 
                     {item.status === 1 ?
                     <div className="fw-semibold d-flex align-items-center">
@@ -268,8 +266,8 @@ export default function Users() {
                     }
                     </td>		
                     {/* <td></td>						 */}
-                    <td>{Moment(item.created).format('D MMM, YYYY') }</td>
-                    <td>
+                    <td style={{ width: "15%" }}>{Moment(item.created).format('D MMM, YYYY') }</td>
+                    <td style={{ width: "20%" }}>
 
                         <div className="d-flex align-items-center v-align-center">
                             {(loader && loader === `${item.id}-view`) ? 

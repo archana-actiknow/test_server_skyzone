@@ -3,13 +3,13 @@ import { useRequest } from '../../utils/Requests';
 import { useLocation, Link } from 'react-router-dom';
 import GetLocations from "../../hooks/Locations";
 import FormDropdown from "../../components/FormDropdown";
-import { Skeleton } from "@mui/material";
 import { items_per_page, messagePop, sanitizeImage, sanitizeText, status } from "../../utils/Common";
 import AddDiscount from './AddDiscount';
 import Pagination from "../../components/Pagination";
 import { DELETEMEMBERSHIPDISCOUNT, FETCHMEMBERSHIPDISCOUNT, SINGLEMEMBERSHIPDISCOUNT } from '../../utils/Endpoints';
 import SweetAlert from '../../components/SweetAlert';
 import EditDiscount from './EditDiscount';
+import SkeletonLoader from '../../components/SkeletonLoader';
 
 export default function MembershipDiscount() {
     const location = useLocation();
@@ -156,7 +156,7 @@ export default function MembershipDiscount() {
             {locationloading ? (
                 <>
                     <div className="text-end mb-3">
-                        <Skeleton variant="rectangular" width="100%" height={80} className="skeleton-custom text-end" />
+                        <SkeletonLoader />
                     </div>
                 </>
             ) : (
@@ -243,7 +243,7 @@ export default function MembershipDiscount() {
                     <div className="row mb-3">
                         <div className="col-md-12">
                         {data?.data?.listing?.length === 0  && !load ? <>No Data Found!</> :
-                            <Skeleton variant="rectangular" width="100%" height={300} className="skeleton-custom" />
+                        <SkeletonLoader height={300}/>
                         }
                         </div>
                     </div>
@@ -257,7 +257,7 @@ export default function MembershipDiscount() {
                     refreshRecords={setRefreshRecords}
                 />
             :
-                <Skeleton variant="rectangular" width="100%" height={20} className="skeleton-custom text-end"/>
+            <SkeletonLoader height={20}/>
             }
         </>
     )

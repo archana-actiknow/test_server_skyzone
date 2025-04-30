@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { useRequest } from '../../utils/Requests';
 import { ADDONS } from '../../utils/Endpoints';
-import { Skeleton } from '@mui/material';
 import EditAddon from './EditAddon';
 import { offer_type } from '../../utils/Common';
 import Accordion from '../../components/Accordion';
+import SkeletonLoader from '../../components/SkeletonLoader';
 
 export default function Addons() {
     const apiRequest = useRequest();
@@ -88,10 +88,10 @@ export default function Addons() {
     {locationloading 
         ? 
         <>
-            <div className="text-end mb-3">              
-                <Skeleton variant="rectangular" width="100%" height={80} className="skeleton-custom text-end" />
+            <div className="text-end mb-3">  
+                <SkeletonLoader/>  
             </div>
-                <Skeleton variant="rectangular" width="100%" height={100} className="skeleton-custom" />
+                <SkeletonLoader height={100}/>
         </> 
         : locationdt &&
         <>
@@ -138,7 +138,7 @@ export default function Addons() {
 
                     {loading 
                     ? 
-                        <Skeleton variant="rectangular" width="100%" height={400} className="skeleton-custom" />
+                    <SkeletonLoader height={400}/>
                     : 
                     <>
                         {/* REPEATING CARD */}

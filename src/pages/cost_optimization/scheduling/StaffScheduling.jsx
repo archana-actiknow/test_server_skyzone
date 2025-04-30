@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 import Accordion from '../../../components/Accordion'
 import { useRequest } from '../../../utils/Requests';
 import { CREATESCHEDULE, FUTURE_STAFF_LISTS } from '../../../utils/Endpoints';
-import { Skeleton } from '@mui/material';
 import { useFormik } from 'formik';
 import { messagePop } from '../../../utils/Common';
+import SkeletonLoader from '../../../components/SkeletonLoader';
 
 const CheckBox = ({position, date, setSchedule}) => {
   const {values, setFieldValue} = useFormik({
@@ -100,10 +100,9 @@ export default function StaffScheduling({currentLocation, weekNumber, year, filt
 
               </div>
 
-              {loading ? <Skeleton variant="rectangular" width="100%" height={400} className="skeleton-custom" />
-              
+              {loading ? 
+              <SkeletonLoader height={400} />
               :
-
               <>
               {weeklySchedule.map((schedules, index) => (
                 <React.Fragment key={index}>

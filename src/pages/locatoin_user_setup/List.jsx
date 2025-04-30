@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import GetLocations from "../../hooks/Locations";
 import FormDropdown from "../../components/FormDropdown";
 import { useLocation } from 'react-router-dom';
-import { Skeleton } from "@mui/material";
 import Add from "./Add";
 import { FETCHMANAGER, LISTMANAGERS, UPDATEMANAGERSTATUS } from "../../utils/Endpoints";
 import { items_per_page, messagePop, status, decrypt } from "../../utils/Common";
@@ -11,6 +10,7 @@ import SweetAlert from "../../components/SweetAlert";
 import { useRequest } from "../../utils/Requests";
 import { Link } from "react-router-dom";
 import Edit from "./Edit";
+import SkeletonLoader from "../../components/SkeletonLoader"
 
 function List() {
   const location = useLocation();
@@ -168,10 +168,10 @@ function List() {
       {locationloading 
         ? 
         <>
-            <div className="text-end mb-3">              
-                <Skeleton variant="rectangular" width="100%" height={80} className="skeleton-custom text-end" />
+            <div className="text-end mb-3">  
+            <SkeletonLoader />
             </div>
-                <Skeleton variant="rectangular" width="100%" height={100} className="skeleton-custom" />
+            <SkeletonLoader height={100} />
         </> 
         : locationdt &&
         <>
@@ -262,7 +262,7 @@ function List() {
             <div className="row mb-3">
               <div className="col-md-12">
               {data?.data?.listing?.length === 0  ? <>No Data Found!</> :
-                  <Skeleton variant="rectangular" width="100%" height={300} className="skeleton-custom" />
+                    <SkeletonLoader height={300} />
               }
               </div>
             </div>         

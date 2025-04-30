@@ -4,10 +4,10 @@ import GetLocations from '../../hooks/Locations';
 import FormDropdown from '../../components/FormDropdown';
 import { useRequest } from '../../utils/Requests';
 import { REWARDS } from '../../utils/Endpoints';
-import { Skeleton } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import EditRewardRule from './EditRewardRule';
 import Accordion from '../../components/Accordion';
+import SkeletonLoader from '../../components/SkeletonLoader';
 
 export default function Rewards() {
     const location = useLocation();
@@ -86,10 +86,10 @@ export default function Rewards() {
         {locationloading 
         ? 
         <>
-            <div className="text-end mb-3">              
-                <Skeleton variant="rectangular" width="100%" height={80} className="skeleton-custom text-end" />
+            <div className="text-end mb-3">   
+            <SkeletonLoader />  
             </div>
-                <Skeleton variant="rectangular" width="100%" height={100} className="skeleton-custom" />
+            <SkeletonLoader height={100} />
         </> 
         : locationdt &&
         <>
@@ -128,7 +128,7 @@ export default function Rewards() {
         <div className="accordion mt-3" id="accordionWithIcon">
             {loading 
             ? 
-                <Skeleton variant="rectangular" width="100%" height={400} className="skeleton-custom" />
+            <SkeletonLoader height={400} />
             : 
             <>
                 {data?.map((product) => {

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import Accordion from '../../../components/Accordion'
 import { useRequest } from '../../../utils/Requests'
 import { SAVESHIFTCUSTOMIZATION, SHIFTCUSTOMIZATION } from '../../../utils/Endpoints';
-import { Skeleton } from '@mui/material';
 import { useFormik } from 'formik';
 import { messagePop } from '../../../utils/Common';
+import SkeletonLoader from '../../../components/SkeletonLoader';
 
 const CustomShift = ({id, timeBefore, timeAfter, position, upAll}) => {
     const [res, setRes] = useState({});
@@ -129,8 +129,8 @@ export default function ShiftCustomizing({currentLocation, weekNumber, year, fil
                     </div>
                     <div className="col-md-12 mb-3">
 
-                    {loading ? <Skeleton variant="rectangular" width="100%" height={400} className="skeleton-custom" />
-              
+                    {loading ? 
+                    <SkeletonLoader height={400} />
                     :
 
                         <Accordion id={1} title="Shift Customization" key={1} defaultCollapse={true}>

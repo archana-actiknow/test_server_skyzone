@@ -3,9 +3,9 @@ import { useRequest } from '../../utils/Requests';
 import { can_access, messagePop, status, timezones} from '../../utils/Common';
 import Moment from 'moment';
 import DOMPurify from 'dompurify';
-import { Tooltip } from '@mui/material';
+// import { Tooltip } from '@mui/material';
 import { NOTIFICATIONS, FETCHNOTIFICATION, DELETENOTIFICATION } from '../../utils/Endpoints';
-import Datatable from '../../components/Datatable';
+// import Datatable from '../../components/Datatable';
 import { Link, useNavigate } from 'react-router-dom';
 import SweetAlert from '../../components/SweetAlert';
 import GetLocations from '../../hooks/Locations';
@@ -285,9 +285,9 @@ export default function PushNotifications() {
                             </thead> */}
                             <thead>
                             <tr className="bg-color">
-                                <th className="fs-12 fw-semibold sorting sorting_asc" style={{ width: "50px" }}>Title</th>
+                                <th className="fs-12 fw-semibold sorting sorting_asc" style={{ width: "100px" }}>Title</th>
                                 <th className="fs-12 fw-semibold sorting" style={{ width: "100px" }}>Message</th>
-                                <th className="fs-12 fw-semibold sorting" style={{ width: "150px" }}>Timezone</th>
+                                <th className="fs-12 fw-semibold sorting" style={{ width: "100px" }}>Timezone</th>
                                 <th className="fs-12 fw-semibold sorting" style={{ width: "200px" }}>Locations</th>
                                 <th className="fs-12 fw-semibold sorting" style={{ width: "100px" }}>Date</th>
                                 <th className="fs-12 fw-semibold sorting" style={{ width: "120px" }}>Time</th>
@@ -311,7 +311,7 @@ export default function PushNotifications() {
 
                                     return (
                                     <tr key={item.id} className="odd">
-                                        <td style={{ width: "50px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                                        <td style={{ width: "100px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                                             <span title={item.title}>
                                                 {item.title.length > 30 ? item.title.slice(0,10) + "..." : item.title}
                                             </span>
@@ -327,7 +327,7 @@ export default function PushNotifications() {
                                         </span>
                                         </td>
 
-                                        <td style={{ width: "150px" }}>{timezoneLabel}</td>
+                                        <td style={{ width: "100px" }}>{timezoneLabel}</td>
 
                                         <td style={{ Width: "200px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                                         <span title={location_names}>
@@ -351,7 +351,7 @@ export default function PushNotifications() {
 
                                         <td style={{ width: "150px" }}>
                                         {item.notified !== '1' ? (
-                                            <div className="d-flex align-items-center v-align-center">
+                                            <div className="d-flex align-items-center">
                                             {(editLoader && editLoader === item.id) ? (
                                                 <div className='td-btn'>
                                                 <div className="spinner-border" role="status">

@@ -8,7 +8,7 @@ import { GETHOIDAYCAL, HOLIDAYCALENDAR,DELETEHOLIDAYCALENDAR } from '../../utils
 import { holidayTypes, messagePop } from '../../utils/Common';
 import { holidayCalendarValidation } from '../../utils/validationSchemas';
 import SweetAlert from '../../components/SweetAlert';
-import { Skeleton } from '@mui/material';
+import SkeletonLoader from '../../components/SkeletonLoader';
 
 const TblBody = ({ data = {}, onDelete, index, title, onChange }) => {
     const upRef = useRef(false);
@@ -436,7 +436,7 @@ export default function Calendar() {
                 {locationloading ? (
                     <>
                         <div className="text-end mb-3">
-                        <Skeleton variant="rectangular" width="100%" height={80} className="skeleton-custom text-end"/>
+                        <SkeletonLoader />
                         </div>
                     </>
                     ) : (
@@ -472,7 +472,7 @@ export default function Calendar() {
             </div>
                 {loading 
                     ? 
-                        <Skeleton variant="rectangular" width="100%" height={400} className="skeleton-custom" />
+                    <SkeletonLoader height={400} />
                     : 
                 <div>
                     <BreakSection title="Holidays" imgPath="./images/happy.png" data={breakSections.holidays}

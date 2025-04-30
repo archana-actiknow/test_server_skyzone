@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useRequest } from '../../utils/Requests';
-import { Skeleton } from '@mui/material';
 import { Link } from 'react-router-dom';
 import Add from './Add';
 import SweetAlert from '../../components/SweetAlert';
 import Edit from './Edit';
 import { DELETE_KITCHEN_SLIDER_IMAGES, GET_KITCHEN_SLIDER_IMAGES } from '../../utils/Endpoints';
 import { messagePop } from '../../utils/Common';
+import SkeletonLoader from "../../components/SkeletonLoader";
 
 export default function KitchenSlider() {
     const [data, setData] = useState([]);
@@ -98,7 +98,7 @@ export default function KitchenSlider() {
             </div>
             {loading 
                 ? 
-                    <Skeleton variant="rectangular" width="100%" height={400} className="skeleton-custom" />
+                <SkeletonLoader height={400} />
                 : 
             <div className="row align-items-center">
             {(data?.length > 0 && !load) ? (
@@ -131,7 +131,7 @@ export default function KitchenSlider() {
                 <div className="row mb-3">
                     <div className="col-md-12">
                     {data?.length === 0  && !load ? <>No Data Found!</> :
-                        <Skeleton variant="rectangular" width="100%" height={300} className="skeleton-custom" />
+                    <SkeletonLoader height={300} />
                     }
                     </div>
                 </div>

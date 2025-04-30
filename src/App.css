@@ -1353,11 +1353,12 @@ height: 300px;
 }
 
 .react-confirm-p{
-    padding: .2em .5em 0;
+    padding: .2em .2em 0;
+    text-align: center;
 }
 
 .table>:not(caption)>*>* {
-    padding: 0.2rem .5rem !important;
+    padding: 0.3rem .5rem !important;
     color: var(--bs-table-color-state, var(--bs-table-color-type, var(--bs-table-color)));
     background-color: var(--bs-table-bg);
     border-bottom-width: var(--bs-border-width);
@@ -1395,4 +1396,31 @@ height: 300px;
     box-shadow: inset 0 -1px 0 #fb5656
   }
   
+
+/*skeleton css start */
+
+  .skeleton {
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    animation: pulse 1.5s infinite ease-in-out;
+  }
+  
+  .skeleton-card {
+    padding: 16px;
+    width: 100%;
+    /* max-width: 300px; */
+  }
+  
+  .skeleton-image {
+    width: 100%;
+    margin-bottom: 12px;
+  }
+  
+  @keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+  }
+  
+/*skeleton css end */
   

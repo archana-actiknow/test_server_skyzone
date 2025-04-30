@@ -6,14 +6,14 @@ import {
   OFFERS_LIST,
   OFFER_LIST,
   OFFER_STATUS_UPDATE,
-  OFFER_DELETE,
+//   OFFER_DELETE,
 } from "../../utils/Endpoints";
-import { Skeleton } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import SweetAlert from "../../components/SweetAlert";
-import { items_per_page, messagePop, sanitizeImage, sanitizeText, status } from "../../utils/Common";
+import { items_per_page, sanitizeImage, sanitizeText, status } from "../../utils/Common";
 import Pagination from "../../components/Pagination";
+import SkeletonLoader from "../../components/SkeletonLoader";
 
 export default function Offers() {
   
@@ -122,27 +122,27 @@ export default function Offers() {
     };
 
     // DELETE
-    const handleDelete = async (currentLocation, id) => {
+    // const handleDelete = async (currentLocation, id) => {
 
-        const title = "Are you sure?";
-        const text  = "Are you sure you want to delete this record?";
-        const confirm = await SweetAlert.confirm(title, text);
+    //     const title = "Are you sure?";
+    //     const text  = "Are you sure you want to delete this record?";
+    //     const confirm = await SweetAlert.confirm(title, text);
 
-        if(confirm){
-            const deleteOffer = await apiRequest({
-            url: OFFER_DELETE,
-            method: "delete",
-            params: {
-                id: id,
-            },
-            });
-            messagePop(deleteOffer);
-            if(deleteOffer.status === 'success'){
-            setRefresRecords(true);
-            }
-        }
+    //     if(confirm){
+    //         const deleteOffer = await apiRequest({
+    //         url: OFFER_DELETE,
+    //         method: "delete",
+    //         params: {
+    //             id: id,
+    //         },
+    //         });
+    //         messagePop(deleteOffer);
+    //         if(deleteOffer.status === 'success'){
+    //         setRefresRecords(true);
+    //         }
+    //     }
 
-    };
+    // };
 
     // UPDATE
     const handleStatusUpdate = async (offer_id, status) => {
@@ -207,7 +207,7 @@ export default function Offers() {
 
         <>
             <div className="text-end mb-3">
-            <Skeleton variant="rectangular" width="100%" height={80} className="skeleton-custom text-end"/>
+            <SkeletonLoader/>
             </div>
         </>
 
@@ -288,9 +288,9 @@ export default function Offers() {
                                 </Link>
                             }
 
-                            <Link className="icon delete" data-bs-title="Delete" onClick={() => handleDelete(currentLocation, offering.id)}>
+                            {/* <Link className="icon delete" data-bs-title="Delete" onClick={() => handleDelete(currentLocation, offering.id)}>
                                 <i className="bi bi-trash-fill"></i>
-                            </Link>
+                            </Link> */}
                             
                         </div>
 
@@ -312,7 +312,7 @@ export default function Offers() {
             <div className="row mb-3">
             <div className="col-md-12">
             {data?.data?.offers?.length === 0  && !load ? <>No Data Found!</> :
-                <Skeleton variant="rectangular" width="100%" height={300} className="skeleton-custom" />
+                <SkeletonLoader height={300}/>
             }
             </div>
             </div>
@@ -328,7 +328,7 @@ export default function Offers() {
                 refreshRecords={setRefresRecords}
             />
         :
-            <Skeleton variant="rectangular" width="100%" height={20} className="skeleton-custom text-end"/>
+            <SkeletonLoader height={20} />
         }
     </>
   );

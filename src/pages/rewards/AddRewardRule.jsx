@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useRequest } from '../../utils/Requests';
 import { NONREWARDS } from '../../utils/Endpoints';
-import { Skeleton } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import RewardRule from './RewardRule';
 import Accordion from '../../components/Accordion';
+import SkeletonLoader from '../../components/SkeletonLoader';
 // import { useFormik } from 'formik';
 
 export default function AddRewardRule() {
@@ -69,10 +69,10 @@ export default function AddRewardRule() {
         {(!currentLocation) 
         ? 
         <>
-            <div className="text-end mb-3">              
-                <Skeleton variant="rectangular" width="100%" height={80} className="skeleton-custom text-end" />
+            <div className="text-end mb-3">  
+            <SkeletonLoader />   
             </div>
-                <Skeleton variant="rectangular" width="100%" height={100} className="skeleton-custom" />
+            <SkeletonLoader height={100}/>
         </> 
         : 
         <>
@@ -108,7 +108,7 @@ export default function AddRewardRule() {
         <div className="accordion mt-3" id="accordionWithIcon">
         {(loading) || (!currentLocation)
         ? 
-            <Skeleton variant="rectangular" width="100%" height={400} className="skeleton-custom" />
+        <SkeletonLoader height={400}/>
         : 
         <>
             {data?.map((product) => {

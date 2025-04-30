@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Chart from '../../../components/Chart';
 import { TRAFFIC_PREDICTION } from '../../../utils/Endpoints';
 import { useRequest } from '../../../utils/Requests';
-import { Skeleton } from '@mui/material';
+import SkeletonLoader from '../../../components/SkeletonLoader';
 
 export default function TrafficPrediction({currentLocation, weekNumber, year, filterClicked, setFilterClicked}) {
 
@@ -86,7 +86,7 @@ export default function TrafficPrediction({currentLocation, weekNumber, year, fi
                             <p className="fs-15 fw-semibold mb-2">Predicted vs Actual</p>
                             {isLoading 
                             ? 
-                                <Skeleton variant="rectangular" width="100%" height={250} className="skeleton-custom text-end"/> 
+                            <SkeletonLoader height={250} />
                             :
                                 <Chart chartData={chartData} settings={false} />
                             }
@@ -100,7 +100,7 @@ export default function TrafficPrediction({currentLocation, weekNumber, year, fi
                             <div className="ss-table table-responsive">
                             {isLoading 
                             ? 
-                                <Skeleton variant="rectangular" width="100%" height={250} className="skeleton-custom text-end"/> 
+                            <SkeletonLoader height={250} />
                             :
                                 <table className="table">
                                     <thead>

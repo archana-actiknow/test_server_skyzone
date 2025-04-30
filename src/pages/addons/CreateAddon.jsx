@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { useRequest } from '../../utils/Requests';
 import { NONADDONS } from '../../utils/Endpoints';
-import { Skeleton } from '@mui/material';
 import NewAddon from './NewAddon';
 import Accordion from '../../components/Accordion';
+import SkeletonLoader from '../../components/SkeletonLoader';
 
 export default function CreateAddon() {
     const apiRequest = useRequest();
@@ -79,10 +79,10 @@ export default function CreateAddon() {
         {locationloading 
         ? 
         <>
-            <div className="text-end mb-3">              
-                <Skeleton variant="rectangular" width="100%" height={80} className="skeleton-custom text-end" />
+            <div className="text-end mb-3"> 
+            <SkeletonLoader/>  
             </div>
-            <Skeleton variant="rectangular" width="100%" height={100} className="skeleton-custom" />
+            <SkeletonLoader height={100}/>
         </> 
         : locationdt &&
         <>
@@ -129,7 +129,7 @@ export default function CreateAddon() {
         <div className="accordion mt-3" id="accordionWithIcon">
             {loading 
             ? 
-                <Skeleton variant="rectangular" width="100%" height={400} className="skeleton-custom" />
+            <SkeletonLoader height={400}/>
             : 
             <>
                 {/* REPEATING CARD */}

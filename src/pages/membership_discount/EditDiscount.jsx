@@ -7,7 +7,7 @@ import Accordion from '../../components/Accordion';
 import PopupModal from '../../components/PopupModal';
 import SweetAlert from '../../components/SweetAlert';
 import { messagePop } from '../../utils/Common';
-import { Skeleton } from '@mui/material';
+import SkeletonLoader from '../../components/SkeletonLoader';
 
 const EditDiscount = ({id, close, editData,clientID, loadProducts, setLoadProducts, refreshData}) => {
     const apiRequest = useRequest();
@@ -119,7 +119,7 @@ const EditDiscount = ({id, close, editData,clientID, loadProducts, setLoadProduc
                 </div>
                 {loading 
                     ? 
-                        <Skeleton variant="rectangular" width="100%" height={400} className="skeleton-custom" />
+                    <SkeletonLoader height={400}/>
                     : 
                 <div className="form-group row mb-3">
                     <label className="col-md-3 fs-12 fw-semibold">Products</label>

@@ -67,7 +67,7 @@ const SweetAlert = {
       confirmAlert({
         // title: <span><i className="bi bi-check-circle-fill text-success me-2"></i> {options.title}</span>,
         title: options.title || '',
-        message: <p className='react-confirm-p fs-14'>{options.text}</p>, 
+        message: <p className='react-confirm-p fs-13'>{options.text}</p>, 
         // message: options.text || '',
         buttons: [
           {
@@ -90,7 +90,7 @@ const SweetAlert = {
       confirmAlert({
         // title: <span><i className="bi bi-check-circle-fill text-success me-2"></i> {title}</span>,
         title,
-        message: <p className='react-confirm-p fs-14'>{text}</p>, 
+        message: <p className='react-confirm-p fs-13'>{text}</p>, 
         // message: text,
         buttons: [
           {
@@ -112,7 +112,7 @@ const SweetAlert = {
     confirmAlert({
       // title: <span><i className="bi bi-check-circle-fill text-success me-2"></i> {title}</span>,
       title: title,
-      message: <p className='react-confirm-p fs-14'>{text}</p>, 
+      message: <p className='react-confirm-p fs-13'>{text}</p>, 
       // message: text,
       buttons: [
         {
@@ -128,7 +128,7 @@ const SweetAlert = {
     confirmAlert({
       // title: <span><i className="bi bi-check-circle-fill text-success me-2"></i> {title}</span>,
       title: title,
-      message: <p className='react-confirm-p fs-14'>{text}</p>, 
+      message: <p className='react-confirm-p fs-13'>{text}</p>, 
       // message: text,
       buttons: [
         {
@@ -144,7 +144,7 @@ const SweetAlert = {
     confirmAlert({
       // title: <span><i className="bi bi-check-circle-fill text-success me-2"></i> {title}</span>,
       title: title,
-      message: <p className='react-confirm-p fs-14'>{text}</p>, 
+      message: <p className='react-confirm-p fs-13'>{text}</p>, 
       // message: text,
       buttons: [
         {
@@ -160,7 +160,7 @@ const SweetAlert = {
     confirmAlert({
       // title: <span><i className="bi bi-check-circle-fill text-success me-2"></i> {title}</span>,
       title: title,
-      message: <p className='react-confirm-p fs-14'>{text}</p>, 
+      message: <p className='react-confirm-p fs-13'>{text}</p>, 
       // message: text,
       buttons: [
         {
@@ -176,7 +176,7 @@ const SweetAlert = {
     return new Promise((resolve) => {
       confirmAlert({
         title: options.title || '',
-        message: <p className='react-confirm-p fs-14'>{options.text}</p>, 
+        message: <p className='react-confirm-p fs-13'>{options.text}</p>, 
         // message: options.text || '',
         buttons: options.buttons || [
           {

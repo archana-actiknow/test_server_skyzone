@@ -6,7 +6,7 @@ import SweetAlert from '../../components/SweetAlert';
 import { FETCHLOCATIONS, UPDATELOCATION, UPDATESTATUSCHANGE } from '../../utils/Endpoints';
 import GetLocations from "../../hooks/Locations";
 import FormDropdown from "../../components/FormDropdown";
-import { Skeleton } from "@mui/material";
+import SkeletonLoader from '../../components/SkeletonLoader';
 
 export default function LocationSetup() {
     const location = useLocation();
@@ -153,7 +153,7 @@ export default function LocationSetup() {
 
         <>
             <div className="text-end mb-3">
-            <Skeleton variant="rectangular" width="100%" height={80} className="skeleton-custom text-end"/>
+            <SkeletonLoader />
             </div>
         </>
 
@@ -192,7 +192,7 @@ export default function LocationSetup() {
         )}
 
         {loading ? (
-            <Skeleton variant="rectangular" width="100%" height={400} className="skeleton-custom" />
+            <SkeletonLoader height={400}/>
         ):(
 
 

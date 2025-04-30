@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useRequest } from '../../utils/Requests.js';
 import { decrypt, FilterstatusChange, items_per_page, messagePop, statusChange } from '../../utils/Common.js';
 import { CUSTOMERQUERIES, CUSTOMERQUERIESREPLY, STATUSCHANGE } from '../../utils/Endpoints.js';
-import { Skeleton } from '@mui/material';
 import Accordion from '../../components/Accordion.jsx';
 import moment from 'moment';
 import Pagination from '../../components/Pagination.jsx';
@@ -13,6 +12,7 @@ import TinyMCEEditor from "../../editor/editor.jsx";
 import { sendReply } from '../../utils/validationSchemas.jsx';
 import { useFormik } from 'formik';
 import SweetAlert from '../../components/SweetAlert.jsx';
+import SkeletonLoader from "../../components/SkeletonLoader.js";
 
 const RenderQueryRow = ({query, expandMessages, setExpandMessages}) => {
     const [queryStatus, setQueryStatus] = useState(query.status) ;
@@ -262,7 +262,7 @@ export default function CustomerQueries() {
             {locationloading ?
                 <>
                     <div className="text-end mb-3">
-                        <Skeleton variant="rectangular" width="100%" height={80} className="skeleton-custom text-end" />
+                    <SkeletonLoader />
                     </div>
                 </>
                 : locationdt &&
@@ -343,7 +343,7 @@ export default function CustomerQueries() {
                                 </div>
                             </div> 
                             {loading ? (
-                                <Skeleton variant="rectangular" width="100%" height={400} className="skeleton-custom" />
+                                <SkeletonLoader height={400} />
                             ) : (
                                 <>
                                 {data?.map((query) => {

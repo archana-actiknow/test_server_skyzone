@@ -8,13 +8,13 @@ import {
   PAYMENT_DETAILS,
   SUBSCRIPTION_CANCEL,
 } from "../../utils/Endpoints";
-import { Skeleton } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import moment from "moment";
 import { Modal, Button } from "react-bootstrap";
 import SweetAlert from "../../components/SweetAlert";
 import { items_per_page, messagePop } from "../../utils/Common";
 import DatePicker from "../../components/DatePicker.jsx";
+import SkeletonLoader from "../../components/SkeletonLoader.js";
 
 export default function Payments() {
   const location = useLocation();
@@ -191,12 +191,7 @@ export default function Payments() {
         <>
           <div className="text-end mb-3">
           </div>
-          <Skeleton
-            variant="rectangular"
-            width="100%"
-            height={100}
-            className="skeleton-custom"
-          />
+          <SkeletonLoader height={100} />
         </>
       ) : (
         locationdt && (
@@ -298,12 +293,7 @@ export default function Payments() {
               </div>
               <div className="table-responsive">
                 {loading ? 
-                <Skeleton
-                  variant="rectangular"
-                  width="100%"
-                  height={80}
-                  className="skeleton-custom text-end"
-                />
+                <SkeletonLoader/>
                 :
                 <table className="table" id="">
                   <thead>
@@ -336,19 +326,9 @@ export default function Payments() {
                     {currentPayments.length < 0 ? (
                       <>
                         <div className="text-end mb-3">
-                          <Skeleton
-                            variant="rectangular"
-                            width="100%"
-                            height={80}
-                            className="skeleton-custom text-end"
-                          />
+                          <SkeletonLoader />
                         </div>
-                        <Skeleton
-                          variant="rectangular"
-                          width="100%"
-                          height={100}
-                          className="skeleton-custom"
-                        />
+                        <SkeletonLoader height={100} />
                       </>
                     ) : (
                       currentPayments && (

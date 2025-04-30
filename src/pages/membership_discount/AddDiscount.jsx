@@ -8,7 +8,7 @@ import PopupModal from '../../components/PopupModal';
 import { addMembershipDiscount } from '../../utils/validationSchemas';
 import SweetAlert from '../../components/SweetAlert';
 import { messagePop } from '../../utils/Common';
-import { Skeleton } from '@mui/material';
+import SkeletonLoader from "../../components/SkeletonLoader"
 
 const AddDiscount = ({close, clientID, loadProducts, setLoadProducts,refreshData}) => {
 
@@ -108,7 +108,7 @@ const AddDiscount = ({close, clientID, loadProducts, setLoadProducts,refreshData
                 </div>
                  {loading 
                     ? 
-                        <Skeleton variant="rectangular" width="100%" height={400} className="skeleton-custom" />
+                    <SkeletonLoader height={400} />
                     : 
                 <div className="form-group row mb-3">
                     <label className="col-md-3 fs-12 fw-semibold">Products</label>

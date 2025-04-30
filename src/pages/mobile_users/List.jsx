@@ -1,16 +1,15 @@
-import { Skeleton } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import GetLocations from "../../hooks/Locations";
 import FormDropdown from "../../components/FormDropdown";
 import DatePicker from "../../components/DatePicker";
-import Datatable from '../../components/Datatable';
 import { decrypt, sanitizeImage } from "../../utils/Common";
 import Moment from 'moment';
 import { useRequest } from "../../utils/Requests";
 import { GETCUSTOMERQUERIESPOINTS, MOBCUSTOMERLIST } from "../../utils/Endpoints";
 import Add from "./Add";
 import Table from '../../components/Table';
+import SkeletonLoader from "../../components/SkeletonLoader";
 
 
 export default function Lists () {
@@ -198,7 +197,7 @@ export default function Lists () {
             {locationloading ?
                 <>
                     <div className="text-end mb-3">
-                        <Skeleton variant="rectangular" width="100%" height={80} className="skeleton-custom text-end" />
+                    <SkeletonLoader />
                     </div>
                 </>
                 : locationdt &&

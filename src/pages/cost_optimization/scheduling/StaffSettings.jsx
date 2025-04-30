@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import Accordion from '../../../components/Accordion'
 import { useRequest } from '../../../utils/Requests';
 import { LISTSTAFFSETTINGS, SAVESTAFFSETTING } from '../../../utils/Endpoints';
-import { Skeleton } from '@mui/material';
 import FormDropdown from '../../../components/FormDropdown';
 import { useFormik } from 'formik';
 import { messagePop } from '../../../utils/Common';
+import SkeletonLoader from '../../../components/SkeletonLoader';
 
 const PayRateSingle = ({id, position, position_model, pay_rate, modelParams, upAll}) => {
     const [res, setRes] = useState({});
@@ -108,8 +108,8 @@ export default function StaffSettings({currentLocation, weekNumber, year, filter
                         <button onClick={saveStaffSettings} className="ss_btn">Save Setting</button>
                     </div>
                     <div className="col-md-12 mb-3">
-                    {loading ? <Skeleton variant="rectangular" width="100%" height={400} className="skeleton-custom" />
-              
+                    {loading ?
+                    <SkeletonLoader height={400} />
                     :
                         <Accordion id="hourly-pay-rate" title="Hourly Pay Rate" defaultCollapse={true}>
                             <div className="ss-table table-responsive">

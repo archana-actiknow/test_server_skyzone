@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useRequest } from '../../utils/Requests';
 import { items_per_page} from '../../utils/Common';
 import { GENERALQUERIES } from '../../utils/Endpoints';
-import { Skeleton } from '@mui/material';
 import Accordion from '../../components/Accordion';
 import moment from 'moment';
 import Pagination from '../../components/Pagination';
+import SkeletonLoader from "../../components/SkeletonLoader";
 
 export default function GeneralQueries(){
     const [RefresRecords, setRefresRecords] = useState(true);
@@ -87,8 +87,8 @@ export default function GeneralQueries(){
 
                         <div className="col-md-12 mb-3">
 
-                        {loading ? <Skeleton variant="rectangular" width="100%" height={400} className="skeleton-custom" />
-                
+                        {loading ? 
+                        <SkeletonLoader height={400} />
                         :
 
                         <>
@@ -148,7 +148,7 @@ export default function GeneralQueries(){
                                 refreshRecords={setRefresRecords}
                             />
                         :
-                            <Skeleton variant="rectangular" width="100%" height={20} className="skeleton-custom text-end"/>
+                        <SkeletonLoader height={20} />
                         }
                         </div>
                     </div>

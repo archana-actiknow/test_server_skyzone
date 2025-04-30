@@ -4,9 +4,9 @@ import GetLocations from '../../hooks/Locations';
 import { useLocation } from 'react-router-dom';
 import { useRequest } from '../../utils/Requests';
 import { CREATETYPE, GET_PRODUCTS, UPDATE_STATUS } from '../../utils/Endpoints';
-import { Skeleton } from '@mui/material';
 import { messagePop, cards, available_prd_category, weekdays, sanitizeImage } from '../../utils/Common';
 import SweetAlert from '../../components/SweetAlert';
+import SkeletonLoader from '../../components/SkeletonLoader';
 
 export default function Products() {
     const apiRequest = useRequest();
@@ -171,10 +171,10 @@ export default function Products() {
     {locationloading
         ? 
         <>
-            <div className="text-end mb-3">              
-                <Skeleton variant="rectangular" width="100%" height={80} className="skeleton-custom text-end" />
+            <div className="text-end mb-3">
+            <SkeletonLoader />   
             </div>
-                <Skeleton variant="rectangular" width="100%" height={100} className="skeleton-custom" />
+            <SkeletonLoader height={100} />
         </> 
         : locationdt &&
         <>
@@ -209,7 +209,7 @@ export default function Products() {
 
             {loading 
             ? 
-                <Skeleton variant="rectangular" width="100%" height={400} className="skeleton-custom" />
+            <SkeletonLoader height={400}/>
             : 
             <>
                 <div className="text-end mb-3"><span type="button" className="ss_btn" onClick={updateStatus}>Update</span></div>
@@ -271,7 +271,7 @@ export default function Products() {
                     <div className="row mb-3">
                         <div className="col-md-12">
                         {data?.length === 0 ? <>No Data Found!</> :
-                            <Skeleton variant="rectangular" width="100%" height={300} className="skeleton-custom" />
+                        <SkeletonLoader height={300} />
                         }
                         </div>
                     </div>
