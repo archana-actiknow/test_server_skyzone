@@ -412,7 +412,8 @@ a{
     font-size: 12px;
     font-weight: 600;
     color: #fff;
-    padding: 3px 7px;
+    padding: 3px 6px;
+    /* padding: 3px 7px; */
     border-radius: 5px;
 }
 .product-active{

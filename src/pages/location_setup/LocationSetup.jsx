@@ -137,6 +137,7 @@ export default function LocationSetup() {
     
         if (confirm) {
             const upCafeVisibility = { id: id, cafe_module: !cafe_module }; // Toggle true/false
+            console.log("upCafeVisibility",upCafeVisibility);
             const data = await apiRequest({ url: UPDATELOCATION, method: "POST", data: upCafeVisibility });
             setRefreshRecords(true);
             messagePop(data);
