@@ -321,6 +321,7 @@ export default function Calendar() {
             end_time: extractTime(item.end_time),
         }));
     });
+    
 
     const handleAddEntry = (section, title) => {
         const newEntry = {
