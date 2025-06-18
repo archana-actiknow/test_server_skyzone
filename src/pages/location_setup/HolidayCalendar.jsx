@@ -108,7 +108,7 @@ const TblBody = ({ data = {}, onDelete, index, title, onChange }) => {
                     </td>
                 )}
                 <td>
-                    <FormDropdown options={holidayTypes} default_value={values.type} name="type" classnm="form-select"
+                    <FormDropdown options={holidayTypes} default_value={values.type} value={values.type} name="type" classnm="form-select"
                         onChange={holidayTypesChange} onBlur={handleBlur} />
                     {errors.type && touched.type && <p className='text-danger fs-12'>{errors.type}</p>}
                 </td>
@@ -321,7 +321,7 @@ export default function Calendar() {
             end_time: extractTime(item.end_time),
         }));
     });
-    
+
 
     const handleAddEntry = (section, title) => {
         const newEntry = {

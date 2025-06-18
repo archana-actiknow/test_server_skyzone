@@ -6,9 +6,9 @@ const key = CryptoJS.enc.Utf8.parse(process.env.REACT_APP_RIVETTE_KEY);
 const iv = CryptoJS.enc.Utf8.parse(process.env.REACT_APP_SECRET_IV);
 
 export const holidayTypes = [
-  { id: 1, label: "Open", value: 1 },
-  { id: 2, label: "Open as usual", value: 2 },
-  { id: 3, label: "Close", value: 3 },
+  { id: 1, label: "Open", value: '1' },
+  { id: 2, label: "Open as usual", value: '2' },
+  { id: 3, label: "Close", value: '3' },
 ];
 
 export const timezones = [
