@@ -324,6 +324,7 @@ export const sanitizeText = (text) => {
   const sanitizedDescription = DOMPurify.sanitize(text);
   return sanitizedDescription;
 };
+
 export const sanitizeAndValidateUrl = (url) => {
   // Validate the URL
   const isValidUrl = (url) => {

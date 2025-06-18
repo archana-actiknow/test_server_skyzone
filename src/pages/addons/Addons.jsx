@@ -41,7 +41,6 @@ export default function Addons() {
 
      // ONLOAD //
      useEffect(() => {
-
         if(!locationloading && locationdt){
             if(location.state !== null){
                 setCurrentLocation(location.state?.id);
@@ -53,21 +52,20 @@ export default function Addons() {
             }
             setAllLocations(locationdt.data);
         }
-
     }, [locationdt, locationloading, location.state]);
 
     // FETCH ONLOAD //
     useEffect(()=> {
         const getRewards = async () => {
             const rewardsRec = await apiRequest({
-                    url:ADDONS, 
-                    method:"get", 
-                    params: {
-                        location_id:currentLocation, 
-                        card_id: cardType,
-                        search: search
-                    }
-                });
+                url:ADDONS, 
+                method:"get", 
+                params: {
+                    location_id:currentLocation, 
+                    card_id: cardType,
+                    search: search
+                }
+            });
             setData(rewardsRec?.data);
             setLoading(false);
         }
@@ -91,7 +89,7 @@ export default function Addons() {
             <div className="text-end mb-3">  
                 <SkeletonLoader/>  
             </div>
-                <SkeletonLoader height={100}/>
+            <SkeletonLoader height={100}/>
         </> 
         : locationdt &&
         <>
@@ -100,7 +98,6 @@ export default function Addons() {
                     Add New
                 </Link>
             </div>
-
             <div className="row mb-3">
                 <div className="col-md-12">
                     <div className="card border-0">
@@ -129,53 +126,46 @@ export default function Addons() {
                     </div>
                 </div>
             </div>
-
         </>
         }
 
-         
-                    <div className="accordion mt-3" id="accordionWithIcon">
-
-                    {loading 
-                    ? 
-                    <SkeletonLoader height={400}/>
-                    : 
-                    <>
-                        {/* REPEATING CARD */}
-                        {data?.listing?.map((products) => {
-                            return (
-
-                                <Accordion id={products.Pid} title={products.name} key={products.Pid}>
-                                    <table className="table table-bordered RjTable mb-0 data-table">
-                                        <thead>
-                                            <tr>
-                                                <th style={{width: 50}}>#</th>
-                                                <th style={{width: 100}}></th>
-                                                <th>Item</th>
-                                                <th style={{width: 200}}>Cost</th>
-                                                <th style={{width: 50}}>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {products.rest_products.map((product, index) => {
-                                                return (
-                                                    <tr key={product.add_on.id}>
-                                                        <EditAddon product={product} index={index} refreshRecords={setRefresRecords} />
-                                                    </tr>
-                                                )
-                                            })}
-                                        </tbody>
-                                    </table>
-                                </Accordion>
-                                
-                            )
-                        })}
-                        {/* REPEATING CARD */}
-                    </>
-                    }
-
-                    </div>
-                
+        <div className="accordion mt-3" id="accordionWithIcon">
+        {loading 
+        ? 
+        <SkeletonLoader height={400}/>
+        : 
+        <>
+            {/* REPEATING CARD */}
+            {data?.listing?.map((products) => {
+                return (
+                    <Accordion id={products.Pid} title={products.name} key={products.Pid}>
+                        <table className="table table-bordered RjTable mb-0 data-table">
+                            <thead>
+                                <tr>
+                                    <th style={{width: 50}}>#</th>
+                                    <th style={{width: 100}}></th>
+                                    <th>Item</th>
+                                    <th style={{width: 200}}>Cost</th>
+                                    <th style={{width: 50}}>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {products.rest_products.map((product, index) => {
+                                    return (
+                                        <tr key={product.add_on.id}>
+                                            <EditAddon product={product} index={index} refreshRecords={setRefresRecords} />
+                                        </tr>
+                                    )
+                                })}
+                            </tbody>
+                        </table>
+                    </Accordion>
+                )
+            })}
+            {/* REPEATING CARD */}
+        </>
+        }
+        </div>
     </>
   )
 }

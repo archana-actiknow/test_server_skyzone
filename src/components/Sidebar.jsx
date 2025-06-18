@@ -44,18 +44,14 @@ export default function Sidebar() {
     return (
     <section id="sidebar" className="sidebarFull">
         <ul id="sidebar-nav" className="sidebar-nav scroll h-100 pt-0">
-            
             <div className="d-flex align-items-center mb-3">
                 <Link className="navbar-brand  mx-auto">
                   <img style={{height: "50px"}} src={process.env.REACT_APP_ICON} className="img-fluid" alt="logo" />
                 </Link>
             </div>
-
             <span className={`toggle-sidebar-btn ${isSidebarOpen ? 'color' : ''}`} onMouseOver={() => toggleIcon()} onMouseOut={() => setIcon("bi bi-list")} onClick={toggleSidebar} ><i className={icon}></i></span>
-            
             {(IsAgent || IsSuperAdmin || IsUser || IsAdmin) &&
             <>
-
             {!IsAgent && (
                 <>
                     <li
@@ -288,14 +284,14 @@ export default function Sidebar() {
                     </div>
 
                     {!isSidebarOpen && (<i className={`bi fs-13 ${openSection === 'Queries' ? 'bi-chevron-down' : 'bi-chevron-right'}`}></i>)}
-                </li>
+                </li>   
 
                 {/* <li className="fs-15 mt-30 d-flex justify-content-between align-items-center lnk" onClick={() => handleSectionClick('Queries')}>
                     <div className="d-flex align-items-center">
                         <i className={`bi bi-patch-question ${(iconSide === 'right') && 'fs_40'}`}></i> 
                         {iconSide === 'right' ? '' : <span className="ms-2">Queries</span>}
                     </div>
-                    {!isSidebarOpen && (
+                    {!isSidebarOpen && (    
                         <i className={`bi fs-13 ${openSection === 'Queries' ? 'bi-chevron-down' : 'bi-chevron-right'}`}></i>
                     )}
                 </li> */}

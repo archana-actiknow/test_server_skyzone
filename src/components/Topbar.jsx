@@ -32,12 +32,10 @@ export default function Topbar({title}) {
                     className={`rounded-circle head-icon text-dark${(show) ? ' show' : ''}`}
                     type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <div className="head-icon text-center">
-                        
                         <img src="./images/images.png" className="img-fluid rounded-circle" alt="settings" />
                     </div>
                 </Link>
-                <ul className={`dropdown-menu dropdown-menu-end border-0 shadow${(show) ? ' show' : ''}`} style={{right: '30px'}}>
-                    
+                <ul className={`dropdown-menu dropdown-menu-end border-0 shadow${(show) ? ' show' : ''}`} style={{right: '30px'}}>   
                     {/* <li>
                         <Link className="dropdown-item fs-12 fw-semibold d-flex align-items-center" >
                             <span className="">Set a Status</span>

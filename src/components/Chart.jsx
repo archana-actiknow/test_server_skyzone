@@ -70,8 +70,6 @@ export default function Chart({chartData, settings}) {
             })
         );
 
-        
-    
         yAxis.children.unshift(
             am5.Label.new(root, {
                 rotation: -90, 

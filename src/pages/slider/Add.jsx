@@ -20,15 +20,15 @@ function Add({refreshData, close}) {
         const response = await apiRequest( {
             url: ADD_KITCHEN_SLIDER_IMAGES, 
             method: "POST", data: formData}, true);
-      if(response){
-            messagePop(response);
-            refreshData(true);
-            resetForm();
-            close();
-            setOpen(false)
-      }else{
-            SweetAlert.error("Error", "There is some issue while adding user.")
-      }
+        if(response){
+                messagePop(response);
+                refreshData(true);
+                resetForm();
+                close();
+                setOpen(false)
+        }else{
+                SweetAlert.error("Error", "There is some issue while adding user.")
+        }
       setLoading(false);
     }
 
@@ -49,7 +49,7 @@ function Add({refreshData, close}) {
 
     const handleFileChange = (file) => {
         setFieldValue("image", file);
-      };
+    };
 
   return (
     <PopupModal title="Add Slider Image" open={open} setOpen={handleClose} handleSubmit={handleSubmit} size="md" loading={loading}>
