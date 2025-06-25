@@ -257,14 +257,14 @@ function App() {
         </Auth>
       ),
     },
-    {
-      path: "/mobile-available-products",
-      element: (
-        <Auth title="Products">
-          <Products />
-        </Auth>
-      ),
-    },
+    // {
+    //   path: "/mobile-available-products",
+    //   element: (
+    //     <Auth title="Products">
+    //       <Products />
+    //     </Auth>
+    //   ),
+    // },
     {
       path: "/membership-discount",
       element: (
@@ -292,6 +292,14 @@ function App() {
       element: (
         <Auth title="General Queries">
           <GeneralQueries />
+        </Auth>
+      ),
+    },
+    {
+      path: "/mobile-available-products",
+      element: (
+        <Auth title="Products">
+          <Products />
         </Auth>
       ),
     },

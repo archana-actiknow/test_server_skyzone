@@ -26,8 +26,8 @@ export const otpValidationSchema = yup.object().shape({
     //   }
     // )
     .required('Field is required')
-    // .required("OTP is required.")
-    // .min(6, 'OTP must be at least 6 digits long.'),
+  // .required("OTP is required.")
+  // .min(6, 'OTP must be at least 6 digits long.'),
 });
 
 export const userValidationSchema = yup.object().shape({
@@ -35,16 +35,16 @@ export const userValidationSchema = yup.object().shape({
     .matches(/^[a-z0-9]+$/, 'Username should only contain lowercase letters and numbers without spaces')
     .min(3, 'Username must be at least 3 characters long')
     .max(20, 'Username cannot be longer than 20 characters'),
-    // .test('check-username', 'Username already exists', async (value) => {
-    //   if (!value) return true; // Skip if value is empty
-    //   try {
-    //     const response = await PostAuthRequest(CHECKUSER, "POST", { username: value });
-    //     return !response.data.found; // Assuming the response contains an `available` field
-    //   } catch (error) {
-    //     console.error('Error checking username availability', error);
-    //     return false; // Treat as invalid if there was an error
-    //   }
-    // }),
+  // .test('check-username', 'Username already exists', async (value) => {
+  //   if (!value) return true; // Skip if value is empty
+  //   try {
+  //     const response = await PostAuthRequest(CHECKUSER, "POST", { username: value });
+  //     return !response.data.found; // Assuming the response contains an `available` field
+  //   } catch (error) {
+  //     console.error('Error checking username availability', error);
+  //     return false; // Treat as invalid if there was an error
+  //   }
+  // }),
   password: yup
     .string()
     .min(8, 'Password must be at least 8 characters long')
@@ -112,11 +112,11 @@ export const latestOfferingValidationSchema = yup.object().shape({
     return schema;
   }),
   discountAmount: yup.string().when('campaignType', ([campaignType], schema) => {
-    if (campaignType === "2") return yup.string().nullable(); 
+    if (campaignType === "2") return yup.string().nullable();
     return schema;
   }),
   discountPercent: yup.string().when(['campaignType', 'discountAmount'], ([campaignType, discountAmount], schema) => {
-    if (campaignType === "2" && (discountAmount === '' || discountAmount === undefined)) 
+    if (campaignType === "2" && (discountAmount === '' || discountAmount === undefined))
       return yup.string().required("At least one of discount amount or percentage must be filled");
     return schema;
   })
@@ -164,7 +164,7 @@ export const editPushNotificationSchema = yup.object().shape({
 
 export const changePasswordValidationSchema = yup.object({
   currentPassword: yup.string().required("Current password is required."),
-  newPassword:yup
+  newPassword: yup
     .string()
     .required("New password is required.")
     .min(8, 'Password must be at least 8 characters long')
@@ -217,11 +217,11 @@ export const check_location_validation = (location) => {
   }
 }
 
-export const sendReply =  yup.object({
+export const sendReply = yup.object({
   reply: yup.string().required("Reply is required"),
 });
 
-export const imageValidation =  yup.object({
+export const imageValidation = yup.object({
   image: yup.string().required("image is required"),
 });
 
@@ -250,8 +250,8 @@ export const validationSchema = yup.object({
   waiver_text: yup.string().required('Waiver text is required'),
   phone_number: yup.string().matches(/^[0-9]{10}$/, "Must be a valid phone number").required('Phone number is required'),
   topic_name: yup.string().required('Topic name is required'),
-  address:yup.string().required('Address is required'),
-  weiver_url:yup.string().required('Weiver Url is required'),
+  address: yup.string().required('Address is required'),
+  weiver_url: yup.string().required('Weiver Url is required'),
   customerTimezone: yup.string().required('Timezone is required'),
   can_access: yup.string().required('Access level is required'),
   country_type: yup.string().required('Country is required'),
@@ -259,7 +259,7 @@ export const validationSchema = yup.object({
 
 export const addMobileUsersPoints = yup.object({
   points: yup.string().required("points is required"),
-  reason:  yup.string().required("Reason is required")
+  reason: yup.string().required("Reason is required")
 });
 
 export const holidayCalendarValidation = yup.object().shape({
@@ -267,11 +267,21 @@ export const holidayCalendarValidation = yup.object().shape({
   start_date: yup.string().required("start date is required."),
   end_date: yup.string().required("end date is required."),
   type: yup.string().required("type is required."),
-  start_time: yup.string().required('start time is required'),
-  end_time: yup.string().required("end time is required."),
+  start_time: yup.string().when('type', {
+    is: 2,
+    then: schema => schema.optional().nullable(),
+    otherwise: schema => schema.required("Opening time is required.").nullable(),
+  }),
+  end_time: yup.string().when('type', {
+    is: 2,
+    then: schema => schema.optional().nullable(),
+    otherwise: schema => schema.required("Closing time is required.").nullable(),
+  }),
+  // start_time: yup.string().required('start time is required'),
+  // end_time: yup.string().required("end time is required."),
 });
 
 export const addMembershipDiscount = yup.object().shape({
-  discountCode:yup.string().required("discount code is required"),
-  selectedProduct:yup.string().required("select products"),
+  discountCode: yup.string().required("discount code is required"),
+  selectedProduct: yup.string().required("select products"),
 })

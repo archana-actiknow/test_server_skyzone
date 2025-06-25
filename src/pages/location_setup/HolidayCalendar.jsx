@@ -5,7 +5,7 @@ import DatePicker from '../../components/DatePicker';
 import { useFormik } from 'formik';
 import { useRequest } from '../../utils/Requests';
 import { GETHOIDAYCAL, HOLIDAYCALENDAR, DELETEHOLIDAYCALENDAR } from '../../utils/Endpoints';
-import { holidayTypes, messagePop } from '../../utils/Common';
+import { holidayTypes, messagePop, weekdays } from '../../utils/Common';
 import { holidayCalendarValidation } from '../../utils/validationSchemas';
 import SweetAlert from '../../components/SweetAlert';
 import SkeletonLoader from '../../components/SkeletonLoader';
@@ -60,14 +60,25 @@ const TblBody = ({ data = {}, onDelete, index, title, onChange }) => {
         upRef.current = true;
     }
 
+    // const endTimeChange = (time) => {
+    //     if (!values.start_time || (time && values.start_time <= time)) {
+    //         setFieldValue("end_time", time);
+    //     } else {
+    //         SweetAlert.error("End time must be after start time.");
+    //         setTimeout(() => setFieldValue("end_time", ""), 0);
+    //     }
+    //     // setFieldValue("end_time", time); 
+    //     upRef.current = true;
+    // }
+
     const endTimeChange = (time) => {
-        if (!values.start_time || (time && values.start_time <= time)) {
+        const startTimeAsDate = values.start_time ? setTime(values.start_time) : null;
+        if (!startTimeAsDate || (time && startTimeAsDate <= time)) {
             setFieldValue("end_time", time);
         } else {
             SweetAlert.error("End time must be after start time.");
-            setTimeout(() => setFieldValue("end_time", ""), 0);
+            setTimeout(() => setFieldValue("end_time", values.end_time || ""), 0);
         }
-        // setFieldValue("end_time", time); 
         upRef.current = true;
     }
 
@@ -77,7 +88,14 @@ const TblBody = ({ data = {}, onDelete, index, title, onChange }) => {
     }
 
     const holidayTypesChange = (e) => {
-        setFieldValue("type", parseInt(e.target.value));
+        const newType = parseInt(e.target.value);
+        setFieldValue("type", newType);
+
+        // If the new type is 2 ('Closed'), clear the time fields
+        if (newType === 2) {
+            setFieldValue("start_time", "");
+            setFieldValue("end_time", "");
+        }
         upRef.current = true;
     }
 
@@ -87,6 +105,8 @@ const TblBody = ({ data = {}, onDelete, index, title, onChange }) => {
             upRef.current = false;
         }
     }, [values, onChange]);
+
+    const isTimeDisabled = values.type === 2;
 
     return (
         <tbody>
@@ -102,22 +122,38 @@ const TblBody = ({ data = {}, onDelete, index, title, onChange }) => {
                     {errors.start_date && touched.start_date && <p className='text-danger fs-12'>{errors.start_date}</p>}
                 </td>
                 {title !== "Holidays" && (
-                    <td>
-                        <DatePicker value={values.end_date || null} onChange={endDateChange} name="end_date" className="form-control" minDate={true} onBlur={handleBlur} />
-                        {errors.end_date && touched.end_date && <p className='text-danger fs-12'>{errors.end_date}</p>}
-                    </td>
+                    <>
+                        <td>
+                            <DatePicker value={values.end_date || null} onChange={endDateChange} name="end_date" className="form-control" minDate={true} onBlur={handleBlur} />
+                            {errors.end_date && touched.end_date && <p className='text-danger fs-12'>{errors.end_date}</p>}
+                        </td>
+                    </>
                 )}
                 <td>
                     <FormDropdown options={holidayTypes} default_value={values.type} value={values.type} name="type" classnm="form-select"
                         onChange={holidayTypesChange} onBlur={handleBlur} />
                     {errors.type && touched.type && <p className='text-danger fs-12'>{errors.type}</p>}
                 </td>
-                <td>
-                    <DatePicker value={startTime} onChange={startTimeChange} name="start_time" timeOnly onBlur={handleBlur} />
+                    <td>
+                    <DatePicker
+                        value={isTimeDisabled ? null : startTime} 
+                        onChange={startTimeChange}
+                        name="start_time"
+                        timeOnly
+                        onBlur={handleBlur}
+                        disabled={isTimeDisabled} 
+                    />
                     {errors.start_time && touched.start_time && <p className='text-danger fs-12'>{errors.start_time}</p>}
                 </td>
                 <td>
-                    <DatePicker value={endTime || null} onChange={endTimeChange} name="end_time" timeOnly onBlur={handleBlur} />
+                    <DatePicker
+                        value={isTimeDisabled ? null : endTime}
+                        onChange={endTimeChange}
+                        name="end_time"
+                        timeOnly
+                        onBlur={handleBlur}
+                        disabled={isTimeDisabled} 
+                    />
                     {errors.end_time && touched.end_time && <p className='text-danger fs-12'>{errors.end_time}</p>}
                 </td>
                 <td>
@@ -186,7 +222,7 @@ export default function Calendar() {
     const [Year, setYear] = useState(currentYear);
     const [loading, setLoading] = useState(true);
     const [breakSections, setBreakSections] = useState({
-        springBreak: [{ id: 0, holiday_desc: "Spring Break", start_date: "", end_date: "", type: 1, start_time: "", end_time: "", }],
+        springBreak: [{ id: 0, holiday_desc: "Spring Break", start_date: "", end_date: "", type: 1,  start_time: "", end_time: "", }],
         summerBreak: [{ id: 0, holiday_desc: "Summer Break", start_date: "", end_date: "", type: 1, start_time: "", end_time: "", }],
         winterBreak: [{ id: 0, holiday_desc: "Winter Break", start_date: "", end_date: "", type: 1, start_time: "", end_time: "", }],
         thanksGivingBreak: [{ id: 0, holiday_desc: "Thanks Giving Break", start_date: "", end_date: "", type: 1, start_time: "", end_time: "", }],
@@ -429,9 +465,6 @@ export default function Calendar() {
                 }
             }
         }
-
-
-
         const data = { client_id: currentLocation, data: updatedSections, year: Year };
         const response = await apiRequest({
             url: HOLIDAYCALENDAR,
@@ -440,6 +473,7 @@ export default function Calendar() {
         });
         messagePop(response);
     };
+
 
     const handleRefresh = () => {
         setYear(currentYear);

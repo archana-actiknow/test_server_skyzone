@@ -4,7 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 const DatePickerComponent = (props) => {
 
-  const {value, onChange, minDate, className, showWeekPicker} = props;
+  const {value, onChange, minDate, className, showWeekPicker,disabled } = props;
   const time = props.timeOnly ? props.timeOnly : false;
 
   return (
@@ -21,6 +21,7 @@ const DatePickerComponent = (props) => {
         timeIntervals={5}
         timeCaption="Time"
         dateFormat="HH:mm"
+        disabled={disabled}
       />
       :
       <DatePicker
@@ -36,6 +37,7 @@ const DatePickerComponent = (props) => {
         showWeekPicker={(showWeekPicker) ? true : false}
         showWeekNumbers={(showWeekPicker) ? true : false}
         calendarStartDay={1}
+        disabled={disabled}
       />
     }
     </>
