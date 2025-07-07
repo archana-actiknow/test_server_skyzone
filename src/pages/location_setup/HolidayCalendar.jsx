@@ -46,20 +46,44 @@ const TblBody = ({ data = {}, onDelete, index, title, onChange, isFixed = false 
         upRef.current = true;
     }
 
+    // const endDateChange = (date) => {
+    //     setFieldValue("end_date", date);
+    //     upRef.current = true;
+    // }
+
     const endDateChange = (date) => {
-        setFieldValue("end_date", date);
+        if (!values.start_date || (date && new Date(values.start_date) <= new Date(date))) {
+            setFieldValue("end_date", date);
+        } else {
+            SweetAlert.error("End date must be after start date.");
+            setTimeout(() => setFieldValue("end_date", ""), 0);
+        }
+        // setFieldValue("end_date", date);
         upRef.current = true;
     }
+
 
     const startTimeChange = (time) => {
         setFieldValue("start_time", time);
         upRef.current = true;
     }
 
+    // const endTimeChange = (time) => {
+    //     setFieldValue("end_time", time);
+    //     upRef.current = true;
+    // }
+
     const endTimeChange = (time) => {
-        setFieldValue("end_time", time);
+        const startTimeAsDate = values.start_time ? setTime(values.start_time) : null;
+        if (!startTimeAsDate || (time && startTimeAsDate <= time)) {
+            setFieldValue("end_time", time);
+        } else {
+            SweetAlert.error("End time must be after start time.");
+            setTimeout(() => setFieldValue("end_time", values.end_time || ""), 0);
+        }
         upRef.current = true;
     }
+    
 
     const descriptionChange = (e) => {
         setFieldValue("holiday_desc", e.target.value);
@@ -246,7 +270,8 @@ export default function Calendar() {
         const getData = async () => {
             setLoading(true);
             try {
-                const response = await apiRequest({ url: GETHOIDAYCAL, method: "post", data: { client_id: currentLocation } });
+                const data = { client_id: currentLocation, year: Year };
+                const response = await apiRequest({ url: GETHOIDAYCAL, method: "post", data: data});
                 if (Array.isArray(response.data)) {
                     setData(response.data);
                 } else {
