@@ -262,26 +262,118 @@ export const addMobileUsersPoints = yup.object({
   reason: yup.string().required("Reason is required")
 });
 
-export const holidayCalendarValidation = yup.object().shape({
-  holiday_desc: yup.string().required("holiday description is required."),
-  start_date: yup.string().required("start date is required."),
-  end_date: yup.string().required("end date is required."),
-  type: yup.string().required("type is required."),
-  start_time: yup.string().when('type', {
-    is: 2,
-    then: schema => schema.optional().nullable(),
-    otherwise: schema => schema.required("Opening time is required.").nullable(),
-  }),
-  end_time: yup.string().when('type', {
-    is: 2,
-    then: schema => schema.optional().nullable(),
-    otherwise: schema => schema.required("Closing time is required.").nullable(),
-  }),
-  // start_time: yup.string().required('start time is required'),
-  // end_time: yup.string().required("end time is required."),
-});
 
 export const addMembershipDiscount = yup.object().shape({
   discountCode: yup.string().required("discount code is required"),
   selectedProduct: yup.string().required("select products"),
 })
+
+
+export const holidayCalendarValidation = yup.object().shape({
+  // Only require a description if it's a holiday (not a fixed weekday break)
+  holiday_desc: yup.string().when('weekday', {
+    is: (val) => !val, // is weekday is null or empty
+    then: schema => schema.required('Event description is required.'),
+    otherwise: schema => schema.notRequired()
+  }),
+
+  // Start date is always required
+  start_date: yup.date().required('Start date is required.').nullable(),
+
+  // End date is optional, but if it exists, it must be after the start date
+  end_date: yup.date()
+    .nullable()
+    .min(
+      yup.ref('start_date'),
+      "End date cannot be before start date."
+    ),
+
+  type: yup.number().required(),
+
+  // --- NEW VALIDATION LOGIC ---
+  // Start time is required only under specific conditions
+  start_time: yup.mixed().when(['start_date', 'end_date', 'type'], {
+    is: (start_date, end_date, type) => {
+      // The condition: if both dates exist AND the type is not "Full Day"
+      return start_date && end_date && type !== 2;
+    },
+    then: schema => schema.required('Start time is required when dates are set.'),
+    otherwise: schema => schema.notRequired().nullable(),
+  }),
+
+  // End time is required under the same conditions and must be after start time
+  end_time: yup.mixed().when(['start_date', 'end_date', 'type'], {
+    is: (start_date, end_date, type) => {
+      // The condition: if both dates exist AND the type is not "Full Day"
+      return start_date && end_date && type !== 2;
+    },
+    then: schema => schema.required('End time is required when dates are set.')
+      .test(
+        'is-greater',
+        'End time must be after start time',
+        function (value) {
+          const { start_time } = this.parent;
+          // 'value' is end_time. Both must be valid Date objects to compare.
+          return !start_time || !value || new Date(value) > new Date(start_time);
+        }
+      ),
+    otherwise: schema => schema.notRequired().nullable(),
+  }),
+});
+
+
+
+// export const holidayCalendarValidation = (options = {}) => {
+//     // ... (Your validation code is correct, no changes needed)
+//     const { isBreakSection = false, sectionDates = null } = options;
+
+//     return yup.object().shape({
+//         holiday_desc: yup.string().when([], {
+//             is: () => !isBreakSection,
+//             then: schema => schema.required('Event description is required.'),
+//             otherwise: schema => schema.notRequired(),
+//         }),
+//         start_date: yup.date().nullable().required('Start date is required.'),
+//         end_date: yup.date().nullable().when('start_date', (start_date, schema) => {
+//             if (start_date && start_date[0]) {
+//                 return schema.min(start_date[0], "End date must be after start date.");
+//             }
+//             return schema;
+//         }),
+//         type: yup.number().required('Type is required.'),
+
+//         start_time: yup.mixed().when(['start_date', 'end_date', 'type'], {
+//             is: (start_date, end_date, type) => {
+//                 if (parseInt(type) === 2) return false;
+
+//                 if (isBreakSection) {
+//                     return sectionDates && sectionDates.start_date && sectionDates.end_date;
+//                 } else {
+//                     return !!start_date;
+//                 }
+//             },
+//             then: schema => schema.required("Opening time is required."),
+//             otherwise: schema => schema.notRequired(),
+//         }),
+//         end_time: yup.mixed().when(['start_date', 'end_date', 'type'], {
+//             is: (start_date, end_date, type) => {
+//                 if (parseInt(type) === 2) return false;
+
+//                 if (isBreakSection) {
+//                     return sectionDates && sectionDates.start_date && sectionDates.end_date;
+//                 } else {
+//                     return !!start_date;
+//                 }
+//             },
+//             then: schema => schema.required("Closing time is required.")
+//                 .test('is-after-start-time', 'End time must be after start time.', function (value) {
+//                     const startTimeValue = this.parent.start_time;
+//                     if (startTimeValue instanceof Date && value instanceof Date) {
+//                         return value > startTimeValue;
+//                     }
+//                     return true;
+//                 }),
+//             otherwise: schema => schema.notRequired(),
+//         }),
+//     });
+// };

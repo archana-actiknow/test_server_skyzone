@@ -154,7 +154,9 @@ export const getToken = () => {
 //   { id: 2, value: 2, label: "Admin" },
 //   { id: 3, value: 3, label: "User" },
 // ];
-
+export const Weekdays = [
+    'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
+];
 
 
 export const weekdays = [

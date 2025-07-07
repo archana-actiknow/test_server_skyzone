@@ -5,17 +5,18 @@ import DatePicker from '../../components/DatePicker';
 import { useFormik } from 'formik';
 import { useRequest } from '../../utils/Requests';
 import { GETHOIDAYCAL, HOLIDAYCALENDAR, DELETEHOLIDAYCALENDAR } from '../../utils/Endpoints';
-import { holidayTypes, messagePop, weekdays } from '../../utils/Common';
+import { holidayTypes, messagePop, Weekdays } from '../../utils/Common';
 import { holidayCalendarValidation } from '../../utils/validationSchemas';
 import SweetAlert from '../../components/SweetAlert';
 import SkeletonLoader from '../../components/SkeletonLoader';
 
-const TblBody = ({ data = {}, onDelete, index, title, onChange }) => {
+const TblBody = ({ data = {}, onDelete, index, title, onChange, isFixed = false }) => {
     const upRef = useRef(false);
-    const { values, setFieldValue, errors, touched, handleBlur } = useFormik({
+    const { values, setFieldValue, errors, touched, handleBlur, setFieldTouched } = useFormik({
         initialValues: {
             id: data.id || 0,
             holiday_desc: data.holiday_desc || '',
+            weekday: data.weekday || '',
             start_date: data.start_date && data.start_date !== "0000-00-00" ? new Date(data.start_date) : '',
             end_date: data.end_date && data.end_date !== "0000-00-00" ? new Date(data.end_date) : '',
             type: data.type || 1,
@@ -32,10 +33,11 @@ const TblBody = ({ data = {}, onDelete, index, title, onChange }) => {
             const [hours, minutes] = timeString.split(":").map(Number);
             defaultTime.setHours(hours, minutes, 0);
         } else if (timeString instanceof Date && !isNaN(timeString)) {
-            defaultTime.setHours(timeString.getHours(), timeString.getMinutes(), 0);
+            return timeString;
         }
         return defaultTime;
     };
+
     const startTime = values.start_time ? setTime(values.start_time) : '';
     const endTime = values.end_time ? setTime(values.end_time) : '';
 
@@ -45,13 +47,7 @@ const TblBody = ({ data = {}, onDelete, index, title, onChange }) => {
     }
 
     const endDateChange = (date) => {
-        if (!values.start_date || (date && new Date(values.start_date) <= new Date(date))) {
-            setFieldValue("end_date", date);
-        } else {
-            SweetAlert.error("End date must be after start date.");
-            setTimeout(() => setFieldValue("end_date", ""), 0);
-        }
-        // setFieldValue("end_date", date);
+        setFieldValue("end_date", date);
         upRef.current = true;
     }
 
@@ -60,25 +56,8 @@ const TblBody = ({ data = {}, onDelete, index, title, onChange }) => {
         upRef.current = true;
     }
 
-    // const endTimeChange = (time) => {
-    //     if (!values.start_time || (time && values.start_time <= time)) {
-    //         setFieldValue("end_time", time);
-    //     } else {
-    //         SweetAlert.error("End time must be after start time.");
-    //         setTimeout(() => setFieldValue("end_time", ""), 0);
-    //     }
-    //     // setFieldValue("end_time", time); 
-    //     upRef.current = true;
-    // }
-
     const endTimeChange = (time) => {
-        const startTimeAsDate = values.start_time ? setTime(values.start_time) : null;
-        if (!startTimeAsDate || (time && startTimeAsDate <= time)) {
-            setFieldValue("end_time", time);
-        } else {
-            SweetAlert.error("End time must be after start time.");
-            setTimeout(() => setFieldValue("end_time", values.end_time || ""), 0);
-        }
+        setFieldValue("end_time", time);
         upRef.current = true;
     }
 
@@ -90,8 +69,6 @@ const TblBody = ({ data = {}, onDelete, index, title, onChange }) => {
     const holidayTypesChange = (e) => {
         const newType = parseInt(e.target.value);
         setFieldValue("type", newType);
-
-        // If the new type is 2 ('Closed'), clear the time fields
         if (newType === 2) {
             setFieldValue("start_time", "");
             setFieldValue("end_time", "");
@@ -106,109 +83,106 @@ const TblBody = ({ data = {}, onDelete, index, title, onChange }) => {
         }
     }, [values, onChange]);
 
-    const isTimeDisabled = values.type === 2;
+    const isTimeDisabled = parseInt(values.type) === 2 || parseInt(values.type) === 3 ;
+    const areDatesDisabled = isFixed && index > 0;
 
     return (
         <tbody>
             <tr>
-                {title === "Holidays" && (
-                    <td>
-                        <input type="text" className="form-control" value={values.holiday_desc} onChange={descriptionChange} name="holiday_desc" onBlur={handleBlur} />
-                        {errors.holiday_desc && touched.holiday_desc && <p className='text-danger fs-12'>{errors.holiday_desc}</p>}
-                    </td>
-                )}
                 <td>
-                    <DatePicker value={values.start_date} onChange={startDateChange} name="start_date" className="form-control" minDate={true} onBlur={handleBlur} />
+                    <input
+                        type="text"
+                        className="form-control"
+                        value={isFixed ? values.weekday : values.holiday_desc}
+                        onChange={descriptionChange}
+                        name="holiday_desc"
+                        onBlur={handleBlur} 
+                        readOnly={isFixed}
+                    />
+                    {errors.holiday_desc && touched.holiday_desc && <p className='text-danger fs-12'>{errors.holiday_desc}</p>}
+                </td>
+
+                <td>
+                    <DatePicker value={values.start_date} onChange={startDateChange} name="start_date" className="form-control" onBlur={() => setFieldTouched('start_date', true)} disabled={areDatesDisabled} />
                     {errors.start_date && touched.start_date && <p className='text-danger fs-12'>{errors.start_date}</p>}
                 </td>
+                
                 {title !== "Holidays" && (
-                    <>
-                        <td>
-                            <DatePicker value={values.end_date || null} onChange={endDateChange} name="end_date" className="form-control" minDate={true} onBlur={handleBlur} />
-                            {errors.end_date && touched.end_date && <p className='text-danger fs-12'>{errors.end_date}</p>}
-                        </td>
-                    </>
+                    <td>
+                        <DatePicker value={values.end_date || null} onChange={endDateChange} name="end_date" className="form-control" onBlur={() => setFieldTouched('end_date', true)} disabled={areDatesDisabled} />
+                        {errors.end_date && touched.end_date && <p className='text-danger fs-12'>{errors.end_date}</p>}
+                    </td>
                 )}
+
                 <td>
-                    <FormDropdown options={holidayTypes} default_value={values.type} value={values.type} name="type" classnm="form-select"
-                        onChange={holidayTypesChange} onBlur={handleBlur} />
+                    <FormDropdown options={holidayTypes} value={values.type} name="type" classnm="form-select" onChange={holidayTypesChange} onBlur={handleBlur} />
                     {errors.type && touched.type && <p className='text-danger fs-12'>{errors.type}</p>}
                 </td>
-                    <td>
-                    <DatePicker
-                        value={isTimeDisabled ? null : startTime} 
-                        onChange={startTimeChange}
-                        name="start_time"
-                        timeOnly
-                        onBlur={handleBlur}
-                        disabled={isTimeDisabled} 
-                    />
+                <td>
+                    <DatePicker value={isTimeDisabled ? null : startTime} onChange={startTimeChange} name="start_time" timeOnly onBlur={() => setFieldTouched('start_time', true)} disabled={isTimeDisabled} />
                     {errors.start_time && touched.start_time && <p className='text-danger fs-12'>{errors.start_time}</p>}
                 </td>
                 <td>
-                    <DatePicker
-                        value={isTimeDisabled ? null : endTime}
-                        onChange={endTimeChange}
-                        name="end_time"
-                        timeOnly
-                        onBlur={handleBlur}
-                        disabled={isTimeDisabled} 
-                    />
+                    <DatePicker value={isTimeDisabled ? null : endTime} onChange={endTimeChange} name="end_time" timeOnly onBlur={() => setFieldTouched('end_time', true)} disabled={isTimeDisabled} />
                     {errors.end_time && touched.end_time && <p className='text-danger fs-12'>{errors.end_time}</p>}
                 </td>
                 <td>
-                    <span className="icon lnk delete" data-bs-title="Delete" onClick={() => {
-                        if (values.id > 0) { onDelete(index, values.id); } else { onDelete(index); }
-                    }}>
-                        <i className="bi bi-trash-fill"></i>
-                    </span>
+                    {!isFixed && (
+                        <span className="icon lnk delete" data-bs-title="Delete" onClick={() => {
+                            if (values.id > 0) { onDelete(index, values.id); } else { onDelete(index); }
+                        }}>
+                            <i className="bi bi-trash-fill"></i>
+                        </span>
+                    )}
                 </td>
             </tr>
         </tbody>
     );
 };
 
-const BreakSection = ({ title, imgPath, data, onAdd, onDelete, onChange }) => {
+const BreakSection = ({ title, imgPath, data, onAdd, onDelete, onChange, isFixed = false }) => {
     return (
-        <>
-            <div className="row mb-3">
-                <div className="col-md-12">
-                    <div className="card border-0">
-                        <div className="card-body">
-                            <div className="row align-items-center">
-                                <div className="col-md-12">
-                                    <p className="fs-12 fw-semibold mb-0"> <img src={imgPath} alt={title} />&nbsp; {title}</p>
-                                </div>
+        <div className="row mb-3">
+            <div className="col-md-12">
+                <div className="card border-0">
+                    <div className="card-body">
+                        <div className="row align-items-center">
+                            <div className="col-md-12">
+                                <p className="fs-12 fw-semibold mb-0"> <img src={imgPath} alt={title} />  {title}</p>
                             </div>
-                            <div className="row align-items-center mt-10">
-                                <div className="col-md-12">
-                                    <div className="ss-table table-responsive">
-                                        <table className="table">
-                                            <thead>
-                                                <tr>
-                                                    {title === "Holidays" && <th>Event</th>}
-                                                    <th>{title === "Holidays" ? "Date" : "Start Date"}</th>
-                                                    {title !== "Holidays" && <th>End Date</th>}
-                                                    <th>Type</th>
-                                                    <th>Opening Time</th>
-                                                    <th>Closing Time</th>
-                                                    <th>
-                                                        <span className="me-2 icon lnk edit" data-bs-title="Add New" onClick={onAdd}> <i className="bi bi-plus-lg"></i></span>
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            {data.map((item, index) => (
-                                                <TblBody key={index} data={item} index={index} title={title} onDelete={onDelete} onChange={(updatedItem) => onChange(index, updatedItem)} />
-                                            ))}
-                                        </table>
-                                    </div>
+                        </div>
+                        <div className="row align-items-center mt-10">
+                            <div className="col-md-12">
+                                <div className="ss-table table-responsive">
+                                    <table className="table">
+                                        <thead>
+                                            <tr>
+                                                <th>{isFixed ? "Day" : "Event"}</th>
+                                                <th>{title === "Holidays" ? "Date" : "Start Date"}</th>
+                                                {title !== "Holidays" && <th>End Date</th>}
+                                                <th>Type</th>
+                                                <th>Opening Time</th>
+                                                <th>Closing Time</th>
+                                                <th>
+                                                    {!isFixed && (
+                                                        <span className="me-2 icon lnk edit" data-bs-title="Add New" onClick={onAdd}>
+                                                            <i className="bi bi-plus-lg"></i>
+                                                        </span>
+                                                    )}
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        {data.map((item, index) => (
+                                            <TblBody key={item.id || index} data={item} index={index} title={title} onDelete={onDelete} onChange={(updatedItem) => onChange(index, updatedItem)} isFixed={isFixed} />
+                                        ))}
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 
@@ -221,92 +195,120 @@ export default function Calendar() {
     const currentYear = new Date().getFullYear();
     const [Year, setYear] = useState(currentYear);
     const [loading, setLoading] = useState(true);
+    const initialDataRef = useRef(null);
+
+    const createWeekdayBreakData = (breakName) => Weekdays.map(day => ({
+        id: 0, holiday_desc: breakName, weekday: day,
+        start_date: "", end_date: "", type: 1, start_time: "", end_time: "",
+    }));
+
     const [breakSections, setBreakSections] = useState({
-        springBreak: [{ id: 0, holiday_desc: "Spring Break", start_date: "", end_date: "", type: 1,  start_time: "", end_time: "", }],
-        summerBreak: [{ id: 0, holiday_desc: "Summer Break", start_date: "", end_date: "", type: 1, start_time: "", end_time: "", }],
-        winterBreak: [{ id: 0, holiday_desc: "Winter Break", start_date: "", end_date: "", type: 1, start_time: "", end_time: "", }],
-        thanksGivingBreak: [{ id: 0, holiday_desc: "Thanks Giving Break", start_date: "", end_date: "", type: 1, start_time: "", end_time: "", }],
-        christmasBreak: [{ id: 0, holiday_desc: "Christmas Break", start_date: "", end_date: "", type: 1, start_time: "", end_time: "", }],
-        holidays: [{ id: 0, holiday_desc: "", start_date: "", type: 1, start_time: "", end_time: "", }],
+        holidays: [{ id: 0, holiday_desc: "", start_date: "", type: 1, start_time: "", end_time: "" }],
+        springBreak: createWeekdayBreakData("Spring Break"),
+        summerBreak: createWeekdayBreakData("Summer Break"),
+        winterBreak: createWeekdayBreakData("Winter Break"),
+        thanksGivingBreak: createWeekdayBreakData("Thanks Giving Break"),
+        christmasBreak: createWeekdayBreakData("Christmas Break"),
     });
+
     const [data, setData] = useState([]);
     const years = [];
-    const initialBreakSectionsRef = useRef(breakSections);
 
-    const dropDownChange = (e) => {
-        setCurrentLocation(e.target.value);
-        setRefreshData(true);
+    const formatTimeFromAPI = (hour, minute) => {
+        if (hour === null || hour === undefined || hour === 0 && (minute === null || minute === undefined)) {
+            return '';
+        }
+        const date = new Date();
+        date.setHours(parseInt(hour, 10), parseInt(minute || 0, 10), 0, 0);
+        return date;
+    };
+    
+    const breakNameMapping = {
+        "Spring Break": "springBreak",
+        "Summer Break": "summerBreak",
+        "Winter Break": "winterBreak",
+        "Thanks Giving Break": "thanksGivingBreak",
+        "Christmas Break": "christmasBreak",
     };
 
-    // ONLOAD //
-    useEffect(() => {
-        if (!locationloading && locationdt) {
-            setCurrentLocation(locationdt.data[0].value);
-            setRefreshData(true);
-        }
-    }, [locationdt, locationloading]);
+    const dropDownChange = (e) => { setCurrentLocation(e.target.value); setRefreshData(true); };
 
+    useEffect(() => { if (!locationloading && locationdt) { setCurrentLocation(locationdt.data[0].value); setRefreshData(true); } }, [locationdt, locationloading]);
+
+    const formatDateForAPI = (date) => {
+        if (date instanceof Date && !isNaN(date)) {
+            return date.toISOString().split('T')[0];
+        }
+        return "";
+    };
 
     useEffect(() => {
         const getData = async () => {
             setLoading(true);
             try {
-                const data = { client_id: currentLocation, year: Year };
-                const response = await apiRequest({ url: GETHOIDAYCAL, method: "post", data });
+                const response = await apiRequest({ url: GETHOIDAYCAL, method: "post", data: { client_id: currentLocation } });
                 if (Array.isArray(response.data)) {
                     setData(response.data);
                 } else {
                     setData([]);
                 }
-            } catch (error) {
-                console.error("Error fetching data:", error);
-                setData([]); // Handle error case by setting an empty array
-            } finally {
-                setLoading(false); // Ensure loading state is turned off
-            }
+            } catch (error) { console.error("Error fetching data:", error); setData([]); }
+            finally { setLoading(false); }
         };
 
-        if (refreshData) {
-            setRefreshData(false);
-            getData();
-        }
+        if (refreshData) { setRefreshData(false); getData(); }
     }, [refreshData, currentLocation, Year, apiRequest]);
 
     useEffect(() => {
-        if (Array.isArray(data)) {
-            const filteredSections = {
-                springBreak: data.filter((holiday) => holiday.holiday_desc === "Spring Break" && holiday.type_id === 2),
-                summerBreak: data.filter((holiday) => holiday.holiday_desc === "Summer Break" && holiday.type_id === 3),
-                thanksGivingBreak: data.filter((holiday) => holiday.holiday_desc === "Thanks Giving Break" && holiday.type_id === 4),
-                winterBreak: data.filter((holiday) => holiday.holiday_desc === "Winter Break" && holiday.type_id === 5),
-                christmasBreak: data.filter(
-                    (holiday) => (holiday.holiday_desc === "Christmas Break" && holiday.type_id === 6) || (holiday.holiday_desc === "Christmas" && holiday.type_id === 6)),
-                holidays: data.filter((holiday) =>
-                    !["Spring Break", "Summer Break", "Thanks Giving Break", "Winter Break", "Christmas Break", "Christmas"].includes(holiday.holiday_desc) || holiday.type_id === 1
-                ),
-            };
+        let processedSections = {
+            holidays: [],
+            springBreak: [], summerBreak: [], winterBreak: [],
+            thanksGivingBreak: [], christmasBreak: [],
+        };
 
-            // Ensure at least one default entry per subsection
-            const ensureNonEmpty = (section, defaultEntry) => {
-                return filteredSections[section].length ? filteredSections[section] : [defaultEntry];
-            };
+        if (Array.isArray(data) && data.length > 0) {
+            data.forEach(apiItem => {
+                const transformedItem = {
+                    id: apiItem.id,
+                    holiday_desc: apiItem.description,
+                    weekday: apiItem.weekday,
+                    start_date: apiItem.startDate ? new Date(apiItem.startDate) : '',
+                    end_date: apiItem.endDate ? new Date(apiItem.endDate) : '',
+                    type: (apiItem.startTime === null || apiItem.startTime === 0) ? 2 : 1,
+                    start_time: formatTimeFromAPI(apiItem.startTime, apiItem.startTimeMinutes),
+                    end_time: formatTimeFromAPI(apiItem.endTime, apiItem.endTimeMinutes),
+                };
 
-            setBreakSections({
-                springBreak: ensureNonEmpty("springBreak", { id: 0, holiday_desc: "Spring Break", start_date: "", end_date: "", type: 1, start_time: "", end_time: "" }),
-                summerBreak: ensureNonEmpty("summerBreak", { id: 0, holiday_desc: "Summer Break", start_date: "", end_date: "", type: 1, start_time: "", end_time: "" }),
-                thanksGivingBreak: ensureNonEmpty("thanksGivingBreak", { id: 0, holiday_desc: "Thanks Giving Break", start_date: "", end_date: "", type: 1, start_time: "", end_time: "" }),
-                winterBreak: ensureNonEmpty("winterBreak", { id: 0, holiday_desc: "Winter Break", start_date: "", end_date: "", type: 1, start_time: "", end_time: "" }),
-                christmasBreak: ensureNonEmpty("christmasBreak", { id: 0, holiday_desc: "Christmas Break", start_date: "", end_date: "", type: 1, start_time: "", end_time: "" }),
-                holidays: ensureNonEmpty("holidays", { id: 0, holiday_desc: "", start_date: "", type: 1, start_time: "", end_time: "" }),
+                if (apiItem.parameter === "National Holiday") {
+                    processedSections.holidays.push(transformedItem);
+                } else if (apiItem.parameter === "School break") {
+                    const sectionKey = breakNameMapping[apiItem.description];
+                    if (sectionKey && processedSections[sectionKey]) {
+                        processedSections[sectionKey].push(transformedItem);
+                    }
+                }
             });
-
-            initialBreakSectionsRef.current = JSON.parse(JSON.stringify(filteredSections));
-        } else {
-            setBreakSections({});
-            initialBreakSectionsRef.current = {};
         }
-    }, [data]);
+        Object.keys(breakNameMapping).forEach(breakName => {
+            const sectionKey = breakNameMapping[breakName];
+            const apiDataForBreak = processedSections[sectionKey];
+            const defaultData = createWeekdayBreakData(breakName);
 
+            const mergedData = defaultData.map(dayData => {
+                const foundApiData = apiDataForBreak.find(apiItem => apiItem.weekday === dayData.weekday);
+                return foundApiData ? { ...foundApiData, holiday_desc: breakName } : dayData;
+            });
+            processedSections[sectionKey] = mergedData;
+        });
+
+        if (processedSections.holidays.length === 0) {
+            processedSections.holidays = [{ id: 0, holiday_desc: "", start_date: "", type: 1, start_time: "", end_time: "" }];
+        }
+
+        setBreakSections(processedSections);
+        initialDataRef.current = JSON.parse(JSON.stringify(processedSections));
+
+    }, [data]);
 
     for (let i = 0; i < 6; i++) {
         years.push({ id: Year - i, label: Year - i, value: Year - i });
@@ -317,58 +319,95 @@ export default function Calendar() {
         setRefreshData(true);
     };
 
-    const updatedSections = {};
-    // Object.keys(breakSections).forEach((section) => {
-    //     const isEmptyHolidaySection = 
-    //         section === 'holidays' && 
-    //         breakSections[section].every(item => !item.holiday_desc);
-
-    //     if (
-    //         JSON.stringify(breakSections[section]) !== JSON.stringify(initialBreakSectionsRef.current[section]) &&
-    //         !(isEmptyHolidaySection && breakSections[section].length === 1)
-    //     ) {
-    //         updatedSections[section] = breakSections[section].map((item) => {
-    //             const extractTime = (dateTime) => {
-    //                 if (dateTime instanceof Date && !isNaN(dateTime)) {
-    //                     return dateTime.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
-    //                 }
-    //                 return dateTime; 
-    //             };
-    //             return {
-    //                 ...item,
-    //                 start_time: extractTime(item.start_time),
-    //                 end_time: extractTime(item.end_time),
-    //             };
-    //         });
-    //     }
-    // });
-
     const extractTime = (dateTime) => {
         if (dateTime instanceof Date && !isNaN(dateTime)) {
             return dateTime.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
         }
-        return dateTime;
+        return dateTime || "";
+    };
+    
+    const handleSave = async () => {
+        const changedData = {};
+        const initialSections = initialDataRef.current;
+
+        if (!initialSections) {
+            SweetAlert.error("Data is not ready. Please wait and try again.");
+            return;
+        }
+
+        const areItemsEqual = (item1, item2) => {
+            const dateToString = (date) => (date instanceof Date ? date.toISOString().split('T')[0] : (date || null));
+            const timeToString = (time) => {
+                if (time instanceof Date) return time.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+                return time || null;
+            };
+
+            return (
+                item1.holiday_desc === item2.holiday_desc &&
+                (item1.weekday || null) === (item2.weekday || null) &&
+                dateToString(item1.start_date) === dateToString(item2.start_date) &&
+                dateToString(item1.end_date) === dateToString(item2.end_date) &&
+                parseInt(item1.type) === parseInt(item2.type) &&
+                timeToString(item1.start_time) === timeToString(item2.start_time) &&
+                timeToString(item1.end_time) === timeToString(item2.end_time)
+            );
+        };
+
+        for (const sectionKey of Object.keys(breakSections)) {
+            const currentItems = breakSections[sectionKey];
+            const initialItems = initialSections[sectionKey] || [];
+            const sectionChanges = [];
+            for (const currentItem of currentItems) {
+                if (currentItem.id === 0) {
+                    if (sectionKey === 'holidays' && !currentItem.holiday_desc && !currentItem.start_date) {
+                        continue; 
+                    }
+                    sectionChanges.push(currentItem);
+                } else {
+                    const originalItem = initialItems.find(item => item.id === currentItem.id);
+                    if (originalItem && !areItemsEqual(currentItem, originalItem)) {
+                        sectionChanges.push(currentItem);
+                    }
+                }
+            }
+            if (sectionChanges.length > 0) {
+                changedData[sectionKey] = sectionChanges.map(item => ({
+                    ...item,
+                    start_date: formatDateForAPI(item.start_date),
+                    end_date: formatDateForAPI(item.end_date),
+                    start_time: extractTime(item.start_time),
+                    end_time: extractTime(item.end_time),
+                    weekday: item.weekday || null,
+                }));
+            }
+        }
+        
+        if (Object.keys(changedData).length === 0) {
+            SweetAlert.info("No changes to save.");
+            return;
+        }
+        const dataToPost = { client_id: currentLocation, data: changedData };
+
+        try {
+            setLoading(true);
+            const response = await apiRequest({
+                url: HOLIDAYCALENDAR,
+                method: "POST",
+                data: dataToPost
+            });
+            messagePop(response);
+            if (response.status === 'success') {
+                setRefreshData(true);
+            }
+        } catch (error) {
+            SweetAlert.error("Failed to save settings: " + error.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
-    Object.keys(breakSections).forEach((section) => {
-        updatedSections[section] = breakSections[section].map((item) => ({
-            ...item,
-            start_time: extractTime(item.start_time),
-            end_time: extractTime(item.end_time),
-        }));
-    });
-
-
-    const handleAddEntry = (section, title) => {
-        const newEntry = {
-            id: 0,
-            holiday_desc: section === "holidays" ? "" : title,
-            start_date: "",
-            ...(title !== "Holidays" && { end_date: "" }),
-            type: 1,
-            start_time: "",
-            end_time: "",
-        };
+    const handleAddEntry = (section) => {
+        const newEntry = { id: 0, holiday_desc: "", start_date: "", type: 1, start_time: "", end_time: "" };
         setBreakSections((prev) => ({ ...prev, [section]: [...prev[section], newEntry] }));
     };
 
@@ -379,106 +418,48 @@ export default function Calendar() {
                 if (confirm) {
                     const deleteOffer = await apiRequest({ url: DELETEHOLIDAYCALENDAR + id, method: "delete" });
                     messagePop(deleteOffer);
-
-                    if (deleteOffer.status === "success") {
-                        setRefreshData(false);
-                        let updatedSection = breakSections[section].filter(item => item.id !== id);
-
-                        // Ensure there's always at least one row in the subsection
-                        if (updatedSection.length === 0) {
-                            updatedSection = [{
-                                id: 0,
-                                holiday_desc: section === "holidays" ? "" : section.replace(/([A-Z])/g, " $1").trim(),
-                                start_date: "",
-                                end_date: "",
-                                type: 1,
-                                start_time: "",
-                                end_time: "",
-                            }];
-                        }
-
-                        setBreakSections({ ...breakSections, [section]: updatedSection });
-                    } else {
-                        SweetAlert.error("Failed to delete the record: " + deleteOffer.message);
-                    }
+                    if (deleteOffer.status === "success") { setRefreshData(true); }
                 }
             } else {
                 let updatedSection = breakSections[section].filter((_, idx) => idx !== index);
-                // Ensure at least one row remains
                 if (updatedSection.length === 0) {
-                    updatedSection = [{
-                        id: 0,
-                        holiday_desc: section === "holidays" ? "" : section.replace(/([A-Z])/g, " $1").trim(),
-                        start_date: "",
-                        end_date: "",
-                        type: 1,
-                        start_time: "",
-                        end_time: "",
-                    }];
+                    updatedSection = [{ id: 0, holiday_desc: "", start_date: "", type: 1, start_time: "", end_time: "" }];
                 }
-
                 setBreakSections({ ...breakSections, [section]: updatedSection });
             }
-        } catch (error) {
-            SweetAlert.error("Error in deleting the record: " + error);
-        }
+        } catch (error) { SweetAlert.error("Error in deleting the record: " + error); }
     };
-
+    
     const handleUpdateEntry = (section, index, updatedItem) => {
-        setBreakSections((prev) => {
-            const updatedSections = prev[section].map((item, i) => {
-                if (i === index) {
-                    let newItem = { ...item, ...updatedItem };
-
-                    // Validate date
-                    if (newItem.start_date && newItem.end_date && new Date(newItem.start_date) > new Date(newItem.end_date)) {
-                        SweetAlert.error("Start date must be before end date.");
-                        delete newItem.end_date; // Prevent updating end_date
+        const isFixedSection = section !== 'holidays';
+        if (isFixedSection) {
+            setBreakSections(prev => {
+                const sourceOfTruth = { ...prev[section][index], ...updatedItem };
+                const oldStartDate = prev[section][index].start_date ? new Date(prev[section][index].start_date).getTime() : null;
+                const newStartDate = sourceOfTruth.start_date ? new Date(sourceOfTruth.start_date).getTime() : null;
+                const oldEndDate = prev[section][index].end_date ? new Date(prev[section][index].end_date).getTime() : null;
+                const newEndDate = sourceOfTruth.end_date ? new Date(sourceOfTruth.end_date).getTime() : null;
+                const anyDateDidChange = (oldStartDate !== newStartDate) || (oldEndDate !== newEndDate);
+    
+                const updatedSectionData = prev[section].map((item, i) => {
+                    if (i === index) { return sourceOfTruth; }
+                    if (anyDateDidChange) {
+                        return { ...item, start_date: sourceOfTruth.start_date, end_date: sourceOfTruth.end_date };
                     }
-
-                    // Validate time
-                    if (newItem.start_time && newItem.end_time && newItem.start_time > newItem.end_time) {
-                        SweetAlert.error("Start time must be before end time.");
-                        delete newItem.end_time; // Prevent updating end_time
-                    }
-
-                    return newItem;
-                }
-                return item;
+                    return item;
+                });
+                return { ...prev, [section]: updatedSectionData };
             });
-
-            return { ...prev, [section]: updatedSections };
-        });
-    };
-
-    const handleSave = async () => {
-        // Validate before submitting
-        for (const section in breakSections) {
-            for (const entry of breakSections[section]) {
-                if (entry.start_date && entry.end_date && new Date(entry.start_date) > new Date(entry.end_date)) {
-                    SweetAlert.error(`In ${section}, Start date must be before end date.`);
-                    return;
-                }
-                if (entry.start_time && entry.end_time && entry.start_time > entry.end_time) {
-                    SweetAlert.error(`In ${section}, Start time must be before end time.`);
-                    return;
-                }
-            }
+        } else {
+            setBreakSections(prev => {
+                const updatedSectionData = [...prev[section]];
+                updatedSectionData[index] = { ...updatedSectionData[index], ...updatedItem };
+                return { ...prev, [section]: updatedSectionData };
+            });
         }
-        const data = { client_id: currentLocation, data: updatedSections, year: Year };
-        const response = await apiRequest({
-            url: HOLIDAYCALENDAR,
-            method: "POST",
-            data: data
-        });
-        messagePop(response);
     };
-
-
-    const handleRefresh = () => {
-        setYear(currentYear);
-        setRefreshData(true);
-    };
+    
+    const handleRefresh = () => { setYear(currentYear); setRefreshData(true); };
 
     return (
         <div>
@@ -486,13 +467,7 @@ export default function Calendar() {
                 <div className="col-md-12 mb-3 text-md-end">
                     <button className="ss_btn" onClick={handleSave}>Save Setting</button>
                 </div>
-                {locationloading ? (
-                    <>
-                        <div className="text-end mb-3">
-                            <SkeletonLoader />
-                        </div>
-                    </>
-                ) : (
+                {locationloading ? ( <div className="text-end mb-3"><SkeletonLoader /></div> ) : (
                     locationdt && (
                         <div className="col-md-12">
                             <div className="card border-0">
@@ -501,7 +476,7 @@ export default function Calendar() {
                                         <div className="col-md-3">
                                             <p className="fs-15 fw-semibold mb-0">Holiday Settings</p>
                                         </div>
-                                        <div className="col-md-4">&nbsp;</div>
+                                        <div className="col-md-4"> </div>
                                         <div className="col-md-3">
                                             <label className="form-label fs-12 fw-semibold">Location</label>
                                             {((locationloading) || (!currentLocation)) ? 'Loading...' : locationdt && <FormDropdown onChange={dropDownChange} name="location" options={locationdt.data} default_value={currentLocation} classnm="form-select fs-12" />}
@@ -523,39 +498,26 @@ export default function Calendar() {
                     )
                 )}
             </div>
-            {loading
-                ?
-                <SkeletonLoader height={400} />
-                :
+            {loading ? <SkeletonLoader height={400} /> :
                 <div>
-                    <BreakSection title="Holidays" imgPath="./images/happy.png" data={breakSections.holidays}
-                        onAdd={() => handleAddEntry("holidays", "Holidays")}
+                    <BreakSection title="Holidays" imgPath="./images/happy.png" data={breakSections.holidays} isFixed={false}
+                        onAdd={() => handleAddEntry("holidays")}
                         onDelete={(index, id) => handleDeleteEntry("holidays", index, id)}
                         onChange={(index, updatedItem) => handleUpdateEntry("holidays", index, updatedItem)}
                     />
-                    <BreakSection title="Spring Break" imgPath="./images/break.png" data={breakSections.springBreak}
-                        onAdd={() => handleAddEntry("springBreak", "Spring Break")}
-                        onDelete={(index, id) => handleDeleteEntry("springBreak", index, id)}
+                    <BreakSection title="Spring Break" imgPath="./images/break.png" data={breakSections.springBreak} isFixed={true}
                         onChange={(index, updatedItem) => handleUpdateEntry("springBreak", index, updatedItem)}
                     />
-                    <BreakSection title="Summer Break" imgPath="./images/sun-umbrella.png" data={breakSections.summerBreak}
-                        onAdd={() => handleAddEntry("summerBreak", "Summer Break")}
-                        onDelete={(index, id) => handleDeleteEntry("summerBreak", index, id)}
+                    <BreakSection title="Summer Break" imgPath="./images/sun-umbrella.png" data={breakSections.summerBreak} isFixed={true}
                         onChange={(index, updatedItem) => handleUpdateEntry("summerBreak", index, updatedItem)}
                     />
-                    <BreakSection title="Thanks Giving Break" imgPath="./images/leaves.png" data={breakSections.thanksGivingBreak}
-                        onAdd={() => handleAddEntry("thanksGivingBreak", "Thanks Giving Break")}
-                        onDelete={(index, id) => handleDeleteEntry("thanksGivingBreak", index, id)}
+                    <BreakSection title="Thanks Giving Break" imgPath="./images/leaves.png" data={breakSections.thanksGivingBreak} isFixed={true}
                         onChange={(index, updatedItem) => handleUpdateEntry("thanksGivingBreak", index, updatedItem)}
                     />
-                    <BreakSection title="Winter Break" imgPath="./images/snowman.png" data={breakSections.winterBreak}
-                        onAdd={() => handleAddEntry("winterBreak", "Winter Break")}
-                        onDelete={(index, id) => handleDeleteEntry("winterBreak", index, id)}
+                    <BreakSection title="Winter Break" imgPath="./images/snowman.png" data={breakSections.winterBreak} isFixed={true}
                         onChange={(index, updatedItem) => handleUpdateEntry("winterBreak", index, updatedItem)}
                     />
-                    <BreakSection title="Christmas Break" imgPath="./images/snowman.png" data={breakSections.christmasBreak}
-                        onAdd={() => handleAddEntry("christmasBreak", "Christmas Break")}
-                        onDelete={(index, id) => handleDeleteEntry("christmasBreak", index, id)}
+                    <BreakSection title="Christmas Break" imgPath="./images/snowman.png" data={breakSections.christmasBreak} isFixed={true}
                         onChange={(index, updatedItem) => handleUpdateEntry("christmasBreak", index, updatedItem)}
                     />
                 </div>
