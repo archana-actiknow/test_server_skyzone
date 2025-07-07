@@ -107,7 +107,7 @@ const TblBody = ({ data = {}, onDelete, index, title, onChange, isFixed = false 
         }
     }, [values, onChange]);
 
-    const isTimeDisabled = parseInt(values.type) === 2 || parseInt(values.type) === 3 ;
+    const isTimeDisabled = parseInt(values.type) === 2;
     const areDatesDisabled = isFixed && index > 0;
 
     return (
@@ -299,7 +299,8 @@ export default function Calendar() {
                     weekday: apiItem.weekday,
                     start_date: apiItem.startDate ? new Date(apiItem.startDate) : '',
                     end_date: apiItem.endDate ? new Date(apiItem.endDate) : '',
-                    type: (apiItem.startTime === null || apiItem.startTime === 0) ? 2 : 1,
+                    // type: (apiItem.startTime === null || apiItem.startTime === 0) ? 2 : 1,
+                    type: apiItem.type ? apiItem.type : 2,
                     start_time: formatTimeFromAPI(apiItem.startTime, apiItem.startTimeMinutes),
                     end_time: formatTimeFromAPI(apiItem.endTime, apiItem.endTimeMinutes),
                 };
@@ -360,11 +361,11 @@ export default function Calendar() {
 
             for (const item of items) {
                 const hasDates = item.start_date && item.end_date;
-                const isPartialDay = parseInt(item.type) === 1;
+                const isPartialDay = parseInt(item.type) === 1 
                 const hasTimes = item.start_time && item.end_time;
 
                 if (isPartialDay && hasDates && !hasTimes) {
-                    SweetAlert.error(`In the "${getFriendlySectionName(sectionKey)}" section, you must provide both a start and end time when dates are set.`);
+                    SweetAlert.error('error',`In the "${getFriendlySectionName(sectionKey)}" section, you must provide both a start and end time when dates are set.`);
                     return false;
                 }
             }
