@@ -350,8 +350,33 @@ export default function Calendar() {
         }
         return dateTime || "";
     };
+
+     const getFriendlySectionName = (key) => {
+        return key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase());
+    }
+    const isFormValid = () => {
+        for (const [sectionKey, items] of Object.entries(breakSections)) {
+            if (sectionKey === 'holidays') continue;
+
+            for (const item of items) {
+                const hasDates = item.start_date && item.end_date;
+                const isPartialDay = parseInt(item.type) === 1;
+                const hasTimes = item.start_time && item.end_time;
+
+                if (isPartialDay && hasDates && !hasTimes) {
+                    SweetAlert.error(`In the "${getFriendlySectionName(sectionKey)}" section, you must provide both a start and end time when dates are set.`);
+                    return false;
+                }
+            }
+        }
+        return true;
+    };
+
     
     const handleSave = async () => {
+         if (!isFormValid()) {
+            return;
+        }
         const changedData = {};
         const initialSections = initialDataRef.current;
 
